@@ -53,14 +53,12 @@ export default function Footer() {
           >
             Enlaces Rápidos
           </h4>
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {[
               "Inicio",
               "Acerca de",
               "Speakers",
-              "Agenda",
               "Registro",
-              "Contacto",
             ].map((item) => (
               <li key={item}>
                 <Link
@@ -83,7 +81,7 @@ export default function Footer() {
           >
             Contacto - Promotores Zonales
           </h4>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-6">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-4 text-sm">
             <li className="flex flex-col gap-1">
               <span className="text-secondary font-bold text-sm uppercase tracking-wider">
                 Arequipa
