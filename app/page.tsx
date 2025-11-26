@@ -25,7 +25,13 @@ export default function Home() {
       <header>
         <div className="navbar">
           <a href="#" className="logo">
-            <i className="fas fa-fire"></i> RADICAL
+            <Image 
+              src="/RADICAL-logotipo.png" 
+              alt="Radical Logo" 
+              width={150} 
+              height={50} 
+              className="h-10 w-auto object-contain" 
+            />
           </a>
           
           <nav className="nav-links">
@@ -186,7 +192,22 @@ export default function Home() {
       <footer>
         <div className="footer-grid">
           <div className="footer-col">
-            <span className="footer-logo"><i className="fas fa-fire"></i> RADICAL</span>
+            <div className="flex justify-between items-center w-full mb-6">
+              <Image 
+                src="/RADICAL-logotipo.png" 
+                alt="Radical" 
+                width={140} 
+                height={50} 
+                className="h-12 w-auto object-contain brightness-0 invert" 
+              />
+              <Image 
+                src="/IELP-logo.png" 
+                alt="IELP" 
+                width={60} 
+                height={60} 
+                className="h-12 w-auto object-contain brightness-0 invert" 
+              />
+            </div>
             <p className="footer-desc">
               Un movimiento de jóvenes apasionados por Jesús, dispuestos a transformar su entorno y vivir una vida sin límites.
             </p>
