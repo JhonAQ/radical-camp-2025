@@ -42,7 +42,6 @@ export default function Home() {
       {/* HERO SECTION */}
       <section className="hero">
         <div className="hero-content">
-          <div className="badge">Campamento Año Nuevo 2026</div>
           
           <h1>¡Es tiempo <br /> <span>De volver!</span></h1>
           
