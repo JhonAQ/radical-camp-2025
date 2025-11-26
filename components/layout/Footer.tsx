@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaWhatsapp } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaWhatsapp,
+} from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -70,34 +76,55 @@ export default function Footer() {
         </div>
 
         {/* Contact */}
-        <div>
+        <div className="lg:col-span-1">
           <h4
             className="text-lg font-bold text-white mb-6"
             style={{ fontFamily: "var(--font-title)" }}
           >
             Contacto - Promotores Zonales
           </h4>
-          <ul className="space-y-6">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-6">
             <li className="flex flex-col gap-1">
-              <span className="text-secondary font-bold text-sm uppercase tracking-wider">Arequipa</span>
+              <span className="text-secondary font-bold text-sm uppercase tracking-wider">
+                Arequipa
+              </span>
               <span className="text-white font-medium">Ronald Inquilla</span>
-              <a href="https://wa.me/51947237843" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors">
+              <a
+                href="https://wa.me/51947237843"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors"
+              >
                 <FaWhatsapp className="w-5 h-5" />
                 <span>947 237 843</span>
               </a>
             </li>
             <li className="flex flex-col gap-1">
-              <span className="text-secondary font-bold text-sm uppercase tracking-wider">Juliaca</span>
+              <span className="text-secondary font-bold text-sm uppercase tracking-wider">
+                Juliaca
+              </span>
               <span className="text-white font-medium">Fernando Cutipa</span>
-              <a href="https://wa.me/51976024040" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors">
+              <a
+                href="https://wa.me/51976024040"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors"
+              >
                 <FaWhatsapp className="w-5 h-5" />
                 <span>976 024 040</span>
               </a>
             </li>
             <li className="flex flex-col gap-1">
-              <span className="text-secondary font-bold text-sm uppercase tracking-wider">Tacna</span>
+              <span className="text-secondary font-bold text-sm uppercase tracking-wider">
+                Tacna
+              </span>
               <span className="text-white font-medium">Wilber Arivilca</span>
-              <a href="https://wa.me/51931697951" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors">
+              <a
+                href="https://wa.me/51931697951"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors"
+              >
                 <FaWhatsapp className="w-5 h-5" />
                 <span>931 697 951</span>
               </a>
