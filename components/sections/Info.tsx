@@ -1,41 +1,44 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MapPin, Calendar, Users, Tag } from "lucide-react";
+import { FaCalendarCheck, FaMapMarkedAlt, FaUserFriends, FaTicketAlt } from "react-icons/fa";
 
 const infoItems = [
   {
-    icon: MapPin,
-    label: "Ubicación",
-    value: "Campel, Arequipa",
-    sub: "Perú",
-  },
-  {
-    icon: Calendar,
-    label: "Fecha",
+    icon: FaCalendarCheck,
+    label: "FECHAS",
     value: "30 Dic - 03 Ene",
-    sub: "Año Nuevo 2026",
+    sub: "4 Días inolvidables",
+    active: true,
   },
   {
-    icon: Users,
-    label: "Cupo",
-    value: "Limitado",
-    sub: "Solo 500 lugares",
+    icon: FaMapMarkedAlt,
+    label: "UBICACIÓN",
+    value: "Campel",
+    sub: "Arequipa, Perú",
   },
   {
-    icon: Tag,
-    label: "Costo",
-    value: "$1,200",
-    sub: "Preventa Especial",
+    icon: FaUserFriends,
+    label: "EDADES",
+    value: "17 Años +",
+    sub: "Cupos limitados",
+  },
+  {
+    icon: FaTicketAlt,
+    label: "INVERSIÓN",
+    value: "S/ 150.00",
+    sub: "Separa con S/ 50 antes del 15 Dic",
     isPrice: true,
+    promo: true,
+    originalPrice: "Regular: S/ 190",
   },
 ];
 
 export default function Info() {
   return (
-    <section id="info" className="relative z-20 -mt-20 px-5 mb-20">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-glass-bg backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
+    <section id="info" className="relative z-20 -mt-24 px-5 mb-20">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-[#111827] rounded-3xl shadow-2xl overflow-hidden border border-gray-800">
           {infoItems.map((item, index) => (
             <motion.div
               key={item.label}
@@ -43,24 +46,43 @@ export default function Info() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="relative p-8 text-center group border-b md:border-b-0 md:border-r border-white/5 last:border-0 hover:bg-white/5 transition-colors duration-300"
+              className={`relative p-10 text-center group border-b md:border-b-0 md:border-r border-gray-800 last:border-0 transition-colors duration-300 ${
+                item.active ? "bg-[#161f32]" : "hover:bg-[#161f32]"
+              }`}
             >
-              <item.icon className="w-10 h-10 mx-auto mb-4 text-secondary group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-300" />
-              <span className="block text-xs uppercase tracking-widest text-gray-400 mb-2">
+              {item.promo && (
+                <div className="absolute top-0 right-0 bg-[#ff0055] text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+                  Promo Flash
+                </div>
+              )}
+
+              <div className="mb-6 flex justify-center">
+                <item.icon 
+                  className={`w-12 h-12 ${item.isPrice ? "text-[#ff0055]" : "text-[#00d4ff]"}`} 
+                />
+              </div>
+              
+              <span className="block text-xs uppercase tracking-[0.2em] text-gray-400 mb-3 font-medium">
                 {item.label}
               </span>
+              
               <h3
-                className={`text-2xl font-bold mb-1 ${
-                  item.isPrice ? "text-accent text-4xl" : "text-white"
-                }`}
+                className={`text-2xl md:text-3xl font-bold mb-2 text-white`}
                 style={{ fontFamily: "var(--font-title)" }}
               >
                 {item.value}
               </h3>
-              <p className="text-sm text-gray-500">{item.sub}</p>
+              
+              <p className="text-sm text-gray-400 font-light">{item.sub}</p>
+              
+              {item.originalPrice && (
+                <p className="text-xs text-gray-600 line-through mt-1">{item.originalPrice}</p>
+              )}
 
-              {/* Hover Line Effect */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              {/* Active Line Effect */}
+              {item.active && (
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-[#00d4ff]" />
+              )}
             </motion.div>
           ))}
         </div>

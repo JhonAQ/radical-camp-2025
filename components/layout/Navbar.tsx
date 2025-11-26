@@ -2,24 +2,37 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Rocket } from "lucide-react";
+import { FaBars, FaTimes, FaCalendarAlt, FaMapMarkerAlt, FaPhoneAlt, FaInstagram, FaYoutube, FaTiktok, FaArrowRight } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
   { name: "Inicio", href: "#hero" },
-  { name: "Info", href: "#info" },
+  { name: "Información", href: "#info" },
   { name: "Experiencia", href: "#experience" },
-  { name: "Speakers", href: "#speakers" },
+  { name: "Invitados", href: "#speakers" },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("Inicio");
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+      
+      // Simple scroll spy
+      const sections = navLinks.map(link => link.href.substring(1));
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top >= 0 && rect.top <= 300) {
+            setActiveSection(navLinks.find(link => link.href === `#${section}`)?.name || "Inicio");
+          }
+        }
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -28,59 +41,60 @@ export default function Navbar() {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-black py-3 px-5 flex flex-col md:flex-row justify-between items-center text-sm border-b border-white/10 relative z-50">
-        <div className="flex items-center gap-6 text-gray-400">
+      <div className="bg-black py-2 px-5 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm relative z-50 font-sans">
+        <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 md:gap-6 text-gray-300">
           <span className="flex items-center gap-2">
-            <span className="text-secondary">📅</span> 30 Dic - 03 Ene
+            <FaCalendarAlt className="text-cyan-400" /> 30 Dic - 03 Ene
           </span>
           <span className="flex items-center gap-2">
-            <span className="text-secondary">📍</span> Campel, Arequipa
+            <FaMapMarkerAlt className="text-cyan-400" /> Campel, Arequipa
+          </span>
+          <span className="flex items-center gap-2">
+            <FaPhoneAlt className="text-cyan-400" /> +51 999 888 777
           </span>
         </div>
         <div className="flex gap-4 mt-2 md:mt-0">
-          {/* Social placeholders */}
-          {["Facebook", "Twitter", "Instagram", "LinkedIn"].map((social) => (
-            <a
-              key={social}
-              href="#"
-              className="text-white hover:text-secondary transition-colors text-xs uppercase tracking-wider"
-            >
-              {social}
-            </a>
-          ))}
+          <a href="#" className="text-white hover:text-cyan-400 transition-colors">
+            <FaInstagram size={16} />
+          </a>
+          <a href="#" className="text-white hover:text-cyan-400 transition-colors">
+            <FaTiktok size={16} />
+          </a>
+          <a href="#" className="text-white hover:text-cyan-400 transition-colors">
+            <FaYoutube size={16} />
+          </a>
         </div>
       </div>
 
       {/* Floating Navbar */}
-      <header className="fixed top-[60px] left-0 w-full px-[5%] z-40 pointer-events-none">
+      <header className="fixed top-[50px] left-0 w-full z-40 px-4 pointer-events-none">
         <motion.nav
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className={cn(
-            "pointer-events-auto mx-auto max-w-7xl rounded-full px-6 md:px-8 py-3 flex justify-between items-center transition-all duration-300",
-            isScrolled
-              ? "bg-white/95 backdrop-blur-md shadow-lg py-2 mt-[-40px]" // Move up when scrolled
-              : "bg-white/90 backdrop-blur-sm mt-0"
+            "pointer-events-auto mx-auto max-w-6xl rounded-full px-2 pl-6 pr-2 py-2 flex justify-between items-center transition-all duration-300 bg-white shadow-lg",
+            isScrolled ? "mt-[-40px] py-2" : "mt-0"
           )}
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <Rocket className="w-6 h-6 text-secondary group-hover:rotate-12 transition-transform" />
-            <span
-              className="font-black text-xl md:text-2xl text-primary tracking-tighter"
-              style={{ fontFamily: "var(--font-title)" }}
-            >
-              RADICAL<span className="text-secondary">CAMP</span>
-            </span>
+          <Link href="/" className="flex items-center gap-2 group mr-8">
+            <img src="/RADICAL-logotipo.png" alt="Radical Camp" className="h-8 md:h-10 object-contain" />
           </Link>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center justify-center flex-1 gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-gray-800 font-semibold px-4 py-2 rounded-full text-sm hover:bg-primary hover:text-white transition-all hover:shadow-lg hover:shadow-primary/30"
+                className={cn(
+                  "px-5 py-2 rounded-full text-sm font-bold transition-all",
+                  activeSection === link.name 
+                    ? "bg-[#6200ea] text-white shadow-md" 
+                    : "text-gray-600 hover:text-[#6200ea] hover:bg-gray-50"
+                )}
+                onClick={() => setActiveSection(link.name)}
+                style={{ fontFamily: "var(--font-title)" }}
               >
                 {link.name}
               </Link>
@@ -88,18 +102,18 @@ export default function Navbar() {
           </div>
 
           {/* CTA Button */}
-          <div className="hidden md:block">
-            <button className="bg-dark-bg text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-primary hover:scale-105 transition-all border-2 border-transparent cursor-pointer">
-              Regístrate
+          <div className="hidden md:block ml-8">
+            <button className="bg-black text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-gray-800 transition-all flex items-center gap-2 cursor-pointer shadow-lg">
+              Inscribirme <FaArrowRight />
             </button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-800 p-2"
+            className="md:hidden text-gray-800 p-2 ml-auto"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X /> : <Menu />}
+            {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </motion.nav>
       </header>
@@ -119,12 +133,13 @@ export default function Navbar() {
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-2xl font-bold text-white hover:text-secondary"
+                style={{ fontFamily: "var(--font-title)" }}
               >
                 {link.name}
               </Link>
             ))}
-            <button className="mt-8 bg-primary text-white px-8 py-3 rounded-full font-bold text-lg w-full max-w-xs">
-              Regístrate Ahora
+            <button className="mt-8 bg-[#6200ea] text-white px-8 py-3 rounded-full font-bold text-lg w-full max-w-xs flex items-center justify-center gap-2">
+              Inscribirme <FaArrowRight />
             </button>
           </motion.div>
         )}

@@ -29,19 +29,19 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <span className="inline-block bg-white/20 backdrop-blur-sm px-5 py-2 rounded-full border border-white/40 text-sm uppercase tracking-widest mb-6">
-            🔥 Edición Limitada 2025
-          </span>
-
           <h1
             className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-none mb-4 drop-shadow-2xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
-            Radical<span className="text-secondary">Camp</span>
+            ¡ES TIEMPO<br /><span className="text-secondary">DE VOLVER!</span>
           </h1>
 
-          <p className="text-xl md:text-2xl italic text-white/90 mb-8 font-light">
-            "No os conforméis a este siglo, sino transformaos..."
+          <p 
+            className="text-xl md:text-2xl italic text-white/90 mb-8 font-light max-w-3xl mx-auto"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
+            "Deje el impío su camino, y el hombre inicuo sus pensamientos, y vuélvase a Jehová, el cual tendrá de él misericordia, y al Dios nuestro, el cual será amplio en perdonar."
+            <br /><span className="text-sm mt-2 block not-italic font-bold">- Isaías 55:2</span>
           </p>
         </motion.div>
 
@@ -54,10 +54,10 @@ export default function Hero() {
           className="flex flex-col sm:flex-row gap-4 justify-center mt-8"
         >
           <button className="bg-white text-primary px-10 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-gray-100 hover:-translate-y-1 transition-all shadow-xl hover:shadow-2xl cursor-pointer">
-            Reservar Lugar
+            Reservar Cupo
           </button>
           <button className="bg-transparent border-2 border-white text-white px-10 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-white hover:text-primary hover:-translate-y-1 transition-all cursor-pointer">
-            Ver Agenda
+            Ver Promo
           </button>
         </motion.div>
       </div>

@@ -18,14 +18,10 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
         {/* Brand */}
         <div>
-          <Link href="/" className="flex items-center gap-2 mb-6 group">
-            <Rocket className="w-8 h-8 text-secondary group-hover:rotate-12 transition-transform" />
-            <span
-              className="font-black text-3xl text-white tracking-tighter"
-              style={{ fontFamily: "var(--font-title)" }}
-            >
-              RADICAL<span className="text-secondary">CAMP</span>
-            </span>
+          <Link href="/" className="flex items-center gap-4 mb-6 group">
+            <img src="/RADICAL-white.png" alt="Radical Camp" className="h-12 object-contain" />
+            <div className="h-8 w-px bg-white/20"></div>
+            <img src="/IELP-logo.png" alt="IELP" className="h-12 object-contain" />
           </Link>
           <p className="text-gray-400 leading-relaxed mb-6">
             Un movimiento dedicado a despertar una generación apasionada por
