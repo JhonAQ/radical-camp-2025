@@ -33,15 +33,22 @@ export default function Hero() {
             className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-none mb-4 drop-shadow-2xl"
             style={{ fontFamily: "var(--font-title)" }}
           >
-            ¡ES TIEMPO<br /><span className="text-secondary">DE VOLVER!</span>
+            ¡ES TIEMPO
+            <br />
+            <span className="text-secondary">DE VOLVER!</span>
           </h1>
 
-          <p 
+          <p
             className="text-xl md:text-2xl italic text-white/90 mb-8 font-light max-w-3xl mx-auto"
             style={{ fontFamily: "var(--font-title)" }}
           >
-            "Deje el impío su camino, y el hombre inicuo sus pensamientos, y vuélvase a Jehová, el cual tendrá de él misericordia, y al Dios nuestro, el cual será amplio en perdonar."
-            <br /><span className="text-sm mt-2 block not-italic font-bold">- Isaías 55:2</span>
+            "Deje el impío su camino, y el hombre inicuo sus pensamientos, y
+            vuélvase a Jehová, el cual tendrá de él misericordia, y al Dios
+            nuestro, el cual será amplio en perdonar."
+            <br />
+            <span className="text-sm mt-2 block not-italic font-bold">
+              - Isaías 55:2
+            </span>
           </p>
         </motion.div>
 

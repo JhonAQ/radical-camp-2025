@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaBars, FaTimes, FaCalendarAlt, FaMapMarkerAlt, FaPhoneAlt, FaInstagram, FaYoutube, FaTiktok, FaArrowRight } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaInstagram,
+  FaYoutube,
+  FaTiktok,
+  FaArrowRight,
+} from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -21,15 +31,18 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-      
+
       // Simple scroll spy
-      const sections = navLinks.map(link => link.href.substring(1));
+      const sections = navLinks.map((link) => link.href.substring(1));
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
           if (rect.top >= 0 && rect.top <= 300) {
-            setActiveSection(navLinks.find(link => link.href === `#${section}`)?.name || "Inicio");
+            setActiveSection(
+              navLinks.find((link) => link.href === `#${section}`)?.name ||
+                "Inicio"
+            );
           }
         }
       }
@@ -54,13 +67,22 @@ export default function Navbar() {
           </span>
         </div>
         <div className="flex gap-4 mt-2 md:mt-0">
-          <a href="#" className="text-white hover:text-cyan-400 transition-colors">
+          <a
+            href="#"
+            className="text-white hover:text-cyan-400 transition-colors"
+          >
             <FaInstagram size={16} />
           </a>
-          <a href="#" className="text-white hover:text-cyan-400 transition-colors">
+          <a
+            href="#"
+            className="text-white hover:text-cyan-400 transition-colors"
+          >
             <FaTiktok size={16} />
           </a>
-          <a href="#" className="text-white hover:text-cyan-400 transition-colors">
+          <a
+            href="#"
+            className="text-white hover:text-cyan-400 transition-colors"
+          >
             <FaYoutube size={16} />
           </a>
         </div>
@@ -78,7 +100,11 @@ export default function Navbar() {
         >
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group mr-8">
-            <img src="/RADICAL-logotipo.png" alt="Radical Camp" className="h-8 md:h-10 object-contain" />
+            <img
+              src="/RADICAL-logotipo.png"
+              alt="Radical Camp"
+              className="h-8 md:h-10 object-contain"
+            />
           </Link>
 
           {/* Desktop Links */}
@@ -89,8 +115,8 @@ export default function Navbar() {
                 href={link.href}
                 className={cn(
                   "px-5 py-2 rounded-full text-sm font-bold transition-all",
-                  activeSection === link.name 
-                    ? "bg-[#6200ea] text-white shadow-md" 
+                  activeSection === link.name
+                    ? "bg-[#6200ea] text-white shadow-md"
                     : "text-gray-600 hover:text-[#6200ea] hover:bg-gray-50"
                 )}
                 onClick={() => setActiveSection(link.name)}

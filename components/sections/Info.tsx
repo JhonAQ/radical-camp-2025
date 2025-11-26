@@ -1,7 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FaCalendarCheck, FaMapMarkedAlt, FaUserFriends, FaTicketAlt } from "react-icons/fa";
+import {
+  FaCalendarCheck,
+  FaMapMarkedAlt,
+  FaUserFriends,
+  FaTicketAlt,
+} from "react-icons/fa";
 
 const infoItems = [
   {
@@ -57,26 +62,30 @@ export default function Info() {
               )}
 
               <div className="mb-6 flex justify-center">
-                <item.icon 
-                  className={`w-12 h-12 ${item.isPrice ? "text-[#ff0055]" : "text-[#00d4ff]"}`} 
+                <item.icon
+                  className={`w-12 h-12 ${
+                    item.isPrice ? "text-[#ff0055]" : "text-[#00d4ff]"
+                  }`}
                 />
               </div>
-              
+
               <span className="block text-xs uppercase tracking-[0.2em] text-gray-400 mb-3 font-medium">
                 {item.label}
               </span>
-              
+
               <h3
                 className={`text-2xl md:text-3xl font-bold mb-2 text-white`}
                 style={{ fontFamily: "var(--font-title)" }}
               >
                 {item.value}
               </h3>
-              
+
               <p className="text-sm text-gray-400 font-light">{item.sub}</p>
-              
+
               {item.originalPrice && (
-                <p className="text-xs text-gray-600 line-through mt-1">{item.originalPrice}</p>
+                <p className="text-xs text-gray-600 line-through mt-1">
+                  {item.originalPrice}
+                </p>
               )}
 
               {/* Active Line Effect */}
