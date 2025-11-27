@@ -344,10 +344,18 @@ export default function RegistroPage() {
                     >
                       <div className="absolute top-0 right-0 w-0 h-0 border-t-[30px] border-r-[30px] border-t-transparent border-r-secondary/50 group-hover:border-r-secondary transition-colors"></div>
                       <h3 className="font-bold text-lg mb-1 text-gray-300 group-hover:text-white">
-                        FULL PASS
+                        PAGO COMPLETO
                       </h3>
-                      <p className="text-4xl font-black text-white mb-2 tracking-tighter">
-                        S/ 150
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="text-gray-500 line-through text-lg decoration-red-500 decoration-2">
+                          S/ 190
+                        </span>
+                        <span className="text-4xl font-black text-white tracking-tighter">
+                          S/ 150
+                        </span>
+                      </div>
+                      <p className="text-xs text-secondary font-bold mb-2 animate-pulse">
+                        ¡OFERTA HASTA EL 15 DIC!
                       </p>
                       <p className="text-xs text-gray-500 font-mono">
                         // ACCESO TOTAL
@@ -366,8 +374,11 @@ export default function RegistroPage() {
                       <h3 className="font-bold text-lg mb-1 text-gray-300 group-hover:text-white">
                         RESERVA
                       </h3>
-                      <p className="text-4xl font-black text-white mb-2 tracking-tighter">
+                      <p className="text-4xl font-black text-white mb-1 tracking-tighter">
                         S/ 50
+                      </p>
+                      <p className="text-xs text-secondary font-bold mb-2">
+                        CONGELA EL PRECIO DE S/ 150
                       </p>
                       <p className="text-xs text-gray-500 font-mono">
                         // ASEGURA TU CUPO
