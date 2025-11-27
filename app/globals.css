@@ -18,6 +18,11 @@
   body {
     @apply bg-dark-bg text-white font-sans overflow-x-hidden antialiased;
     scroll-behavior: smooth;
+    cursor: none;
+  }
+
+  a, button, [role="button"] {
+    cursor: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
