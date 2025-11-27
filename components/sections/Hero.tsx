@@ -35,12 +35,25 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
         >
           <h1
-            className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-none mb-4 drop-shadow-2xl"
+            className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-none mb-4 relative z-20"
             style={{ fontFamily: "var(--font-title)" }}
           >
-            ¡ES TIEMPO
+            <span className="text-white drop-shadow-lg">¡ES TIEMPO</span>
             <br />
-            <span className="text-secondary">DE VOLVER!</span>
+            <span className="relative inline-block glitch-wrapper animate-blink-random">
+              {/* Texto Principal con Efecto Celeste + Transparencia */}
+              <span
+                className="glitch-text relative z-10 text-secondary/90 mix-blend-hard-light drop-shadow-[0_0_15px_rgba(0,212,255,0.8)]"
+                data-text="DE VOLVER!"
+              >
+                DE VOLVER!
+              </span>
+
+              {/* Capa de Resplandor Extra */}
+              <span className="absolute inset-0 text-secondary blur-xl opacity-40 animate-pulse -z-10">
+                DE VOLVER!
+              </span>
+            </span>
           </h1>
 
           <p
