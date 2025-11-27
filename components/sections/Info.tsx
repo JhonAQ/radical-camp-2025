@@ -32,7 +32,7 @@ const infoItems = [
     label: "EDADES",
     value: "17 Años +",
     sub: "Cupos Limitados",
-    gradient: "from-amber-400 to-orange-500",
+    gradient: "from-blue-500 to-cyan-400",
     delay: 0.2,
   },
 ];
@@ -103,7 +103,7 @@ export default function Info() {
             <div className="relative h-full bg-[#111] rounded-[2rem] border border-[#ff0055]/30 p-1 overflow-hidden">
               {/* Discount Badge */}
               <div className="absolute top-0 right-0 bg-[#ff0055] text-white text-[10px] font-bold px-4 py-2 rounded-bl-2xl z-20">
-                -20% OFF
+                PROMOCIÓN
               </div>
 
               <div className="h-full bg-gradient-to-b from-[#1a1a1a] to-black rounded-[1.8rem] p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
@@ -137,18 +137,10 @@ export default function Info() {
                       <FaClock className="animate-pulse" />
                       <span>Solo hasta el 15 Dic</span>
                     </div>
-                    <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: "0%" }}
-                        whileInView={{ width: "75%" }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                        className="h-full bg-gradient-to-r from-[#ff0055] to-[#ff5e00]"
-                      />
-                    </div>
                   </div>
 
                   <p className="text-[10px] text-gray-400">
-                    *Incluye alimentación y hospedaje
+                    *Incluye alimentación, hospedaje y traslado.
                   </p>
                 </div>
               </div>

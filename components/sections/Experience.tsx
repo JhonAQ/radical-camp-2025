@@ -6,23 +6,23 @@ import { Music, Zap, Heart, Coffee } from "lucide-react";
 const features = [
   {
     icon: Music,
-    title: "Adoración Extrema",
-    desc: "Bandas en vivo y momentos de conexión profunda.",
+    title: "Noches de adoración",
+    desc: "Música en vivo y momentos de adoración.",
   },
   {
     icon: Zap,
-    title: "Plenarias de Poder",
-    desc: "Mensajes que desafiarán tu forma de pensar y vivir.",
+    title: "Plenarias",
+    desc: "Ponencias sobre temas dirigidas a jóvenes cristianos.",
   },
   {
     icon: Heart,
     title: "Comunidad",
-    desc: "Conoce a jóvenes apasionados por el mismo propósito.",
+    desc: "Conoce a más cristianos como tú.",
   },
   {
     icon: Coffee,
-    title: "After Party",
-    desc: "Música, comida y diversión hasta tarde.",
+    title: "Juegos y +",
+    desc: "Dinámicas, juegos y playa!.",
   },
 ];
 
@@ -43,8 +43,8 @@ export default function Experience() {
             La <span className="text-secondary">Experiencia</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Prepárate para tres días intensos que marcarán un antes y un después
-            en tu vida.
+            Prepárate para recibir el año nuevo con una experiencia única que
+            transformará tu vida.
           </p>
         </motion.div>
 

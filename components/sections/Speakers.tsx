@@ -44,7 +44,7 @@ export default function Speakers() {
             className="text-4xl md:text-5xl font-bold mb-4"
             style={{ fontFamily: "var(--font-title)" }}
           >
-            Nuestros <span className="text-secondary">Speakers</span>
+            Nuestros <span className="text-secondary">Ponentes</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
             Voces que inspiran y desafían a esta generación.
