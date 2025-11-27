@@ -21,11 +21,18 @@
     cursor: none;
   }
 
-  a, button, [role="button"] {
+  a,
+  button,
+  [role="button"] {
     cursor: none;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-title), sans-serif;
     font-weight: 700;
   }
@@ -35,7 +42,7 @@
   .text-gradient {
     @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
   }
-  
+
   .glass-panel {
     @apply backdrop-blur-xl border border-white/10 shadow-2xl;
     background: var(--color-glass-bg);
