@@ -23,8 +23,12 @@
 
   a,
   button,
-  [role="button"] {
-    cursor: none;
+  [role="button"],
+  input,
+  label,
+  select,
+  textarea {
+    cursor: none !important;
   }
 
   h1,

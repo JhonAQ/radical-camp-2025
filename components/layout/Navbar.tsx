@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   FaBars,
   FaTimes,
@@ -24,6 +25,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("Inicio");
@@ -91,7 +93,7 @@ export default function Navbar() {
       </div>
 
       {/* Floating Navbar */}
-      <header className="fixed top-[70px] left-0 w-full z-40 px-4 pointer-events-none">
+      <header className={cn("top-[70px] left-0 w-full z-40 px-4 pointer-events-none", pathname === "/registro" ? "absolute" : "fixed")}>
         <motion.nav
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
