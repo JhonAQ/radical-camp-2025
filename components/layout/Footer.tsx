@@ -7,6 +7,7 @@ import {
   FaInstagram,
   FaLinkedin,
   FaWhatsapp,
+  FaTiktok,
 } from "react-icons/fa";
 
 export default function Footer() {
@@ -33,7 +34,7 @@ export default function Footer() {
             transformar su entorno a través de la fe y la acción.
           </p>
           <div className="flex gap-4">
-            {[FaFacebook, FaTwitter, FaInstagram, FaLinkedin].map((Icon, i) => (
+            {[FaFacebook, FaInstagram, FaTiktok].map((Icon, i) => (
               <a
                 key={i}
                 href="#"
