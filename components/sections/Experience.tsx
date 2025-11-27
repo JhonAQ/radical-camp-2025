@@ -186,8 +186,8 @@ export default function Experience() {
                 ease: "easeInOut",
               }}
             >
-              Cinco días intensos diseñados para marcar un antes y un después
-              en tu vida.
+              Cinco días intensos diseñados para marcar un antes y un después en
+              tu vida.
             </motion.p>
           </motion.div>
         </div>
