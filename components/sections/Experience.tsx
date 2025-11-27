@@ -7,37 +7,115 @@ import Image from "next/image";
 const experiences = [
   {
     id: 1,
-    title: "Campamento en la Playa",
-    description: "Dinámicas y diversión en Campel.",
+    title: "CAMPAMENTO",
+    subtitle: "PLAYA 2024",
     image:
       "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=1000&auto=format&fit=crop",
-    color: "#00d4ff",
+    color: "from-cyan-500 to-blue-600",
+    border: "border-cyan-400",
+    shadow: "shadow-cyan-500/50",
   },
   {
     id: 2,
-    title: "Noches de Alabanza",
-    description: "Adoración y música en vivo.",
+    title: "ALABANZA",
+    subtitle: "NOCHE RADICAL",
     image:
       "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1000&auto=format&fit=crop",
-    color: "#6200ea",
+    color: "from-purple-500 to-pink-600",
+    border: "border-purple-400",
+    shadow: "shadow-purple-500/50",
   },
   {
     id: 3,
-    title: "Año Nuevo 2026",
-    description: "Recibimos el año celebrando.",
+    title: "AÑO NUEVO",
+    subtitle: "2026 VISION",
     image:
       "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?q=80&w=1000&auto=format&fit=crop",
-    color: "#ff0055",
+    color: "from-pink-500 to-rose-600",
+    border: "border-pink-400",
+    shadow: "shadow-pink-500/50",
   },
   {
     id: 4,
-    title: "Ponencias",
-    description: "Mensajes que transforman.",
+    title: "PONENCIAS",
+    subtitle: "TRANSFORMACIÓN",
     image:
       "https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=1000&auto=format&fit=crop",
-    color: "#00d4ff",
+    color: "from-cyan-400 to-teal-500",
+    border: "border-teal-400",
+    shadow: "shadow-teal-500/50",
   },
 ];
+
+const GlitchCard = ({ item }: { item: (typeof experiences)[0] }) => {
+  return (
+    <div className="relative group w-80 h-80 mx-6 bg-black transition-transform duration-300 hover:-translate-y-2">
+      {/* Cyberpunk Border Frame with Clip Path */}
+      <div
+        className={`absolute inset-0 border-2 ${item.border} opacity-40 group-hover:opacity-100 group-hover:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300 z-20`}
+        style={{
+          clipPath:
+            "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)",
+        }}
+      ></div>
+
+      {/* Corner Accents */}
+      <div
+        className={`absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 ${item.border} z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}
+      ></div>
+      <div
+        className={`absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 ${item.border} z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-200`}
+      ></div>
+
+      {/* Image Container with Clip Path */}
+      <div
+        className="absolute inset-1 z-10 overflow-hidden bg-gray-900"
+        style={{
+          clipPath:
+            "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)",
+        }}
+      >
+        {/* Image */}
+        <Image
+          src={item.image}
+          alt={item.title}
+          fill
+          className="object-cover transition-all duration-500 grayscale contrast-125 group-hover:grayscale-0 group-hover:contrast-100 group-hover:scale-110"
+        />
+
+        {/* Scanline Overlay (CSS only) */}
+        <div
+          className="absolute inset-0 opacity-30 pointer-events-none z-20"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent, transparent 2px, #000 3px)",
+            backgroundSize: "100% 4px",
+          }}
+        ></div>
+
+        {/* Dark Gradient Overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent opacity-90 group-hover:opacity-60 transition-opacity duration-300 z-10"></div>
+
+        {/* Content */}
+        <div className="absolute bottom-0 left-0 w-full p-6 z-30 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+          <h3 className="text-3xl font-black italic tracking-tighter text-white mb-1 drop-shadow-lg">
+            {item.title}
+          </h3>
+          <div className="flex items-center gap-2">
+            <span
+              className={`w-2 h-2 rounded-full bg-linear-to-r ${item.color} animate-pulse`}
+            ></span>
+            <p
+              className={`text-sm font-mono font-bold text-transparent bg-clip-text bg-linear-to-r ${item.color}`}
+            >
+              // {item.subtitle}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function Experience() {
   return (
@@ -115,88 +193,21 @@ export default function Experience() {
         </div>
       </div>
 
-      {/* Infinite Marquee */}
       <div className="relative w-full">
-        <div className="absolute inset-y-0 left-0 w-20 bg-linear-to-r from-dark-bg to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-20 bg-linear-to-l from-dark-bg to-transparent z-10 pointer-events-none" />
+        {/* Rotated Background Strip for "Speed" look */}
+        <div className="absolute top-1/2 left-0 w-full h-[300px] bg-linear-to-r from-primary/5 via-secondary/5 to-primary/5 -skew-y-3 -translate-y-1/2 blur-3xl pointer-events-none"></div>
 
         <Marquee
           gradient={false}
-          speed={40}
-          pauseOnHover={false}
-          className="py-4"
+          speed={50}
+          pauseOnHover={true}
+          className="py-10 overflow-y-visible"
         >
-          {experiences.map((item, index) => (
-            <div
-              key={item.id}
-              className="mx-4 relative group w-[250px] h-[250px] md:w-[300px] md:h-[300px] rounded-3xl overflow-hidden cursor-pointer"
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-300" />
-
-              {/* Content */}
-              <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                <div
-                  className="w-12 h-1 rounded-full mb-4"
-                  style={{ backgroundColor: item.color }}
-                />
-                <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
-                  {item.title}
-                </h3>
-                <p className="text-gray-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
-                  {item.description}
-                </p>
-              </div>
-
-              {/* Hover Glow Effect */}
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at center, ${item.color}, transparent 70%)`,
-                }}
-              />
-            </div>
+          {experiences.map((item) => (
+            <GlitchCard key={item.id} item={item} />
           ))}
-          {/* Duplicate for variety if needed, but Marquee handles looping. 
-               Adding more items to make the strip longer visually if the screen is wide. */}
-          {experiences.map((item, index) => (
-            <div
-              key={`dup-${item.id}`}
-              className="mx-4 relative group w-[250px] h-[250px] md:w-[300px] md:h-[300px] rounded-3xl overflow-hidden cursor-pointer"
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-300" />
-              <div className="absolute bottom-0 left-0 w-full p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                <div
-                  className="w-12 h-1 rounded-full mb-4"
-                  style={{ backgroundColor: item.color }}
-                />
-                <h3 className="text-2xl font-bold text-white mb-2 leading-tight">
-                  {item.title}
-                </h3>
-                <p className="text-gray-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
-                  {item.description}
-                </p>
-              </div>
-              <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
-                style={{
-                  background: `radial-gradient(circle at center, ${item.color}, transparent 70%)`,
-                }}
-              />
-            </div>
+          {experiences.map((item) => (
+            <GlitchCard key={`clone-${item.id}`} item={item} />
           ))}
         </Marquee>
       </div>
