@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
+import Preloader from "@/components/ui/Preloader";
 
 const montserrat = Montserrat({
   variable: "--font-title",
@@ -37,6 +38,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${montserrat.variable} ${poppins.variable}`}>
+        <Preloader />
         <CustomCursor />
         {children}
       </body>
