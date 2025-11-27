@@ -69,31 +69,48 @@ export default function Experience() {
       <div className="relative z-20 mb-16">
         <div className="relative text-center">
           {/* Background Logo - Behind Title */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[1000px] opacity-50 blur-[1px] pointer-events-none select-none -z-10 mix-blend-screen">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[1000px] opacity-40 blur-[1px] pointer-events-none select-none -z-10 mix-blend-screen">
             <Image
               src="/RADICAL-white.png"
               alt="Radical Logo"
-              width={500}
-              height={200}
+              width={1000}
+              height={400}
               className="w-full h-auto"
             />
           </div>
+
+          {/* Text Readability Enhancer - Dark Glow behind text */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[150px] bg-black/60 blur-3xl -z-5 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+            <h2 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight drop-shadow-xl">
               Vive la{" "}
-              <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-primary">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-secondary to-primary drop-shadow-[0_0_15px_rgba(0,212,255,0.5)]">
                 Experiencia
               </span>
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto px-6">
-              Cuatro días intensos diseñados para marcar un antes y un después
+            <motion.p
+              className="text-white text-lg max-w-2xl mx-auto px-6 font-medium tracking-wide"
+              animate={{
+                textShadow: [
+                  "0 0 5px rgba(0, 212, 255, 0.3)",
+                  "0 0 15px rgba(0, 212, 255, 0.6)",
+                  "0 0 5px rgba(0, 212, 255, 0.3)",
+                ],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              Cinco días intensos diseñados para marcar un antes y un después
               en tu vida.
-            </p>
+            </motion.p>
           </motion.div>
         </div>
       </div>
