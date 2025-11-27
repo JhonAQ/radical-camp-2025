@@ -70,7 +70,7 @@ export default function Hero() {
               Reservar Cupo
             </button>
           </Link>
-          <button 
+          <button
             onClick={() => setIsModalOpen(true)}
             className="group flex items-center gap-3 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-white hover:text-primary hover:-translate-y-1 transition-all cursor-pointer"
           >
@@ -103,7 +103,7 @@ export default function Hero() {
               >
                 <X className="w-5 h-5" />
               </button>
-              
+
               <video
                 src="/promo-2.mp4"
                 className="w-full h-full object-cover"
@@ -116,7 +116,6 @@ export default function Hero() {
           </motion.div>
         )}
       </AnimatePresence>
-
     </section>
   );
 }
