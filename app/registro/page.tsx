@@ -31,7 +31,11 @@ const recommendations = [
     text: "Sleeping bag / Frazada",
     sub: "Noches de campamento",
   },
-  { icon: FaShower, text: "Artículos de aseo", sub: "Personal e intransferible" },
+  {
+    icon: FaShower,
+    text: "Artículos de aseo",
+    sub: "Personal e intransferible",
+  },
   { icon: FaTshirt, text: "Ropa cómoda", sub: "Deportiva y para ensuciar" },
   { icon: FaSun, text: "Protección", sub: "Repelente y bloqueador" },
   { icon: FaHeart, text: "Corazón dispuesto", sub: "Lo más importante" },
@@ -81,7 +85,7 @@ export default function RegistroPage() {
               className="object-cover object-center opacity-50"
             />
           </div>
-          
+
           {/* Animated Gradient Blob */}
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-[120px] -z-10 animate-pulse" />
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[120px] -z-10 animate-pulse delay-1000" />
@@ -93,7 +97,7 @@ export default function RegistroPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 
+              <h1
                 className="text-6xl lg:text-8xl font-black tracking-tighter mb-2 leading-[0.9] glitch-text"
                 data-text="REGISTRO"
               >
@@ -105,13 +109,13 @@ export default function RegistroPage() {
                 </span>
               </h1>
               <p className="text-xl text-gray-400 max-w-md mb-12 font-light tracking-wide">
-                No es solo un evento, es el inicio de tu nueva historia. <br/>
+                No es solo un evento, es el inicio de tu nueva historia. <br />
                 <span className="text-secondary font-bold">¿Estás listo?</span>
               </p>
             </motion.div>
 
             {/* Recommendations List (Desktop) */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, duration: 0.8 }}
@@ -127,7 +131,9 @@ export default function RegistroPage() {
                       <item.icon />
                     </div>
                     <div>
-                      <p className="font-bold text-gray-200 text-sm group-hover:text-secondary transition-colors">{item.text}</p>
+                      <p className="font-bold text-gray-200 text-sm group-hover:text-secondary transition-colors">
+                        {item.text}
+                      </p>
                       <p className="text-xs text-gray-500">{item.sub}</p>
                     </div>
                   </div>
@@ -139,28 +145,40 @@ export default function RegistroPage() {
 
         {/* RIGHT PANEL: Form */}
         <div className="lg:w-1/2 bg-[#080808] p-6 lg:p-12 flex flex-col justify-center relative border-l border-white/5">
-            {/* Grid Pattern Overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-size-[2rem_2rem] opacity-20 pointer-events-none"></div>
+          {/* Grid Pattern Overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#1a1a1a_1px,transparent_1px),linear-gradient(to_bottom,#1a1a1a_1px,transparent_1px)] bg-size-[2rem_2rem] opacity-20 pointer-events-none"></div>
 
           <div className="max-w-xl mx-auto w-full relative z-10">
             {/* Progress Steps */}
             <div className="flex justify-between items-center mb-12 relative">
-                <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-800 -z-10"></div>
-                <div 
-                    className="absolute top-1/2 left-0 h-0.5 bg-secondary -z-10 transition-all duration-500"
-                    style={{ width: step === 1 ? "0%" : step === 2 ? "50%" : "100%" }}
-                ></div>
-                
-                {[1, 2, 3].map((s) => (
-                    <div key={s} className="flex flex-col items-center gap-2">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 border-2 ${step >= s ? "bg-black border-secondary text-secondary shadow-[0_0_15px_rgba(0,212,255,0.5)]" : "bg-black border-gray-700 text-gray-600"}`}>
-                            {step > s ? <FaCheckCircle /> : s}
-                        </div>
-                        <span className={`text-xs font-bold uppercase tracking-wider ${step >= s ? "text-white" : "text-gray-600"}`}>
-                            {s === 1 ? "Datos" : s === 2 ? "Pago" : "Fin"}
-                        </span>
-                    </div>
-                ))}
+              <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-800 -z-10"></div>
+              <div
+                className="absolute top-1/2 left-0 h-0.5 bg-secondary -z-10 transition-all duration-500"
+                style={{
+                  width: step === 1 ? "0%" : step === 2 ? "50%" : "100%",
+                }}
+              ></div>
+
+              {[1, 2, 3].map((s) => (
+                <div key={s} className="flex flex-col items-center gap-2">
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 border-2 ${
+                      step >= s
+                        ? "bg-black border-secondary text-secondary shadow-[0_0_15px_rgba(0,212,255,0.5)]"
+                        : "bg-black border-gray-700 text-gray-600"
+                    }`}
+                  >
+                    {step > s ? <FaCheckCircle /> : s}
+                  </div>
+                  <span
+                    className={`text-xs font-bold uppercase tracking-wider ${
+                      step >= s ? "text-white" : "text-gray-600"
+                    }`}
+                  >
+                    {s === 1 ? "Datos" : s === 2 ? "Pago" : "Fin"}
+                  </span>
+                </div>
+              ))}
             </div>
 
             <AnimatePresence mode="wait">
@@ -179,7 +197,9 @@ export default function RegistroPage() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="group">
-                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">Nombres</label>
+                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">
+                        Nombres
+                      </label>
                       <input
                         type="text"
                         name="nombres"
@@ -191,7 +211,9 @@ export default function RegistroPage() {
                       />
                     </div>
                     <div className="group">
-                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">Apellidos</label>
+                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">
+                        Apellidos
+                      </label>
                       <input
                         type="text"
                         name="apellidos"
@@ -206,7 +228,9 @@ export default function RegistroPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="group">
-                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">Edad</label>
+                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">
+                        Edad
+                      </label>
                       <input
                         type="number"
                         name="edad"
@@ -219,16 +243,18 @@ export default function RegistroPage() {
                       />
                     </div>
                     <div className="group">
-                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">DNI / Documento</label>
+                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">
+                        DNI / Documento
+                      </label>
                       <div className="relative">
                         <input
-                            type="text"
-                            name="dni"
-                            required
-                            value={formData.dni}
-                            onChange={handleInputChange}
-                            className="w-full bg-white/5 border-b-2 border-gray-700 px-4 py-3 text-white focus:border-secondary focus:bg-white/10 outline-none transition-all rounded-t-lg pl-10"
-                            placeholder="Número de documento"
+                          type="text"
+                          name="dni"
+                          required
+                          value={formData.dni}
+                          onChange={handleInputChange}
+                          className="w-full bg-white/5 border-b-2 border-gray-700 px-4 py-3 text-white focus:border-secondary focus:bg-white/10 outline-none transition-all rounded-t-lg pl-10"
+                          placeholder="Número de documento"
                         />
                         <FaIdCard className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                       </div>
@@ -237,30 +263,34 @@ export default function RegistroPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="group">
-                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">Celular</label>
+                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">
+                        Celular
+                      </label>
                       <div className="relative">
                         <input
-                            type="tel"
-                            name="celular"
-                            required
-                            value={formData.celular}
-                            onChange={handleInputChange}
-                            className="w-full bg-white/5 border-b-2 border-gray-700 px-4 py-3 text-white focus:border-secondary focus:bg-white/10 outline-none transition-all rounded-t-lg pl-10"
-                            placeholder="WhatsApp"
+                          type="tel"
+                          name="celular"
+                          required
+                          value={formData.celular}
+                          onChange={handleInputChange}
+                          className="w-full bg-white/5 border-b-2 border-gray-700 px-4 py-3 text-white focus:border-secondary focus:bg-white/10 outline-none transition-all rounded-t-lg pl-10"
+                          placeholder="WhatsApp"
                         />
                         <FaPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                       </div>
                     </div>
                     <div className="group">
-                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">Iglesia / Ciudad</label>
+                      <label className="block text-xs text-gray-500 uppercase font-bold mb-2 group-focus-within:text-secondary transition-colors">
+                        Iglesia / Ciudad
+                      </label>
                       <div className="relative">
                         <input
-                            type="text"
-                            name="iglesia"
-                            value={formData.iglesia}
-                            onChange={handleInputChange}
-                            className="w-full bg-white/5 border-b-2 border-gray-700 px-4 py-3 text-white focus:border-secondary focus:bg-white/10 outline-none transition-all rounded-t-lg pl-10"
-                            placeholder="¿De dónde nos visitas?"
+                          type="text"
+                          name="iglesia"
+                          value={formData.iglesia}
+                          onChange={handleInputChange}
+                          className="w-full bg-white/5 border-b-2 border-gray-700 px-4 py-3 text-white focus:border-secondary focus:bg-white/10 outline-none transition-all rounded-t-lg pl-10"
+                          placeholder="¿De dónde nos visitas?"
                         />
                         <FaChurch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
                       </div>
@@ -271,10 +301,19 @@ export default function RegistroPage() {
                     <button
                       type="submit"
                       className="group relative px-8 py-3 bg-white text-black font-black uppercase tracking-wider hover:bg-secondary transition-colors clip-path-button"
-                      style={{ clipPath: "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)" }}
+                      style={{
+                        clipPath:
+                          "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
+                      }}
                     >
                       Siguiente
-                      <span className="absolute inset-0 border-2 border-black pointer-events-none" style={{ clipPath: "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)" }}></span>
+                      <span
+                        className="absolute inset-0 border-2 border-black pointer-events-none"
+                        style={{
+                          clipPath:
+                            "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
+                        }}
+                      ></span>
                     </button>
                   </div>
                 </motion.form>
@@ -290,7 +329,8 @@ export default function RegistroPage() {
                   className="space-y-8"
                 >
                   <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-white">
-                    <FaMoneyBillWave className="text-secondary" /> SELECCIONA TU PLAN
+                    <FaMoneyBillWave className="text-secondary" /> SELECCIONA TU
+                    PLAN
                   </h2>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -303,7 +343,9 @@ export default function RegistroPage() {
                       }`}
                     >
                       <div className="absolute top-0 right-0 w-0 h-0 border-t-[30px] border-r-[30px] border-t-transparent border-r-secondary/50 group-hover:border-r-secondary transition-colors"></div>
-                      <h3 className="font-bold text-lg mb-1 text-gray-300 group-hover:text-white">FULL PASS</h3>
+                      <h3 className="font-bold text-lg mb-1 text-gray-300 group-hover:text-white">
+                        FULL PASS
+                      </h3>
                       <p className="text-4xl font-black text-white mb-2 tracking-tighter">
                         S/ 150
                       </p>
@@ -320,8 +362,10 @@ export default function RegistroPage() {
                           : "border-gray-800 bg-black/40 hover:border-gray-600"
                       }`}
                     >
-                       <div className="absolute top-0 right-0 w-0 h-0 border-t-[30px] border-r-[30px] border-t-transparent border-r-secondary/50 group-hover:border-r-secondary transition-colors"></div>
-                      <h3 className="font-bold text-lg mb-1 text-gray-300 group-hover:text-white">RESERVA</h3>
+                      <div className="absolute top-0 right-0 w-0 h-0 border-t-[30px] border-r-[30px] border-t-transparent border-r-secondary/50 group-hover:border-r-secondary transition-colors"></div>
+                      <h3 className="font-bold text-lg mb-1 text-gray-300 group-hover:text-white">
+                        RESERVA
+                      </h3>
                       <p className="text-4xl font-black text-white mb-2 tracking-tighter">
                         S/ 50
                       </p>
@@ -335,18 +379,24 @@ export default function RegistroPage() {
                   <div className="bg-[#1a1a1a] border border-gray-800 p-6 relative overflow-hidden group">
                     <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#742298] to-[#5d1a7a]"></div>
                     <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
-                        <div className="bg-white p-2 shrink-0 shadow-[0_0_20px_rgba(116,34,152,0.3)]">
-                            <div className="w-32 h-32 bg-gray-200 flex items-center justify-center border border-gray-300">
-                                <FaQrcode className="text-gray-400 text-5xl" />
-                            </div>
+                      <div className="bg-white p-2 shrink-0 shadow-[0_0_20px_rgba(116,34,152,0.3)]">
+                        <div className="w-32 h-32 bg-gray-200 flex items-center justify-center border border-gray-300">
+                          <FaQrcode className="text-gray-400 text-5xl" />
                         </div>
-                        <div className="flex-1 text-center md:text-left">
-                            <h3 className="text-xl font-bold mb-1 text-[#bc5be6]">YAPE / PLIN</h3>
-                            <p className="text-3xl font-black mb-4 tracking-widest">999 888 777</p>
-                            <div className="text-xs text-gray-400 font-mono bg-black/50 p-3 border border-gray-800">
-                                MSG: {formData.nombres.split(" ")[0]} {formData.apellidos.split(" ")[0]} - {paymentType === "full" ? "FULL" : "RESERVA"}
-                            </div>
+                      </div>
+                      <div className="flex-1 text-center md:text-left">
+                        <h3 className="text-xl font-bold mb-1 text-[#bc5be6]">
+                          YAPE / PLIN
+                        </h3>
+                        <p className="text-3xl font-black mb-4 tracking-widest">
+                          999 888 777
+                        </p>
+                        <div className="text-xs text-gray-400 font-mono bg-black/50 p-3 border border-gray-800">
+                          MSG: {formData.nombres.split(" ")[0]}{" "}
+                          {formData.apellidos.split(" ")[0]} -{" "}
+                          {paymentType === "full" ? "FULL" : "RESERVA"}
                         </div>
+                      </div>
                     </div>
                   </div>
 
@@ -378,7 +428,10 @@ export default function RegistroPage() {
                     <button
                       onClick={handleSubmit}
                       className="bg-secondary text-black px-8 py-3 font-black uppercase tracking-wider hover:bg-white hover:scale-105 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.4)]"
-                      style={{ clipPath: "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)" }}
+                      style={{
+                        clipPath:
+                          "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
+                      }}
                     >
                       Finalizar
                     </button>
@@ -401,9 +454,10 @@ export default function RegistroPage() {
                     ¡REGISTRO EXITOSO!
                   </h2>
                   <p className="text-gray-400 text-lg mb-8 max-w-md mx-auto">
-                    Nos vemos en el campamento. Revisa tu WhatsApp para la confirmación.
+                    Nos vemos en el campamento. Revisa tu WhatsApp para la
+                    confirmación.
                   </p>
-                  
+
                   <div className="bg-black/50 p-6 border border-gray-800 mb-8 relative overflow-hidden group">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-primary"></div>
                     <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">
@@ -416,14 +470,17 @@ export default function RegistroPage() {
 
                   {/* Mobile Recommendations (Only visible on mobile step 3) */}
                   <div className="lg:hidden text-left bg-white/5 p-6 rounded-xl border border-white/10 mb-8">
-                     <h3 className="text-sm font-bold text-secondary mb-4 uppercase">No olvides traer:</h3>
-                     <ul className="space-y-2 text-sm text-gray-300">
-                        {recommendations.map((r, i) => (
-                            <li key={i} className="flex items-center gap-2">
-                                <FaCheckCircle className="text-gray-600 text-xs" /> {r.text}
-                            </li>
-                        ))}
-                     </ul>
+                    <h3 className="text-sm font-bold text-secondary mb-4 uppercase">
+                      No olvides traer:
+                    </h3>
+                    <ul className="space-y-2 text-sm text-gray-300">
+                      {recommendations.map((r, i) => (
+                        <li key={i} className="flex items-center gap-2">
+                          <FaCheckCircle className="text-gray-600 text-xs" />{" "}
+                          {r.text}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
                   <button
