@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import Countdown from "@/components/ui/Countdown";
 
 export default function Hero() {
@@ -60,9 +61,11 @@ export default function Hero() {
           transition={{ delay: 0.5, duration: 0.8 }}
           className="flex flex-col sm:flex-row gap-4 justify-center mt-8"
         >
-          <button className="bg-white text-primary px-10 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-gray-100 hover:-translate-y-1 transition-all shadow-xl hover:shadow-2xl cursor-pointer">
-            Reservar Cupo
-          </button>
+          <Link href="/registro">
+            <button className="bg-white text-primary px-10 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-gray-100 hover:-translate-y-1 transition-all shadow-xl hover:shadow-2xl cursor-pointer">
+              Reservar Cupo
+            </button>
+          </Link>
           <button className="bg-transparent border-2 border-white text-white px-10 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-white hover:text-primary hover:-translate-y-1 transition-all cursor-pointer">
             Ver Promo
           </button>

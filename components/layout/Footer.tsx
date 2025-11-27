@@ -54,14 +54,19 @@ export default function Footer() {
             Enlaces Rápidos
           </h4>
           <ul className="space-y-2">
-            {["Inicio", "Acerca de", "Speakers", "Registro"].map((item) => (
-              <li key={item}>
+            {[
+              { name: "Inicio", href: "/#hero" },
+              { name: "Acerca de", href: "/#experience" },
+              { name: "Speakers", href: "/#speakers" },
+              { name: "Registro", href: "/registro" },
+            ].map((item) => (
+              <li key={item.name}>
                 <Link
-                  href="#"
+                  href={item.href}
                   className="text-gray-400 hover:text-secondary transition-colors flex items-center gap-2"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-secondary/50" />
-                  {item}
+                  {item.name}
                 </Link>
               </li>
             ))}

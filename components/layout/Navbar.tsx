@@ -17,10 +17,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "Inicio", href: "#hero" },
-  { name: "Información", href: "#info" },
-  { name: "Experiencia", href: "#experience" },
-  { name: "Invitados", href: "#speakers" },
+  { name: "Inicio", href: "/#hero" },
+  { name: "Información", href: "/#info" },
+  { name: "Experiencia", href: "/#experience" },
+  { name: "Invitados", href: "/#speakers" },
 ];
 
 export default function Navbar() {
@@ -33,16 +33,18 @@ export default function Navbar() {
       setIsScrolled(window.scrollY > 50);
 
       // Simple scroll spy
-      const sections = navLinks.map((link) => link.href.substring(1));
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top >= 0 && rect.top <= 300) {
-            setActiveSection(
-              navLinks.find((link) => link.href === `#${section}`)?.name ||
-                "Inicio"
-            );
+      if (window.location.pathname === "/") {
+        const sections = navLinks.map((link) => link.href.substring(2));
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            if (rect.top >= 0 && rect.top <= 300) {
+              setActiveSection(
+                navLinks.find((link) => link.href === `/#${section}`)?.name ||
+                  "Inicio"
+              );
+            }
           }
         }
       }
@@ -129,9 +131,11 @@ export default function Navbar() {
 
           {/* CTA Button */}
           <div className="hidden md:block ml-8">
-            <button className="bg-black text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-gray-800 transition-all flex items-center gap-2 cursor-pointer shadow-lg">
-              Inscribirme <FaArrowRight />
-            </button>
+            <Link href="/registro">
+              <button className="bg-black text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-gray-800 transition-all flex items-center gap-2 cursor-pointer shadow-lg">
+                Inscribirme <FaArrowRight />
+              </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -164,9 +168,11 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <button className="mt-8 bg-[#6200ea] text-white px-8 py-3 rounded-full font-bold text-lg w-full max-w-xs flex items-center justify-center gap-2">
-              Inscribirme <FaArrowRight />
-            </button>
+            <Link href="/registro" className="w-full max-w-xs">
+              <button className="mt-8 bg-[#6200ea] text-white px-8 py-3 rounded-full font-bold text-lg w-full flex items-center justify-center gap-2">
+                Inscribirme <FaArrowRight />
+              </button>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
