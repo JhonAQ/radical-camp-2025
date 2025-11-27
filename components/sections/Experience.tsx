@@ -7,8 +7,8 @@ import Image from "next/image";
 const experiences = [
   {
     id: 1,
-    title: "CAMPAMENTO",
-    subtitle: "PLAYA 2024",
+    title: "JUEGOS Y PLAYA",
+    subtitle: "CAMPEL 2025",
     image:
       "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=1000&auto=format&fit=crop",
     color: "from-cyan-500 to-blue-600",
@@ -17,8 +17,8 @@ const experiences = [
   },
   {
     id: 2,
-    title: "ALABANZA",
-    subtitle: "NOCHE RADICAL",
+    title: "ALABANZAS",
+    subtitle: "NOCHE DE ALABANZA, MUSICA EN VIVO",
     image:
       "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1000&auto=format&fit=crop",
     color: "from-purple-500 to-pink-600",
@@ -28,7 +28,7 @@ const experiences = [
   {
     id: 3,
     title: "AÑO NUEVO",
-    subtitle: "2026 VISION",
+    subtitle: "RECIBE EL AÑO NUEVO CON DIOS",
     image:
       "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?q=80&w=1000&auto=format&fit=crop",
     color: "from-pink-500 to-rose-600",
@@ -38,7 +38,7 @@ const experiences = [
   {
     id: 4,
     title: "PONENCIAS",
-    subtitle: "TRANSFORMACIÓN",
+    subtitle: "TRANSFORMACIÓN PERSONAL",
     image:
       "https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=1000&auto=format&fit=crop",
     color: "from-cyan-400 to-teal-500",
@@ -200,7 +200,7 @@ export default function Experience() {
         <Marquee
           gradient={false}
           speed={50}
-          pauseOnHover={true}
+          pauseOnHover={false}
           className="py-10 overflow-y-visible"
         >
           {experiences.map((item) => (
