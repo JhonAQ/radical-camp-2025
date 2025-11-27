@@ -63,7 +63,7 @@ export default function Navbar() {
             <FaMapMarkerAlt className="text-cyan-400" /> Campel, Arequipa
           </span>
           <span className="flex items-center gap-2">
-            <FaPhoneAlt className="text-cyan-400" /> +51 999 888 777
+            <FaPhoneAlt className="text-cyan-400" /> +51 931 697 951
           </span>
         </div>
         <div className="flex gap-4 mt-2 md:mt-0">

@@ -54,12 +54,7 @@ export default function Footer() {
             Enlaces Rápidos
           </h4>
           <ul className="space-y-2">
-            {[
-              "Inicio",
-              "Acerca de",
-              "Speakers",
-              "Registro",
-            ].map((item) => (
+            {["Inicio", "Acerca de", "Speakers", "Registro"].map((item) => (
               <li key={item}>
                 <Link
                   href="#"
@@ -134,8 +129,16 @@ export default function Footer() {
       {/* Copyright */}
       <div className="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
         <p>
-          &copy; {new Date().getFullYear()} Radical Camp. Todos los derechos
-          reservados.
+          &copy; {new Date().getFullYear()}{" "}
+          <a
+            href="https://github.com/JhonAQ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-secondary transition-colors"
+          >
+            Jhonatan Arias (JhonAQ)
+          </a>
+          . Todos los derechos reservados.
         </p>
       </div>
     </footer>
