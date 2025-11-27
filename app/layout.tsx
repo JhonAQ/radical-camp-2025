@@ -23,6 +23,9 @@ export const metadata: Metadata = {
   title: "Campamento Radical - Año Nuevo 2026",
   description:
     "Un movimiento de jóvenes apasionados por Jesús, dispuestos a transformar su entorno y vivir una vida sin límites.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({
