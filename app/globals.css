@@ -27,7 +27,8 @@
   input,
   label,
   select,
-  textarea {
+  textarea,
+  .cursor-pointer {
     cursor: none !important;
   }
 

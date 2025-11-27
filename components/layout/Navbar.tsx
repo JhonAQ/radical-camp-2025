@@ -93,7 +93,12 @@ export default function Navbar() {
       </div>
 
       {/* Floating Navbar */}
-      <header className={cn("top-[70px] left-0 w-full z-40 px-4 pointer-events-none", pathname === "/registro" ? "absolute" : "fixed")}>
+      <header
+        className={cn(
+          "top-[70px] left-0 w-full z-40 px-4 pointer-events-none",
+          pathname === "/registro" ? "absolute" : "fixed"
+        )}
+      >
         <motion.nav
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
