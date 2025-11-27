@@ -198,4 +198,17 @@
   .glitch-hover:hover .glitch-text::after {
     animation-play-state: running;
   }
+
+  @keyframes text-shine {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 200% 50%;
+    }
+  }
+
+  .animate-text-shine {
+    animation: text-shine 3s linear infinite;
+  }
 }
