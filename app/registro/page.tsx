@@ -82,7 +82,7 @@ export default function RegistroPage() {
               src="/RADICAL-white.png"
               alt="Background"
               fill
-              className="object-cover object-center opacity-50"
+              className="object-contain object-center opacity-50"
             />
           </div>
 
@@ -397,15 +397,20 @@ export default function RegistroPage() {
                       </div>
                       <div className="flex-1 text-center md:text-left">
                         <h3 className="text-xl font-bold mb-1 text-[#bc5be6]">
-                          YAPE / PLIN
+                          YAPE
                         </h3>
                         <p className="text-3xl font-black mb-4 tracking-widest">
                           999 888 777
                         </p>
                         <div className="text-xs text-gray-400 font-mono bg-black/50 p-3 border border-gray-800">
-                          MSG: {formData.nombres.split(" ")[0]}{" "}
-                          {formData.apellidos.split(" ")[0]} -{" "}
-                          {paymentType === "full" ? "FULL" : "RESERVA"}
+                          <p className="text-secondary font-bold mb-1">
+                            ⚠️ IMPORTANTE:
+                          </p>
+                          <p className="mb-1">Agregar mensaje en el Yape:</p>
+                          <p className="text-white font-bold">
+                            "{formData.nombres} {formData.apellidos} -{" "}
+                            {paymentType === "full" ? "FULL" : "RESERVA"}"
+                          </p>
                         </div>
                       </div>
                     </div>
