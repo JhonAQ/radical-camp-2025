@@ -61,7 +61,7 @@ export default function Experience() {
       <div className="relative z-20 mb-16">
         <div className="relative text-center">
           {/* Background Logo - Behind Title */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] opacity-10 pointer-events-none select-none -z-10">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[500px] opacity-30 pointer-events-none select-none -z-10">
             <Image 
               src="/RADICAL-white.png" 
               alt="Radical Logo" 
