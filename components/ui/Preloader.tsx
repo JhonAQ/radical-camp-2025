@@ -22,36 +22,40 @@ export default function Preloader() {
         <motion.div
           className="fixed inset-0 z-[99999] flex items-center justify-center bg-black overflow-hidden"
           initial={{ opacity: 1 }}
-          exit={{ 
+          exit={{
             opacity: 0,
             y: -100,
-            transition: { duration: 0.8, ease: "easeInOut" }
+            transition: { duration: 0.8, ease: "easeInOut" },
           }}
         >
           <div className="relative">
             {/* Glitch Layers */}
             <GlitchImage />
-            
+
             {/* Loading Bar */}
-            <motion.div 
+            <motion.div
               className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-48 h-1 bg-gray-800 rounded-full overflow-hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              <motion.div 
+              <motion.div
                 className="h-full bg-secondary shadow-[0_0_10px_#00d4ff]"
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
                 transition={{ duration: 2, ease: "easeInOut" }}
               />
             </motion.div>
-            
+
             <motion.p
               className="absolute -bottom-20 left-1/2 -translate-x-1/2 text-gray-500 text-xs tracking-[0.3em] uppercase font-bold"
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0.5, 1] }}
-              transition={{ delay: 0.8, duration: 1.5, times: [0, 0.2, 0.5, 1] }}
+              transition={{
+                delay: 0.8,
+                duration: 1.5,
+                times: [0, 0.2, 0.5, 1],
+              }}
             >
               Loading
             </motion.p>
@@ -73,7 +77,7 @@ function GlitchImage() {
         className="object-contain relative z-10"
         priority
       />
-      
+
       {/* Glitch Effect Layers */}
       <motion.div
         className="absolute inset-0 z-0 opacity-50 mix-blend-color-dodge"
