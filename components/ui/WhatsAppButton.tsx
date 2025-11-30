@@ -41,8 +41,8 @@ export default function WhatsAppButton() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        {/* Glow Effect (Only on Hover) */}
-        <div className="absolute inset-0 rounded-full bg-green-500/0 group-hover:bg-green-500/20 blur-lg transition-all duration-300"></div>
+        {/* Glow Effect (Always visible aura) */}
+        <div className="absolute inset-0 rounded-full bg-green-500/20 blur-md group-hover:bg-green-500/40 group-hover:blur-lg transition-all duration-300"></div>
 
         {/* Main Circle */}
         <div className="relative w-12 h-12 bg-black border border-green-500/50 group-hover:border-green-500 rounded-full flex items-center justify-center shadow-lg transition-all overflow-hidden">

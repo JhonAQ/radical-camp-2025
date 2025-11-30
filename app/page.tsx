@@ -3,6 +3,7 @@ import Hero from "@/components/sections/Hero";
 import Info from "@/components/sections/Info";
 import Experience from "@/components/sections/Experience";
 import Speakers from "@/components/sections/Speakers";
+import FAQ from "@/components/sections/FAQ";
 import Footer from "@/components/layout/Footer";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <Info />
       <Experience />
       <Speakers />
+      <FAQ />
       <Footer />
     </main>
   );
