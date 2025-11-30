@@ -16,7 +16,11 @@ export default function WhatsAppButton() {
       {/* Tooltip / Label */}
       <motion.div
         initial={{ opacity: 0, x: 10, scale: 0.9 }}
-        animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 10, scale: isHovered ? 1 : 0.9 }}
+        animate={{
+          opacity: isHovered ? 1 : 0,
+          x: isHovered ? 0 : 10,
+          scale: isHovered ? 1 : 0.9,
+        }}
         className="bg-black/90 backdrop-blur-md border border-green-500/30 text-white px-3 py-1.5 rounded-md shadow-lg hidden md:block pointer-events-none"
       >
         <p className="text-xs font-bold uppercase tracking-wider text-green-400 whitespace-nowrap">
@@ -26,7 +30,9 @@ export default function WhatsAppButton() {
 
       {/* Button */}
       <motion.a
-        href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`}
+        href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+          message
+        )}`}
         target="_blank"
         rel="noopener noreferrer"
         className="relative group"
@@ -40,14 +46,12 @@ export default function WhatsAppButton() {
 
         {/* Main Circle */}
         <div className="relative w-12 h-12 bg-black border border-green-500/50 group-hover:border-green-500 rounded-full flex items-center justify-center shadow-lg transition-all overflow-hidden">
-          
           <motion.div
             animate={isHovered ? { rotate: [0, -10, 10, -10, 10, 0] } : {}}
             transition={{ duration: 0.5 }}
           >
-             <FaWhatsapp className="text-2xl text-green-500 group-hover:text-green-400 transition-colors relative z-10" />
+            <FaWhatsapp className="text-2xl text-green-500 group-hover:text-green-400 transition-colors relative z-10" />
           </motion.div>
-          
         </div>
       </motion.a>
     </div>
