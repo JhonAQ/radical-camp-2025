@@ -4,6 +4,7 @@ import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
 import Preloader from "@/components/ui/Preloader";
 import MobileBlocker from "@/components/ui/MobileBlocker";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 const montserrat = Montserrat({
   variable: "--font-title",
@@ -45,6 +46,7 @@ export default function RootLayout({
         <Preloader />
         <MobileBlocker />
         <CustomCursor />
+        <WhatsAppButton />
         {children}
       </body>
     </html>
