@@ -5,22 +5,22 @@ import Image from "next/image";
 
 const speakers = [
   {
-    name: "Ponente 1",
+    name: "Pastor Sergio Bustamante",
     role: "Tema 1",
     image:
-      "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      "/pastor-sergio-bustamante.jpg",
   },
   {
-    name: "Ponente 2",
+    name: "Lilian Nuñez Lipa",
     role: "Tema 2",
     image:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      "/lilian-nunez-lipa.jpg",
   },
   {
-    name: "Ponente 3",
+    name: "Diego Valero C.",
     role: "Tema 3",
     image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      "/diego-valero.jpg",
   },
   {
     name: "Ponente 4",
