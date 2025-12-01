@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     description:
       "Prepárate para el mejor inicio de año. Campamento juvenil en Campel Arequipa, del 30 de Dic al 02 de Ene.",
     url: "https://radicalcamp.vercel.app",
-    siteName: "Radical Camp",
+    siteName: "IEL-P · Ministerio Nacional de Jovenes",
     locale: "es_PE",
     type: "website",
   },
@@ -58,6 +58,18 @@ export default function RootLayout({
         <link
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "IEL-P · Ministerio Nacional de Jovenes",
+              alternateName: ["Radical Camp", "Radical Camp 2025"],
+              url: "https://radicalcamp.vercel.app",
+            }),
+          }}
         />
       </head>
       <body className={`${montserrat.variable} ${poppins.variable}`}>

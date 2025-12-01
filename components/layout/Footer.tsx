@@ -29,6 +29,9 @@ export default function Footer() {
               className="h-12 object-contain"
             />
           </Link>
+          <p className="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">
+            IEL-P · Ministerio Nacional de Jóvenes
+          </p>
           <p className="text-gray-400 leading-relaxed mb-6">
             Un movimiento dedicado a despertar una generación apasionada por
             transformar su entorno a través de la fe y la acción.
