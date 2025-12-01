@@ -7,26 +7,27 @@ const speakers = [
   {
     name: "Pastor Sergio Bustamante",
     role: "Tema 1",
-    image:
-      "/pastor-sergio-bustamante.jpg",
+    image: "/pastor-sergio-bustamante.jpg",
   },
   {
     name: "Lilian Nuñez Lipa",
     role: "Tema 2",
-    image:
-      "/lilian-nunez-lipa.jpg",
+    image: "/lilian-nunez-lipa.jpg",
   },
   {
     name: "Diego Valero C.",
     role: "Tema 3",
-    image:
-      "/diego-valero.jpg",
+    image: "/diego-valero.jpg",
   },
   {
     name: "Brian Gonzales Inga",
     role: "Tema 4",
-    image:
-      "/brayan-inga.jpg",
+    image: "/brayan-inga.jpg",
+  },
+  {
+    name: "Pastor Daniel Cruz",
+    role: "Tema 4",
+    image: "/daniel-cruz.jpg",
   },
 ];
 
@@ -47,11 +48,12 @@ export default function Speakers() {
             Nuestros <span className="text-secondary">Ponentes</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Conoce a nuestros ponentes y los temas que abordarán durante el campamento.
+            Conoce a nuestros ponentes y los temas que abordarán durante el
+            campamento.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="flex flex-wrap justify-center gap-8">
           {speakers.map((speaker, index) => (
             <motion.div
               key={speaker.name}
@@ -59,7 +61,7 @@ export default function Speakers() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative rounded-3xl overflow-hidden aspect-[3/4] cursor-pointer"
+              className="group relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer w-full sm:w-[calc(50%-1rem)] lg:w-[280px] max-w-[280px]"
             >
               <Image
                 src={speaker.image}
