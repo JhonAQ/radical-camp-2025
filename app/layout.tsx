@@ -21,23 +21,23 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Radical Camp 2026 | ¡Es tiempo de volver!",
+  title: "Radical Camp 2025",
   description:
-    "Campamento juvenil Radical Camp 2025 - 2026. Únete a nosotros en Tacna para un tiempo inolvidable de fe, diversión y comunión. Organizado por la Iglesia Evangélica Luterana - Perú.",
+    "Campamento juvenil Radical Camp 2025 - 2026. Únete a nosotros en Campel Arequipa para un tiempo inolvidable de fe, diversión y comunión. Organizado por la Iglesia Evangélica Luterana - Perú.",
   keywords: [
     "campamento cristiano",
-    "jóvenes",
-    "iglesia luterana",
-    "tacna",
-    "radical camp",
-    "verano 2026",
+    "radical camp 2025",
+    "ielp",
+    "campel arequipa",
+    "ministerio de jovenes arequipa",
+    "iglesia evangelica luterana peru",
   ],
-  authors: [{ name: "Radical Camp Team" }],
+  authors: [{ name: "Radical Camp Team" }, { name: "JhonAQ", url: "https://jhonaq.com" }],
   openGraph: {
-    title: "Radical Camp 2026 | ¡Es tiempo de volver!",
+    title: "Radical Camp 2025 | ¡Es tiempo de volver!",
     description:
-      "Prepárate para el mejor inicio de año. Campamento juvenil en Tacna, del 30 de Dic al 02 de Ene.",
-    url: "https://radicalcamp.com", // Reemplazar con la URL real cuando la tengan
+      "Prepárate para el mejor inicio de año. Campamento juvenil en Campel Arequipa, del 30 de Dic al 02 de Ene.",
+    url: "https://radical-camp-2025.vercel.app", // Reemplazar con la URL real cuando la tengan
     siteName: "Radical Camp",
     locale: "es_PE",
     type: "website",
