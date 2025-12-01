@@ -21,9 +21,27 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Radical Camp 2026",
+  title: "Radical Camp 2025",
   description:
-    "Campamento juvenil Radical Camp 2025 - 2026, es un campamento anual organizado por la Iglesia Evangelica Luterana - Peru, dirigido a jóvenes y adolescentes para fortalecer su fe y fomentar la comunión cristiana a través de actividades recreativas, talleres y momentos de adoración.",
+    "Campamento juvenil Radical Camp 2025 - 2026. Únete a nosotros en Campel Arequipa para un tiempo inolvidable de fe, diversión y comunión. Organizado por la Iglesia Evangélica Luterana - Perú.",
+  keywords: [
+    "campamento cristiano",
+    "radical camp 2025",
+    "ielp",
+    "campel arequipa",
+    "ministerio de jovenes arequipa",
+    "iglesia evangelica luterana peru",
+  ],
+  authors: [{ name: "Radical Camp Team" }, { name: "JhonAQ", url: "https://github.com/jhonaq" }],
+  openGraph: {
+    title: "Radical Camp 2025 | ¡Es tiempo de volver!",
+    description:
+      "Prepárate para el mejor inicio de año. Campamento juvenil en Campel Arequipa, del 30 de Dic al 02 de Ene.",
+    url: "https://radicalcamp.vercel.app",
+    siteName: "Radical Camp",
+    locale: "es_PE",
+    type: "website",
+  },
   icons: {
     icon: "/icon.png",
   },
