@@ -23,7 +23,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Radical Camp 2025",
   description:
-    "Campamento juvenil Radical Camp 2025 - 2026. Únete a nosotros en Campel Arequipa para un tiempo inolvidable de fe, diversión y comunión. Organizado por la Iglesia Evangélica Luterana - Perú.",
+    "Campamento juvenil Radical Camp 2025 - 2026. Únete a nosotros en Campel Arequipa para un tiempo inolvidable de fe, diversión y comunión. Organizado por la Iglesia Evangélica Luterana - Perú (IEL-P).",
   keywords: [
     "campamento cristiano",
     "radical camp 2025",
@@ -32,7 +32,10 @@ export const metadata: Metadata = {
     "ministerio de jovenes arequipa",
     "iglesia evangelica luterana peru",
   ],
-  authors: [{ name: "Radical Camp Team" }, { name: "JhonAQ", url: "https://github.com/jhonaq" }],
+  authors: [
+    { name: "Radical Camp Team" },
+    { name: "JhonAQ", url: "https://github.com/jhonaq" },
+  ],
   openGraph: {
     title: "Radical Camp 2025 | ¡Es tiempo de volver!",
     description:
@@ -41,9 +44,6 @@ export const metadata: Metadata = {
     siteName: "Radical Camp",
     locale: "es_PE",
     type: "website",
-  },
-  icons: {
-    icon: "/icon.png",
   },
 };
 
