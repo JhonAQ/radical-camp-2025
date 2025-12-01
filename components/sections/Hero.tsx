@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Play, X } from "lucide-react";
 import Countdown from "@/components/ui/Countdown";
 
@@ -16,12 +17,13 @@ export default function Hero() {
     >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
-          style={{
-            backgroundImage:
-              'url("https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80")',
-          }}
+        <Image
+          src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
+          alt="Campamento Radical Background"
+          fill
+          priority
+          className="object-cover object-center"
+          quality={90}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-[#3700b3]/85 to-[#00d4ff]/60 mix-blend-multiply" />
         <div className="absolute inset-0 bg-black/30" />

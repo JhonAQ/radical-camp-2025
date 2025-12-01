@@ -21,9 +21,27 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Radical Camp 2026",
+  title: "Radical Camp 2026 | ¡Es tiempo de volver!",
   description:
-    "Campamento juvenil Radical Camp 2025 - 2026, es un campamento anual organizado por la Iglesia Evangelica Luterana - Peru, dirigido a jóvenes y adolescentes para fortalecer su fe y fomentar la comunión cristiana a través de actividades recreativas, talleres y momentos de adoración.",
+    "Campamento juvenil Radical Camp 2025 - 2026. Únete a nosotros en Tacna para un tiempo inolvidable de fe, diversión y comunión. Organizado por la Iglesia Evangélica Luterana - Perú.",
+  keywords: [
+    "campamento cristiano",
+    "jóvenes",
+    "iglesia luterana",
+    "tacna",
+    "radical camp",
+    "verano 2026",
+  ],
+  authors: [{ name: "Radical Camp Team" }],
+  openGraph: {
+    title: "Radical Camp 2026 | ¡Es tiempo de volver!",
+    description:
+      "Prepárate para el mejor inicio de año. Campamento juvenil en Tacna, del 30 de Dic al 02 de Ene.",
+    url: "https://radicalcamp.com", // Reemplazar con la URL real cuando la tengan
+    siteName: "Radical Camp",
+    locale: "es_PE",
+    type: "website",
+  },
   icons: {
     icon: "/icon.png",
   },
