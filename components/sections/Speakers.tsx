@@ -23,10 +23,10 @@ const speakers = [
       "/diego-valero.jpg",
   },
   {
-    name: "Ponente 4",
+    name: "Brian Gonzales Inga",
     role: "Tema 4",
     image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      "/brayan-inga.jpg",
   },
 ];
 
