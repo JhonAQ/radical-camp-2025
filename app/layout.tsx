@@ -21,9 +21,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Campamento Radical - Año Nuevo 2026",
+  title: "Radical Camp 2026",
   description:
-    "Un movimiento de jóvenes apasionados por Jesús, dispuestos a transformar su entorno y vivir una vida sin límites.",
+    "Campamento juvenil Radical Camp 2025 - 2026, es un campamento anual organizado por la Iglesia Evangelica Luterana - Peru, dirigido a jóvenes y adolescentes para fortalecer su fe y fomentar la comunión cristiana a través de actividades recreativas, talleres y momentos de adoración.",
   icons: {
     icon: "/icon.png",
   },

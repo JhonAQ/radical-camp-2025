@@ -47,7 +47,7 @@ export default function Speakers() {
             Nuestros <span className="text-secondary">Ponentes</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Voces que inspiran y desafían a esta generación.
+            Conoce a nuestros ponentes y los temas que abordarán durante el campamento.
           </p>
         </motion.div>
 
