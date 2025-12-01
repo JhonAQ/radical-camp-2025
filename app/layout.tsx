@@ -32,12 +32,12 @@ export const metadata: Metadata = {
     "ministerio de jovenes arequipa",
     "iglesia evangelica luterana peru",
   ],
-  authors: [{ name: "Radical Camp Team" }, { name: "JhonAQ", url: "https://jhonaq.com" }],
+  authors: [{ name: "Radical Camp Team" }, { name: "JhonAQ", url: "https://github.com/jhonaq" }],
   openGraph: {
     title: "Radical Camp 2025 | ¡Es tiempo de volver!",
     description:
       "Prepárate para el mejor inicio de año. Campamento juvenil en Campel Arequipa, del 30 de Dic al 02 de Ene.",
-    url: "https://radical-camp-2025.vercel.app", // Reemplazar con la URL real cuando la tengan
+    url: "https://radicalcamp.vercel.app",
     siteName: "Radical Camp",
     locale: "es_PE",
     type: "website",
