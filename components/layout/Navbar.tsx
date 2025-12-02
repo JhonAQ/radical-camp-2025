@@ -58,7 +58,7 @@ export default function Navbar() {
   return (
     <>
       {/* Top Bar */}
-      <div className="bg-black py-4 px-8 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm relative z-50 font-sans">
+      <div className="hidden md:flex bg-black py-4 px-8 flex-col md:flex-row justify-between items-center text-xs md:text-sm relative z-50 font-sans">
         <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 md:gap-6 text-gray-300">
           <span className="flex items-center gap-2">
             <FaCalendarAlt className="text-cyan-400" /> 30 Dic - 03 Ene

@@ -61,7 +61,7 @@ export default function Speakers() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer w-full sm:w-[calc(50%-1rem)] lg:w-[280px] max-w-[280px]"
+              className="group relative rounded-2xl overflow-hidden aspect-[3/4] cursor-pointer w-[220px] sm:w-[calc(50%-1rem)] lg:w-[280px] max-w-[280px]"
             >
               <Image
                 src={speaker.image}

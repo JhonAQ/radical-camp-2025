@@ -55,36 +55,38 @@ export default function Info() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: item.delay }}
               whileHover={{ y: -10 }}
-              className="group relative bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/5 rounded-[2rem] p-6 md:p-8 overflow-hidden hover:border-white/20 transition-all duration-500"
+              className="group relative bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/5 rounded-[2rem] p-4 md:p-8 overflow-hidden hover:border-white/20 transition-all duration-500"
             >
               {/* Hover Gradient Background */}
               <div
                 className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
               />
 
-              <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="relative z-10 flex flex-row md:flex-col items-center text-left md:text-center gap-4 md:gap-0">
                 <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${
+                  className={`w-12 h-12 md:w-16 md:h-16 shrink-0 rounded-2xl bg-gradient-to-br ${
                     item.gradient
-                  } p-[1px] mb-6 shadow-lg group-hover:shadow-${
+                  } p-[1px] md:mb-6 shadow-lg group-hover:shadow-${
                     item.gradient.split("-")[1]
                   }-500/50 transition-shadow duration-500`}
                 >
                   <div className="w-full h-full bg-black/90 rounded-2xl flex items-center justify-center">
-                    <item.icon className="text-2xl text-white" />
+                    <item.icon className="text-xl md:text-2xl text-white" />
                   </div>
                 </div>
 
-                <h3
-                  className="text-3xl font-bold text-white mb-2"
-                  style={{ fontFamily: "var(--font-title)" }}
-                >
-                  {item.value}
-                </h3>
-                <p className="text-gray-400 text-sm font-medium tracking-wide uppercase mb-1">
-                  {item.label}
-                </p>
-                <p className="text-gray-500 text-xs">{item.sub}</p>
+                <div>
+                  <h3
+                    className="text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2"
+                    style={{ fontFamily: "var(--font-title)" }}
+                  >
+                    {item.value}
+                  </h3>
+                  <p className="text-gray-400 text-xs md:text-sm font-medium tracking-wide uppercase mb-0 md:mb-1">
+                    {item.label}
+                  </p>
+                  <p className="text-gray-500 text-[10px] md:text-xs">{item.sub}</p>
+                </div>
               </div>
             </motion.div>
           ))}

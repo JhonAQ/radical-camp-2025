@@ -78,16 +78,16 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center mt-8"
+          className="flex flex-col sm:flex-row gap-4 justify-center mt-8 px-4"
         >
-          <Link href="/registro">
-            <button className="bg-white text-primary px-10 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-gray-100 hover:-translate-y-1 transition-all shadow-xl hover:shadow-2xl cursor-pointer">
+          <Link href="/registro" className="w-full sm:w-auto">
+            <button className="w-full sm:w-auto bg-white text-primary px-6 py-3 md:px-10 md:py-4 rounded-full font-bold text-base md:text-lg uppercase tracking-wide hover:bg-gray-100 hover:-translate-y-1 transition-all shadow-xl hover:shadow-2xl cursor-pointer">
               Reservar Cupo
             </button>
           </Link>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="group flex items-center gap-3 bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg uppercase tracking-wide hover:bg-white hover:text-primary hover:-translate-y-1 transition-all cursor-pointer"
+            className="w-full sm:w-auto group flex items-center justify-center gap-3 bg-transparent border-2 border-white text-white px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-base md:text-lg uppercase tracking-wide hover:bg-white hover:text-primary hover:-translate-y-1 transition-all cursor-pointer"
           >
             <Play className="w-5 h-5 fill-current" />
             Ver Promo
