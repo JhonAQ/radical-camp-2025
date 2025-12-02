@@ -39,7 +39,7 @@ const infoItems = [
 
 export default function Info() {
   return (
-    <section id="info" className="relative z-20 -mt-24 px-5 mb-32">
+    <section id="info" className="relative z-20 -mt-24 px-5 mb-12 md:mb-32">
       <div className="max-w-7xl mx-auto">
         {/* Background Glow Effects */}
         <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-primary/30 rounded-full blur-[100px] -z-10" />
@@ -85,7 +85,9 @@ export default function Info() {
                   <p className="text-gray-400 text-xs md:text-sm font-medium tracking-wide uppercase mb-0 md:mb-1">
                     {item.label}
                   </p>
-                  <p className="text-gray-500 text-[10px] md:text-xs">{item.sub}</p>
+                  <p className="text-gray-500 text-[10px] md:text-xs">
+                    {item.sub}
+                  </p>
                 </div>
               </div>
             </motion.div>

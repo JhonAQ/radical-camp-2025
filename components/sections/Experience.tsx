@@ -49,7 +49,7 @@ const experiences = [
 
 const GlitchCard = ({ item }: { item: (typeof experiences)[0] }) => {
   return (
-    <div className="relative group w-[70vw] h-[70vw] md:w-80 md:h-80 mx-4 md:mx-6 bg-black transition-transform duration-300 hover:-translate-y-2">
+    <div className="relative group w-64 h-64 md:w-80 md:h-80 mx-4 md:mx-6 bg-black transition-transform duration-300 hover:-translate-y-2">
       {/* Cyberpunk Border Frame with Clip Path */}
       <div
         className={`absolute inset-0 border-2 ${item.border} opacity-40 group-hover:opacity-100 group-hover:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300 z-20`}
@@ -144,7 +144,7 @@ export default function Experience() {
         </svg>
       </div>
 
-      <div className="relative z-20 mb-16">
+      <div className="relative z-20 mb-8 md:mb-16">
         <div className="relative text-center">
           {/* Background Logo - Behind Title */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[1000px] opacity-40 blur-[1px] pointer-events-none select-none -z-10 mix-blend-screen">
@@ -172,7 +172,7 @@ export default function Experience() {
               </span>
             </h2>
             <motion.p
-              className="text-white text-base md:text-lg max-w-2xl mx-auto px-6 font-medium tracking-wide"
+              className="text-white text-sm md:text-lg max-w-2xl mx-auto px-6 font-medium tracking-wide"
               animate={{
                 textShadow: [
                   "0 0 5px rgba(0, 212, 255, 0.3)",
