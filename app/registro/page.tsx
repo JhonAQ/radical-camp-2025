@@ -73,7 +73,7 @@ export default function RegistroPage() {
     <main className="min-h-screen bg-dark-bg text-white font-sans selection:bg-secondary selection:text-black overflow-x-hidden">
       <Navbar />
 
-      <div className="flex flex-col lg:flex-row min-h-screen pt-20">
+      <div className="flex flex-col lg:flex-row min-h-screen pt-24 lg:pt-20">
         {/* LEFT PANEL: Visuals & Info */}
         <div className="lg:w-1/2 relative p-8 lg:p-16 flex flex-col justify-center overflow-hidden bg-[#050505]">
           {/* Background Image with Blend Mode */}
@@ -98,12 +98,12 @@ export default function RegistroPage() {
               transition={{ duration: 0.8 }}
             >
               <h1
-                className="text-6xl lg:text-8xl font-black tracking-tighter mb-2 leading-[0.9] glitch-text"
+                className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-2 leading-[0.9] glitch-text"
                 data-text="REGISTRO"
               >
                 REGISTRO
               </h1>
-              <h1 className="text-6xl lg:text-8xl font-black tracking-tighter mb-6 leading-[0.9]">
+              <h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-6 leading-[0.9]">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-white to-primary animate-text-shine bg-[length:200%_auto]">
                   2025
                 </span>

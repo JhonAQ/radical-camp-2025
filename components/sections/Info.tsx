@@ -55,7 +55,7 @@ export default function Info() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: item.delay }}
               whileHover={{ y: -10 }}
-              className="group relative bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 overflow-hidden hover:border-white/20 transition-all duration-500"
+              className="group relative bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/5 rounded-[2rem] p-6 md:p-8 overflow-hidden hover:border-white/20 transition-all duration-500"
             >
               {/* Hover Gradient Background */}
               <div

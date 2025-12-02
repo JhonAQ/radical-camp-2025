@@ -3,7 +3,6 @@ import { Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
 import Preloader from "@/components/ui/Preloader";
-import MobileBlocker from "@/components/ui/MobileBlocker";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 const montserrat = Montserrat({
@@ -74,7 +73,6 @@ export default function RootLayout({
       </head>
       <body className={`${montserrat.variable} ${poppins.variable}`}>
         <Preloader />
-        <MobileBlocker />
         <CustomCursor />
         <WhatsAppButton />
         {children}

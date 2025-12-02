@@ -13,7 +13,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] flex flex-col justify-center items-center text-center px-5 pt-36 pb-48 overflow-hidden"
+      className="relative min-h-[100dvh] flex flex-col justify-center items-center text-center px-5 pt-24 pb-32 md:pt-36 md:pb-48 overflow-hidden"
     >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
@@ -37,7 +37,7 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
         >
           <h1
-            className="text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-none mb-4 relative z-20"
+            className="text-4xl md:text-7xl lg:text-8xl font-black uppercase leading-none mb-4 relative z-20"
             style={{ fontFamily: "var(--font-title)" }}
           >
             <span className="text-white drop-shadow-lg">¡ES TIEMPO</span>

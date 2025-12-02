@@ -49,7 +49,7 @@ const experiences = [
 
 const GlitchCard = ({ item }: { item: (typeof experiences)[0] }) => {
   return (
-    <div className="relative group w-80 h-80 mx-6 bg-black transition-transform duration-300 hover:-translate-y-2">
+    <div className="relative group w-[85vw] h-[85vw] md:w-80 md:h-80 mx-4 md:mx-6 bg-black transition-transform duration-300 hover:-translate-y-2">
       {/* Cyberpunk Border Frame with Clip Path */}
       <div
         className={`absolute inset-0 border-2 ${item.border} opacity-40 group-hover:opacity-100 group-hover:shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all duration-300 z-20`}

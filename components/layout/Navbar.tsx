@@ -95,8 +95,10 @@ export default function Navbar() {
       {/* Floating Navbar */}
       <header
         className={cn(
-          "top-[70px] left-0 w-full z-40 px-4 pointer-events-none",
-          pathname === "/registro" ? "absolute" : "fixed"
+          "w-full z-40 px-4 pointer-events-none transition-all duration-300",
+          pathname === "/registro"
+            ? "absolute top-0"
+            : "sticky top-0 md:fixed md:top-[70px]"
         )}
       >
         <motion.nav
@@ -104,7 +106,7 @@ export default function Navbar() {
           animate={{ y: 0, opacity: 1 }}
           className={cn(
             "pointer-events-auto mx-auto max-w-6xl rounded-full px-2 pl-6 pr-2 py-2 flex justify-between items-center transition-all duration-300 bg-white shadow-lg",
-            isScrolled ? "mt-[-40px] py-2" : "mt-0"
+            isScrolled ? "md:mt-[-40px] py-2" : "mt-0"
           )}
         >
           {/* Logo */}
