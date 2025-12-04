@@ -107,20 +107,22 @@ export default function RegistroPage() {
         voucherUrl = data.publicUrl;
       }
 
-      const { error: insertError } = await supabase.from("registrations").insert([
-        {
-          nombres: formData.nombres,
-          apellidos: formData.apellidos,
-          edad: parseInt(formData.edad),
-          dni: formData.dni,
-          celular: formData.celular,
-          iglesia: formData.iglesia,
-          tipo_pago: paymentType,
-          voucher_url: voucherUrl,
-          monto: paymentType === "full" ? 170 : 50,
-          estado: "pendiente",
-        },
-      ]);
+      const { error: insertError } = await supabase
+        .from("registrations")
+        .insert([
+          {
+            nombres: formData.nombres,
+            apellidos: formData.apellidos,
+            edad: parseInt(formData.edad),
+            dni: formData.dni,
+            celular: formData.celular,
+            iglesia: formData.iglesia,
+            tipo_pago: paymentType,
+            voucher_url: voucherUrl,
+            monto: paymentType === "full" ? 170 : 50,
+            estado: "pendiente",
+          },
+        ]);
 
       if (insertError) throw insertError;
 
