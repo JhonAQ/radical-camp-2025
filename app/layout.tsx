@@ -4,6 +4,7 @@ import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
 import Preloader from "@/components/ui/Preloader";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
+import { Analytics } from "@vercel/analytics/next"
 
 const montserrat = Montserrat({
   variable: "--font-title",
@@ -76,6 +77,7 @@ export default function RootLayout({
         <CustomCursor />
         <WhatsAppButton />
         {children}
+        <Analytics />
       </body>
     </html>
   );
