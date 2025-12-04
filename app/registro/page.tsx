@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import {
@@ -21,6 +21,7 @@ import {
   FaHeart,
   FaShower,
 } from "react-icons/fa";
+import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
@@ -56,7 +57,9 @@ export default function RegistroPage() {
     ciudad: "",
   });
   const [fileName, setFileName] = useState<string | null>(null);
-  const fileInputRef = require("react").useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,15 +69,68 @@ export default function RegistroPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFileName(e.target.files[0].name);
+      setFile(e.target.files[0]);
     }
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    nextStep();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      let voucherUrl = null;
+
+      if (file) {
+        const fileExt = file.name.split(".").pop();
+        const fileName = `${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(2)}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("vouchers")
+          .upload(filePath, file);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        const { data } = supabase.storage
+          .from("vouchers")
+          .getPublicUrl(filePath);
+
+        voucherUrl = data.publicUrl;
+      }
+
+      const { error: insertError } = await supabase.from("registrations").insert([
+        {
+          nombres: formData.nombres,
+          apellidos: formData.apellidos,
+          edad: parseInt(formData.edad),
+          dni: formData.dni,
+          celular: formData.celular,
+          iglesia: formData.iglesia,
+          tipo_pago: paymentType,
+          voucher_url: voucherUrl,
+          monto: paymentType === "full" ? 170 : 50,
+          estado: "pendiente",
+        },
+      ]);
+
+      if (insertError) throw insertError;
+
+      nextStep();
+    } catch (error) {
+      console.error("Error registering:", error);
+      alert("Hubo un error al registrar. Por favor intenta de nuevo.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -463,13 +519,16 @@ export default function RegistroPage() {
                     </button>
                     <button
                       onClick={handleSubmit}
-                      className="bg-secondary text-black px-8 py-3 font-black uppercase tracking-wider hover:bg-white hover:scale-105 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.4)]"
+                      disabled={isSubmitting}
+                      className={`bg-secondary text-black px-8 py-3 font-black uppercase tracking-wider hover:bg-white hover:scale-105 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(0,212,255,0.4)] ${
+                        isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
                       style={{
                         clipPath:
                           "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
                       }}
                     >
-                      Finalizar
+                      {isSubmitting ? "Enviando..." : "Finalizar"}
                     </button>
                   </div>
                 </motion.div>
