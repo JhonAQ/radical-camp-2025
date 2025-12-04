@@ -13,7 +13,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] flex flex-col justify-start md:justify-center items-center text-center px-5 pt-32 pb-24 md:pt-36 md:pb-48 overflow-hidden"
+      className="relative min-h-[100dvh] flex flex-col justify-start md:justify-center items-center text-center px-5 pt-28 pb-24 md:pt-36 md:pb-48 overflow-hidden"
     >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
