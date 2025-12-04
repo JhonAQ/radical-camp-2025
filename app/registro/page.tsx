@@ -551,19 +551,8 @@ export default function RegistroPage() {
                     ¡REGISTRO EXITOSO!
                   </h2>
                   <p className="text-gray-400 text-lg mb-8 max-w-md mx-auto">
-                    Nos vemos en el campamento. Revisa tu WhatsApp para la
-                    confirmación.
+                    Nos vemos en el campamento.
                   </p>
-
-                  <div className="bg-black/50 p-6 border border-gray-800 mb-8 relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-primary"></div>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">
-                      ID DE ACCESO
-                    </p>
-                    <p className="text-3xl font-mono font-bold text-white tracking-widest group-hover:text-secondary transition-colors">
-                      RC-{Math.floor(Math.random() * 10000)}
-                    </p>
-                  </div>
 
                   {/* Mobile Recommendations (Only visible on mobile step 3) */}
                   <div className="lg:hidden text-left bg-white/5 p-6 rounded-xl border border-white/10 mb-8">
