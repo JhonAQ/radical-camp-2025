@@ -132,7 +132,7 @@ export default function Info() {
                       className="text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(255,0,85,0.5)]"
                       style={{ fontFamily: "var(--font-title)" }}
                     >
-                      150
+                      170
                     </h3>
                   </div>
 

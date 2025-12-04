@@ -68,7 +68,7 @@ const faqs = [
   {
     question: "¿PUEDO PAGAR POR PARTES?",
     answer:
-      "¡Sí! Puedes reservar tu cupo con S/ 50 y terminar de pagar el resto antes del inicio del evento. Aprovecha el precio de preventa reservando ahora (S/ 150 solo hasta el 15 de diciembre).",
+      "¡Sí! Puedes reservar tu cupo con S/ 50 y terminar de pagar el resto antes del inicio del evento. Aprovecha el precio de preventa reservando ahora (S/ 170 solo hasta el 15 de diciembre).",
     className: "",
   },
   {

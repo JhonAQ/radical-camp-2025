@@ -351,7 +351,7 @@ export default function RegistroPage() {
                           S/ 190
                         </span>
                         <span className="text-4xl font-black text-white tracking-tighter">
-                          S/ 150
+                          S/ 170
                         </span>
                       </div>
                       <p className="text-xs text-secondary font-bold mb-2 animate-pulse">
@@ -378,7 +378,7 @@ export default function RegistroPage() {
                         S/ 50
                       </p>
                       <p className="text-xs text-secondary font-bold mb-2">
-                        CONGELA EL PRECIO DE S/ 150
+                        CONGELA EL PRECIO DE S/ 170
                       </p>
                       <p className="text-xs text-gray-500 font-mono">
                         // ASEGURA TU CUPO
