@@ -15,7 +15,7 @@ const infoItems = [
     icon: FaCalendarCheck,
     label: "FECHAS",
     value: "30 Dic - 03 Ene",
-    sub: "4 Días de Verano",
+    sub: "5 Días de Verano",
     gradient: "from-blue-500 to-cyan-400",
     delay: 0,
   },

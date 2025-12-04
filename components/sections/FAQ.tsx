@@ -15,7 +15,7 @@ const faqs = [
   {
     question: "¿CUÁNDO Y DÓNDE ES?",
     answer:
-      "El campamento se realizará del 30 de Diciembre al 02 de Enero en el Campamento Evangélico Luterano (CAMPEL - Mejía). Un lugar perfecto para desconectarse y conectarse con Dios.",
+      "El campamento se realizará del 30 de Diciembre al 02 de Enero en el Campamento Evangélico Luterano (CAMPEL - Mejía - Arequipa).",
     className: "",
   },
   {

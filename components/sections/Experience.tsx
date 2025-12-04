@@ -8,7 +8,7 @@ const experiences = [
   {
     id: 1,
     title: "JUEGOS Y PLAYA",
-    subtitle: "CAMPEL 2025",
+    subtitle: "Diversión y actividades al aire libre",
     image:
       "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=1000&auto=format&fit=crop",
     color: "from-cyan-500 to-blue-600",
@@ -38,7 +38,7 @@ const experiences = [
   {
     id: 4,
     title: "PONENCIAS",
-    subtitle: "TRANSFORMACIÓN PERSONAL",
+    subtitle: "Crecimiento Espiritual y Personal",
     image:
       "https://images.unsplash.com/photo-1544531586-fde5298cdd40?q=80&w=1000&auto=format&fit=crop",
     color: "from-cyan-400 to-teal-500",
@@ -186,8 +186,7 @@ export default function Experience() {
                 ease: "easeInOut",
               }}
             >
-              Cinco días intensos diseñados para marcar un antes y un después en
-              tu vida.
+              Cinco días llenos de actividades, aprendizaje y momentos que recordarás siempre.
             </motion.p>
           </motion.div>
         </div>

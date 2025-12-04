@@ -33,8 +33,8 @@ export default function Footer() {
             IEL-P · Ministerio Nacional de Jóvenes
           </p>
           <p className="text-gray-400 leading-relaxed mb-6">
-            Un movimiento dedicado a despertar una generación apasionada por
-            transformar su entorno a través de la fe y la acción.
+            Trabajamos con los jóvenes de la IELP para brindar formación,
+            acompañamiento y espacios de crecimiento en la fe.
           </p>
           <div className="flex gap-4">
             {[FaFacebook, FaInstagram, FaTiktok].map((Icon, i) => (
