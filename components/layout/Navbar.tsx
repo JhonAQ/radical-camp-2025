@@ -97,8 +97,8 @@ export default function Navbar() {
         className={cn(
           "w-full z-40 px-4 pointer-events-none transition-all duration-300",
           pathname === "/registro"
-            ? "absolute top-4"
-            : "fixed top-4 md:top-[70px]"
+            ? "absolute top-0 md:top-[70px]"
+            : "sticky top-0 md:fixed md:top-[70px]"
         )}
       >
         <motion.nav

@@ -55,10 +55,18 @@ export default function RegistroPage() {
     iglesia: "",
     ciudad: "",
   });
+  const [fileName, setFileName] = useState<string | null>(null);
+  const fileInputRef = require("react").useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFileName(e.target.files[0].name);
+    }
   };
 
   const nextStep = () => setStep((prev) => prev + 1);
@@ -391,16 +399,21 @@ export default function RegistroPage() {
                     <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#742298] to-[#5d1a7a]"></div>
                     <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
                       <div className="bg-white p-2 shrink-0 shadow-[0_0_20px_rgba(116,34,152,0.3)]">
-                        <div className="w-32 h-32 bg-gray-200 flex items-center justify-center border border-gray-300">
-                          <FaQrcode className="text-gray-400 text-5xl" />
+                        <div className="w-32 h-32 bg-white flex items-center justify-center border border-gray-300 relative">
+                          <Image
+                            src="/yape-qr.PNG"
+                            alt="QR Yape"
+                            fill
+                            className="object-contain"
+                          />
                         </div>
                       </div>
                       <div className="flex-1 text-center md:text-left">
                         <h3 className="text-xl font-bold mb-1 text-[#bc5be6]">
                           YAPE
                         </h3>
-                        <p className="text-3xl font-black mb-4 tracking-widest">
-                          999 888 777
+                        <p className="text-lg font-bold mb-4 tracking-wide text-white">
+                          Lilian Marilin Nunez Lipa
                         </p>
                         <div className="text-xs text-gray-400 font-mono bg-black/50 p-3 border border-gray-800">
                           <p className="text-secondary font-bold mb-1">
@@ -421,15 +434,22 @@ export default function RegistroPage() {
                     <label className="text-xs text-gray-500 uppercase font-bold">
                       Comprobante de pago
                     </label>
-                    <div className="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-secondary hover:bg-secondary/5 transition-all cursor-pointer group">
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-secondary hover:bg-secondary/5 transition-all cursor-pointer group"
+                    >
                       <FaFileUpload className="mx-auto text-3xl text-gray-600 group-hover:text-secondary mb-3 transition-colors" />
                       <p className="text-gray-400 text-sm group-hover:text-white transition-colors">
-                        Arrastra o haz clic para subir
+                        {fileName
+                          ? `Archivo seleccionado: ${fileName}`
+                          : "Arrastra o haz clic para subir"}
                       </p>
                       <input
+                        ref={fileInputRef}
                         type="file"
                         className="hidden"
                         accept="image/*,application/pdf"
+                        onChange={handleFileChange}
                       />
                     </div>
                   </div>
