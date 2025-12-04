@@ -175,7 +175,7 @@ export default function RegistroPage() {
                 </span>
               </h1>
               <p className="text-xl text-gray-400 max-w-md mb-12 font-light tracking-wide">
-                No es solo un evento, es el inicio de tu nueva historia. <br />
+                Más que un evento, es un espacio pensado para ti. <br />
                 <span className="text-secondary font-bold">¿Estás listo?</span>
               </p>
             </motion.div>
@@ -188,7 +188,7 @@ export default function RegistroPage() {
               className="hidden lg:block bg-white/5 backdrop-blur-xl p-8 rounded-3xl border border-white/10 shadow-2xl"
             >
               <h3 className="text-lg font-bold mb-6 flex items-center gap-2 text-secondary uppercase tracking-widest">
-                <FaSuitcase /> Kit de Supervivencia
+                <FaSuitcase /> No olvides llevar: 
               </h3>
               <div className="grid grid-cols-2 gap-6">
                 {recommendations.map((item, i) => (
