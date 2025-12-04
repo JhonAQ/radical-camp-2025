@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const speakers = [
   {
-    name: "Pastor Sergio Bustamante",
+    name: "Ps. Sergio Bustamante",
     role: "Tema 1",
     image: "/pastor-sergio-bustamante.jpg",
   },
@@ -25,7 +25,7 @@ const speakers = [
     image: "/brayan-inga.jpg",
   },
   {
-    name: "Pastor Daniel Cruz",
+    name: "Ps. Daniel Cruz",
     role: "Tema 4",
     image: "/daniel-cruz.jpg",
   },
@@ -74,7 +74,7 @@ export default function Speakers() {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
               {/* Content */}
-              <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+              <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-300">
                 <h3
                   className="text-lg md:text-2xl font-bold text-white mb-1"
                   style={{ fontFamily: "var(--font-title)" }}
