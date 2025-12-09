@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { name: "Inicio", href: "/#hero" },
+  { name: "Social", href: "/social" },
   { name: "Información", href: "/#info" },
   { name: "Experiencia", href: "/#experience" },
   { name: "Invitados", href: "/#speakers" },

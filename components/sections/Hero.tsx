@@ -1,15 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Play, X } from "lucide-react";
+import { Play } from "lucide-react";
 import Countdown from "@/components/ui/Countdown";
 
 export default function Hero() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <section
       id="hero"
@@ -85,52 +82,14 @@ export default function Hero() {
               Reservar Cupo
             </button>
           </Link>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="w-auto min-w-[140px] group flex items-center justify-center gap-3 bg-transparent border-2 border-white text-white px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-sm md:text-lg uppercase tracking-wide hover:bg-white hover:text-primary hover:-translate-y-1 transition-all cursor-pointer"
-          >
-            <Play className="w-4 h-4 md:w-5 md:h-5 fill-current" />
-            Ver Promo
-          </button>
+          <Link href="/social" className="w-auto">
+            <button className="w-auto min-w-[140px] group flex items-center justify-center gap-3 bg-transparent border-2 border-white text-white px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-sm md:text-lg uppercase tracking-wide hover:bg-white hover:text-primary hover:-translate-y-1 transition-all cursor-pointer">
+              <Play className="w-4 h-4 md:w-5 md:h-5 fill-current" />
+              Ver Multimedia
+            </button>
+          </Link>
         </motion.div>
       </div>
-
-      {/* Video Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-[350px] md:max-w-[400px] aspect-9/16 bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10 ring-1 ring-white/20"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="absolute top-4 right-4 z-20 p-2 bg-black/40 hover:bg-black/60 text-white rounded-full transition-colors backdrop-blur-md cursor-pointer border border-white/10"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <video
-                src="/promo-2.mp4"
-                className="w-full h-full object-cover"
-                controls
-                autoPlay
-                playsInline
-                loop
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
