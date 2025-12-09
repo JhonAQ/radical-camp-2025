@@ -11,12 +11,13 @@
 
 @layer base {
   :root {
-    --font-main: var(--font-main);
-    --font-title: var(--font-title);
+    --font-main: 'Poppins', sans-serif;
+    --font-title: 'Montserrat', sans-serif;
   }
 
   body {
-    @apply bg-dark-bg text-white font-sans overflow-x-hidden antialiased;
+    @apply bg-dark-bg text-white overflow-x-hidden antialiased;
+    font-family: 'Poppins', sans-serif;
     scroll-behavior: smooth;
     cursor: none;
   }
@@ -38,7 +39,7 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-title), sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
   }
 }

@@ -80,6 +80,11 @@ export default function RegistroPage() {
     e.preventDefault();
     if (isSubmitting) return;
 
+    if (!supabase) {
+      alert("El servicio de registro no está disponible en este momento. Por favor contacta al administrador.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {

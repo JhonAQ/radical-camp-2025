@@ -1,25 +1,10 @@
 import type { Metadata } from "next";
-import { Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/ui/CustomCursor";
 import Preloader from "@/components/ui/Preloader";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next"
-
-const montserrat = Montserrat({
-  variable: "--font-title",
-  weight: ["400", "700", "900"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const poppins = Poppins({
-  variable: "--font-main",
-  weight: ["300", "400", "600"],
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Radical Camp 2025",
@@ -56,6 +41,12 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Poppins:wght@300;400;600&display=swap"
+          rel="stylesheet"
+        />
         <link
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           rel="stylesheet"
@@ -73,7 +64,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${montserrat.variable} ${poppins.variable}`}>
+      <body>
         <Preloader />
         <CustomCursor />
         <WhatsAppButton />
