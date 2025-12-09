@@ -55,8 +55,8 @@ export default function Stories() {
   const [isMuted, setIsMuted] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const requestRef = useRef<number>();
-  const startTimeRef = useRef<number>();
+  const requestRef = useRef<number | undefined>(undefined);
+  const startTimeRef = useRef<number | undefined>(undefined);
   const pausedProgressRef = useRef<number>(0);
 
   const currentStory = stories[currentIndex];
