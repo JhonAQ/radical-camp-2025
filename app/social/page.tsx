@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, X, Download, ExternalLink, Pause } from "lucide-react";
+import { Play, X, Download, Share2, Pause } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 
 // Mock Data
@@ -133,7 +133,7 @@ export default function SocialPage() {
       ? items
       : items.filter((item) => item.category === selectedCategory);
 
-  const openViewer = (item: typeof items[0]) => {
+  const openViewer = (item: (typeof items)[0]) => {
     const index = filteredItems.findIndex((i) => i.id === item.id);
     if (index !== -1) {
       setInitialIndex(index);
@@ -166,6 +166,101 @@ export default function SocialPage() {
         setIsPlaying(false);
       }
     }
+  };
+
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownload = async (e: React.MouseEvent, url: string, filename: string) => {
+    e.stopPropagation();
+    setIsDownloading(true);
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename || "download";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed", error);
+      window.open(url, "_blank");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handleShare = async (e: React.MouseEvent, title: string, text: string) => {
+    e.stopPropagation();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title,
+          text,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.log("Error sharing", error);
+      }
+    } else {
+      // Fallback for insecure contexts or browsers without share API
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(window.location.href);
+          alert("Enlace copiado al portapapeles");
+        } else {
+          // Fallback for older browsers or insecure context
+          const textArea = document.createElement("textarea");
+          textArea.value = window.location.href;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textArea);
+          alert("Enlace copiado al portapapeles");
+        }
+      } catch (err) {
+        console.error("Failed to copy: ", err);
+      }
+    }
+  };
+
+  // Scroll to initial index when viewer opens
+  useEffect(() => {
+    if (viewerOpen && containerRef.current) {
+      // Instant jump to the correct position
+      containerRef.current.scrollTo({
+        top: window.innerHeight * initialIndex,
+        behavior: "instant",
+      });
+    }
+  }, [viewerOpen, initialIndex]);
+
+  // Handle Back Button
+  useEffect(() => {
+    if (viewerOpen) {
+      // Push state when opening
+      window.history.pushState({ viewerOpen: true }, "");
+
+      const handlePopState = () => {
+        setViewerOpen(false);
+      };
+
+      window.addEventListener("popstate", handlePopState);
+
+      return () => {
+        window.removeEventListener("popstate", handlePopState);
+      };
+    }
+  }, [viewerOpen]);
+
+  const closeViewer = () => {
+    // If we pushed state, we should go back to pop it and close
+    // But checking if we pushed is hard.
+    // Simple approach: just setViewerOpen(false) and maybe history.back() if we know we pushed?
+    // If we use history.back(), it triggers popstate which calls setViewerOpen(false).
+    window.history.back();
   };
 
   // Effect to manage video playback based on activeIndex
@@ -308,13 +403,13 @@ export default function SocialPage() {
           >
             <button
               className="absolute top-6 right-6 z-50 p-3 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors border border-white/10"
-              onClick={() => setViewerOpen(false)}
+              onClick={closeViewer}
             >
               <X size={24} />
             </button>
 
             <div
-              className="h-full w-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+              className="h-full w-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-contain"
               ref={containerRef}
               onScroll={handleScroll}
             >
@@ -342,7 +437,10 @@ export default function SocialPage() {
                         {!isPlaying && activeIndex === index && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
                             <div className="w-20 h-20 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-sm">
-                              <Play fill="white" className="w-10 h-10 text-white ml-1" />
+                              <Play
+                                fill="white"
+                                className="w-10 h-10 text-white ml-1"
+                              />
                             </div>
                           </div>
                         )}
@@ -368,7 +466,7 @@ export default function SocialPage() {
                   </div>
 
                   {/* Overlay Info - Reduced size and intrusion */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-20 pb-10 pointer-events-none">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-20 pb-10 pointer-events-none z-20">
                     <div className="max-w-2xl mx-auto w-full pointer-events-auto">
                       <div className="flex items-end justify-between gap-4">
                         <div className="flex-1">
@@ -384,11 +482,28 @@ export default function SocialPage() {
                         </div>
 
                         <div className="flex flex-col gap-3 shrink-0">
-                          <button className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10">
-                            <Download size={20} />
+                          <button
+                            onClick={(e) =>
+                              handleDownload(e, item.url, `${item.title}.mp4`)
+                            }
+                            disabled={isDownloading}
+                            className={`p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10 ${
+                              isDownloading ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                          >
+                            {isDownloading ? (
+                              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            ) : (
+                              <Download size={20} />
+                            )}
                           </button>
-                          <button className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10">
-                            <ExternalLink size={20} />
+                          <button
+                            onClick={(e) =>
+                              handleShare(e, item.title, item.description)
+                            }
+                            className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10"
+                          >
+                            <Share2 size={20} />
                           </button>
                         </div>
                       </div>

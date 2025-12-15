@@ -55,8 +55,8 @@ export default function Stories() {
   const [isMuted, setIsMuted] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const requestRef = useRef<number>();
-  const startTimeRef = useRef<number>();
+  const requestRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
   const pausedProgressRef = useRef<number>(0);
 
   const currentStory = stories[currentIndex];
@@ -64,8 +64,8 @@ export default function Stories() {
   const resetStory = useCallback(() => {
     setProgress(0);
     pausedProgressRef.current = 0;
-    if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    startTimeRef.current = undefined;
+    if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
+    startTimeRef.current = null;
   }, []);
 
   const nextStory = useCallback(() => {
@@ -90,16 +90,16 @@ export default function Stories() {
   // Handle Progress
   useEffect(() => {
     if (!isOpen || isPaused) {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
       // Save current progress timestamp if pausing
-      if (isPaused && !pausedProgressRef.current && startTimeRef.current) {
+      if (isPaused && !pausedProgressRef.current && startTimeRef.current !== null) {
         // Logic handled by just not updating
       }
       return;
     }
 
     const animate = (time: number) => {
-      if (!startTimeRef.current) startTimeRef.current = time;
+      if (startTimeRef.current === null) startTimeRef.current = time;
 
       // Calculate elapsed time considering pauses could be complex,
       // simplified approach: increment progress based on frame delta
@@ -126,6 +126,17 @@ export default function Stories() {
       return () => clearInterval(timer);
     }
   }, [isOpen, isPaused, currentStory, nextStory]);
+
+  // Handle Video Play/Pause
+  useEffect(() => {
+    if (currentStory.type === "video" && videoRef.current) {
+      if (isPaused) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play().catch(() => {});
+      }
+    }
+  }, [isPaused, currentStory.type]);
 
   // Handle Video Progress
   const handleVideoUpdate = () => {
@@ -293,8 +304,6 @@ export default function Stories() {
                       muted={isMuted}
                       onTimeUpdate={handleVideoUpdate}
                       onEnded={handleVideoEnded}
-                      onPlay={() => !isPaused && videoRef.current?.play()}
-                      onPause={() => isPaused && videoRef.current?.pause()}
                     />
                   ) : (
                     <div className="relative w-full h-full">
@@ -305,13 +314,14 @@ export default function Stories() {
                         className="object-cover"
                         priority
                       />
-                      <div className="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent">
-                        <p className="text-white font-bold text-lg">
-                          {currentStory.alt}
-                        </p>
-                      </div>
                     </div>
                   )}
+                  {/* Title Overlay */}
+                  <div className="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
+                    <p className="text-white font-bold text-lg">
+                      {currentStory.alt}
+                    </p>
+                  </div>
                 </motion.div>
               </AnimatePresence>
 
