@@ -3,7 +3,16 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, X, Download, Share2, Pause, Check, Copy, Link as LinkIcon } from "lucide-react";
+import {
+  Play,
+  X,
+  Download,
+  Share2,
+  Pause,
+  Check,
+  Copy,
+  Link as LinkIcon,
+} from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 
 // Mock Data
@@ -121,12 +130,12 @@ const items = [
     title: "Santas Decisiones",
     category: "Promo",
     url: "/promos/promo-3.mp4",
-    description: "Puedes conseguir el libro 'Santas Decisiones' en Radical Camp 2025.",
+    description:
+      "Puedes conseguir el libro 'Santas Decisiones' en Radical Camp 2025.",
     date: "Hace 1 día",
     aspect: "aspect-square",
   },
 ];
-
 
 const categories = ["Todos", "Video", "Speaker", "Info"];
 
@@ -233,9 +242,7 @@ export default function SocialPage() {
         canvas.toBlob(
           (blob) => {
             if (blob) {
-              resolve(
-                new File([blob], "preview.jpg", { type: "image/jpeg" })
-              );
+              resolve(new File([blob], "preview.jpg", { type: "image/jpeg" }));
             } else {
               resolve(null);
             }
