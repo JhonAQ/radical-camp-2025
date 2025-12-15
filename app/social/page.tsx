@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Play, X, Download, Share2, Pause } from "lucide-react";
+import { Play, X, Download, Share2, Pause, Check, Copy, Link as LinkIcon } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 
 // Mock Data
@@ -114,7 +114,19 @@ const items = [
     date: "Hace 3 semanas",
     aspect: "aspect-square",
   },
+
+  {
+    id: 11,
+    type: "video",
+    title: "Santas Decisiones",
+    category: "Promo",
+    url: "/promos/promo-3.mp4",
+    description: "Puedes conseguir el libro 'Santas Decisiones' en Radical Camp 2025.",
+    date: "Hace 1 día",
+    aspect: "aspect-square",
+  },
 ];
+
 
 const categories = ["Todos", "Video", "Speaker", "Info"];
 
@@ -169,8 +181,22 @@ export default function SocialPage() {
   };
 
   const [isDownloading, setIsDownloading] = useState(false);
+  const [toast, setToast] = useState<{ show: boolean; message: string }>({
+    show: false,
+    message: "",
+  });
+  const [showShareModal, setShowShareModal] = useState(false);
 
-  const handleDownload = async (e: React.MouseEvent, url: string, filename: string) => {
+  const showToast = (message: string) => {
+    setToast({ show: true, message });
+    setTimeout(() => setToast({ show: false, message: "" }), 3000);
+  };
+
+  const handleDownload = async (
+    e: React.MouseEvent,
+    url: string,
+    filename: string
+  ) => {
     e.stopPropagation();
     setIsDownloading(true);
     try {
@@ -184,6 +210,7 @@ export default function SocialPage() {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
+      showToast("¡Guardado en tu dispositivo!");
     } catch (error) {
       console.error("Download failed", error);
       window.open(url, "_blank");
@@ -192,37 +219,97 @@ export default function SocialPage() {
     }
   };
 
-  const handleShare = async (e: React.MouseEvent, title: string, text: string) => {
+  const captureVideoFrame = async (
+    video: HTMLVideoElement
+  ): Promise<File | null> => {
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+      ctx.drawImage(video, 0, 0);
+      return new Promise((resolve) => {
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              resolve(
+                new File([blob], "preview.jpg", { type: "image/jpeg" })
+              );
+            } else {
+              resolve(null);
+            }
+          },
+          "image/jpeg",
+          0.8
+        );
+      });
+    } catch (e) {
+      console.error("Error capturing frame", e);
+      return null;
+    }
+  };
+
+  const handleShare = async (
+    e: React.MouseEvent,
+    title: string,
+    text: string,
+    type: string,
+    url: string
+  ) => {
     e.stopPropagation();
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title,
-          text,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.log("Error sharing", error);
-      }
-    } else {
-      // Fallback for insecure contexts or browsers without share API
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(window.location.href);
-          alert("Enlace copiado al portapapeles");
-        } else {
-          // Fallback for older browsers or insecure context
-          const textArea = document.createElement("textarea");
-          textArea.value = window.location.href;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand("copy");
-          document.body.removeChild(textArea);
-          alert("Enlace copiado al portapapeles");
+    const shareData: ShareData = {
+      title,
+      text: `${text}\n\nMira esto en: ${window.location.href}`,
+      url: window.location.href,
+    };
+
+    try {
+      let fileToShare: File | null = null;
+
+      if (type === "image") {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        fileToShare = new File([blob], "image.jpg", { type: blob.type });
+      } else if (type === "video") {
+        // Try to capture frame
+        const videoEl = videoRefs.current[activeIndex];
+        if (videoEl) {
+          fileToShare = await captureVideoFrame(videoEl);
         }
-      } catch (err) {
-        console.error("Failed to copy: ", err);
       }
+
+      if (
+        fileToShare &&
+        navigator.canShare &&
+        navigator.canShare({ files: [fileToShare] })
+      ) {
+        await navigator.share({
+          files: [fileToShare],
+          title,
+          text: `${text}\n\n${window.location.href}`,
+        });
+      } else {
+        // Fallback to text share
+        if (navigator.share) {
+          await navigator.share(shareData);
+        } else {
+          throw new Error("Web Share API not supported");
+        }
+      }
+    } catch (error) {
+      console.log("Share failed or not supported, opening modal", error);
+      setShowShareModal(true);
+    }
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast("Enlace copiado");
+      setShowShareModal(false);
+    } catch (err) {
+      console.error("Failed to copy", err);
     }
   };
 
@@ -488,7 +575,9 @@ export default function SocialPage() {
                             }
                             disabled={isDownloading}
                             className={`p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10 ${
-                              isDownloading ? "opacity-50 cursor-not-allowed" : ""
+                              isDownloading
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
                             }`}
                           >
                             {isDownloading ? (
@@ -499,7 +588,13 @@ export default function SocialPage() {
                           </button>
                           <button
                             onClick={(e) =>
-                              handleShare(e, item.title, item.description)
+                              handleShare(
+                                e,
+                                item.title,
+                                item.description,
+                                item.type,
+                                item.url
+                              )
                             }
                             className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10"
                           >
@@ -512,6 +607,79 @@ export default function SocialPage() {
                 </div>
               ))}
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Toast Notification */}
+      <AnimatePresence>
+        {toast.show && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[70] bg-white text-black px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold"
+          >
+            <div className="bg-green-500 rounded-full p-1">
+              <Check size={14} className="text-white" strokeWidth={3} />
+            </div>
+            {toast.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Share Modal Fallback */}
+      <AnimatePresence>
+        {showShareModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-4"
+            onClick={() => setShowShareModal(false)}
+          >
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              className="bg-[#1a1a1a] w-full max-w-md rounded-3xl p-6 border border-white/10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold">Compartir</h3>
+                <button
+                  onClick={() => setShowShareModal(false)}
+                  className="p-2 bg-white/5 rounded-full hover:bg-white/10"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-4 gap-4 mb-6">
+                <button
+                  onClick={copyToClipboard}
+                  className="flex flex-col items-center gap-2 group"
+                >
+                  <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                    <Copy size={24} />
+                  </div>
+                  <span className="text-xs text-gray-400">Copiar</span>
+                </button>
+                {/* Add more social buttons here if needed */}
+              </div>
+
+              <div className="bg-black/30 p-4 rounded-xl flex items-center gap-3 border border-white/5">
+                <LinkIcon size={16} className="text-gray-500 shrink-0" />
+                <p className="text-sm text-gray-400 truncate flex-1">
+                  {typeof window !== "undefined" ? window.location.href : ""}
+                </p>
+                <button
+                  onClick={copyToClipboard}
+                  className="text-xs font-bold text-secondary hover:text-white transition-colors"
+                >
+                  Copiar
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

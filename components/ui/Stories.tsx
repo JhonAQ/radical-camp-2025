@@ -92,7 +92,11 @@ export default function Stories() {
     if (!isOpen || isPaused) {
       if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
       // Save current progress timestamp if pausing
-      if (isPaused && !pausedProgressRef.current && startTimeRef.current !== null) {
+      if (
+        isPaused &&
+        !pausedProgressRef.current &&
+        startTimeRef.current !== null
+      ) {
         // Logic handled by just not updating
       }
       return;
