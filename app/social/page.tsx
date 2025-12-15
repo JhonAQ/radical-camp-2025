@@ -12,6 +12,9 @@ import {
   Check,
   Copy,
   Link as LinkIcon,
+  MessageCircle,
+  Facebook,
+  Twitter,
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 
@@ -129,6 +132,7 @@ const items = [
     type: "video",
     title: "Santas Decisiones",
     category: "Promo",
+    thumbnail: "/promos/promo-ya-tenemos.web.jpg",
     url: "/promos/promo-3.mp4",
     description:
       "Puedes conseguir el libro 'Santas Decisiones' en Radical Camp 2025.",
@@ -312,11 +316,24 @@ export default function SocialPage() {
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      showToast("Enlace copiado");
-      setShowShareModal(false);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+        showToast("Enlace copiado");
+        setShowShareModal(false);
+      } else {
+        // Fallback for insecure contexts
+        const textArea = document.createElement("textarea");
+        textArea.value = window.location.href;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        showToast("Enlace copiado");
+        setShowShareModal(false);
+      }
     } catch (err) {
       console.error("Failed to copy", err);
+      showToast("Error al copiar");
     }
   };
 
@@ -671,7 +688,57 @@ export default function SocialPage() {
                   </div>
                   <span className="text-xs text-gray-400">Copiar</span>
                 </button>
-                {/* Add more social buttons here if needed */}
+
+                <button
+                  onClick={() =>
+                    window.open(
+                      `https://wa.me/?text=${encodeURIComponent(
+                        document.title + " " + window.location.href
+                      )}`,
+                      "_blank"
+                    )
+                  }
+                  className="flex flex-col items-center gap-2 group"
+                >
+                  <div className="w-14 h-14 rounded-full bg-[#25D366]/20 text-[#25D366] flex items-center justify-center group-hover:bg-[#25D366]/30 transition-colors">
+                    <MessageCircle size={24} />
+                  </div>
+                  <span className="text-xs text-gray-400">WhatsApp</span>
+                </button>
+
+                <button
+                  onClick={() =>
+                    window.open(
+                      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                        window.location.href
+                      )}`,
+                      "_blank"
+                    )
+                  }
+                  className="flex flex-col items-center gap-2 group"
+                >
+                  <div className="w-14 h-14 rounded-full bg-[#1877F2]/20 text-[#1877F2] flex items-center justify-center group-hover:bg-[#1877F2]/30 transition-colors">
+                    <Facebook size={24} />
+                  </div>
+                  <span className="text-xs text-gray-400">Facebook</span>
+                </button>
+
+                <button
+                  onClick={() =>
+                    window.open(
+                      `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                        document.title
+                      )}&url=${encodeURIComponent(window.location.href)}`,
+                      "_blank"
+                    )
+                  }
+                  className="flex flex-col items-center gap-2 group"
+                >
+                  <div className="w-14 h-14 rounded-full bg-[#1DA1F2]/20 text-[#1DA1F2] flex items-center justify-center group-hover:bg-[#1DA1F2]/30 transition-colors">
+                    <Twitter size={24} />
+                  </div>
+                  <span className="text-xs text-gray-400">Twitter</span>
+                </button>
               </div>
 
               <div className="bg-black/30 p-4 rounded-xl flex items-center gap-3 border border-white/5">
