@@ -119,7 +119,7 @@ export default function RegistroPage() {
             iglesia: formData.iglesia,
             tipo_pago: paymentType,
             voucher_url: voucherUrl,
-            monto: paymentType === "full" ? 170 : 50,
+            monto: paymentType === "full" ? 190 : 50,
             estado: "pendiente",
           },
         ]);
@@ -413,15 +413,13 @@ export default function RegistroPage() {
                         PAGO COMPLETO
                       </h3>
                       <div className="flex items-baseline gap-2 mb-1">
-                        <span className="text-gray-500 line-through text-lg decoration-red-500 decoration-2">
-                          S/ 190
-                        </span>
+
                         <span className="text-4xl font-black text-white tracking-tighter">
-                          S/ 170
+                          S/ 190
                         </span>
                       </div>
                       <p className="text-xs text-secondary font-bold mb-2 animate-pulse">
-                        ¡OFERTA HASTA EL 15 DIC!
+                        ¡ASEGURA TU LUGAR!
                       </p>
                       <p className="text-xs text-gray-500 font-mono">
                         // ACCESO TOTAL
@@ -444,7 +442,7 @@ export default function RegistroPage() {
                         S/ 50
                       </p>
                       <p className="text-xs text-secondary font-bold mb-2">
-                        CONGELA EL PRECIO DE S/ 170
+                        ¡RESERVA TU CUPO!
                       </p>
                       <p className="text-xs text-gray-500 font-mono">
                         // ASEGURA TU CUPO
