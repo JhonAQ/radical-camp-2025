@@ -26,23 +26,12 @@ import {
 } from "@/lib/social";
 import { useAuth } from "@/lib/useAuth";
 
-const categories = ["Todos", "promo", "speaker", "info", "archive", "behind-scenes"];
-const categoryLabels: Record<string, string> = {
-  Todos: "🔥 Todo",
-  promo: "🎫 Promos",
-  speaker: "🎤 Speakers",
-  info: "ℹ️ Info",
-  archive: "📂 Archivo",
-  "behind-scenes": "🎬 BTS",
-};
-
 export default function SocialPage() {
   const { user } = useAuth();
 
   // Feed state
   const [posts, setPosts] = useState<Post[]>([]);
   const [likedPostIds, setLikedPostIds] = useState<Set<string>>(new Set());
-  const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -69,7 +58,6 @@ export default function SocialPage() {
   });
 
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const categoriesRef = useRef<HTMLDivElement>(null);
 
   const showToast = (message: string) => {
     setToast({ show: true, message });
@@ -89,10 +77,8 @@ export default function SocialPage() {
 
       try {
         const cursor = reset ? undefined : lastCursor;
-        const data = await getPosts(
-          selectedCategory === "Todos" ? undefined : selectedCategory,
-          cursor
-        );
+        // Fetch all posts without passing any category filter since we removed tabs
+        const data = await getPosts(undefined, cursor);
 
         const newPosts = reset ? data.posts : [...posts, ...data.posts];
         setPosts(newPosts);
@@ -116,14 +102,14 @@ export default function SocialPage() {
         setRefreshing(false);
       }
     },
-    [selectedCategory, lastCursor, posts, user]
+    [lastCursor, posts, user]
   );
 
-  // Initial load + category change
+  // Initial load
   useEffect(() => {
     loadPosts(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory, user?.$id]);
+  }, [user?.$id]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -231,46 +217,15 @@ export default function SocialPage() {
   );
 
   return (
-    <div className="min-h-screen -mx-0">
+    <div className="min-h-screen -mx-0 pb-20">
+      {/* Feed pull-to-refresh style header or stories... */}
+
       {/* ── Stories Row ──────────────────────────────────── */}
-      <div className="border-b border-white/5">
+      <div className="border-b border-white/5 sticky top-14 z-30 bg-dark-bg/95 backdrop-blur-xl">
         <StoriesBar
           onStoryClick={handleStoryClick}
           isLoggedIn={!!user}
         />
-      </div>
-
-      {/* ── Category pills (horizontal scroll) ──────────── */}
-      <div className="sticky top-14 z-30 bg-dark-bg/95 backdrop-blur-xl border-b border-white/5">
-        <div
-          ref={categoriesRef}
-          className="flex items-center gap-2 px-4 py-2.5 overflow-x-auto scrollbar-hide"
-        >
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
-                selectedCategory === cat
-                  ? "bg-white text-black shadow-lg shadow-white/5"
-                  : "bg-white/[0.06] text-gray-400 hover:bg-white/10 hover:text-gray-200 active:scale-95"
-              }`}
-            >
-              {categoryLabels[cat] || cat}
-            </button>
-          ))}
-
-          {/* Refresh pill */}
-          <button
-            onClick={handleRefresh}
-            disabled={refreshing}
-            className="ml-auto px-3 py-1.5 rounded-full text-xs font-semibold text-gray-500 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] transition-all flex items-center gap-1.5 shrink-0"
-          >
-            <RefreshCw
-              className={`w-3 h-3 ${refreshing ? "animate-spin" : ""}`}
-            />
-          </button>
-        </div>
       </div>
 
       {/* ── Feed ────────────────────────────────────────── */}

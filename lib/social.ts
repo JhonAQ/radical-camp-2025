@@ -79,7 +79,7 @@ export async function getPosts(
     queries
   );
 
-  const posts = res.documents as Post[];
+  const posts = res.documents as unknown as Post[];
   const hasMore = posts.length > limit;
   if (hasMore) posts.pop();
 
@@ -95,7 +95,7 @@ export async function getPost(postId: string): Promise<Post> {
     databaseId,
     collections.posts,
     postId
-  )) as Post;
+  )) as unknown as Post;
 }
 
 /* ── Stories ────────────────────────────────────────────────── */
@@ -111,7 +111,7 @@ export async function getStories(): Promise<Post[]> {
     Query.limit(20),
   ]);
 
-  const stories = res.documents as Post[];
+  const stories = res.documents as unknown as Post[];
 
   // Filter: keep pinned ones always, non-pinned only if not expired
   return stories.filter(
@@ -155,7 +155,7 @@ export async function getUserLikedPostIds(
         Query.limit(100),
       ]
     );
-    return new Set((res.documents as Like[]).map((d) => d.postId));
+    return new Set((res.documents as unknown as Like[]).map((d) => d.postId));
   } catch {
     return new Set();
   }
@@ -221,7 +221,7 @@ export async function getComments(
     queries
   );
 
-  const comments = res.documents as Comment[];
+  const comments = res.documents as unknown as Comment[];
   const hasMore = comments.length > limit;
   if (hasMore) comments.pop();
 
@@ -240,7 +240,7 @@ export async function addComment(
     collections.comments,
     ID.unique(),
     { postId, userId, userName, userAvatar, content }
-  )) as Comment;
+  )) as unknown as Comment;
 
   // Increment comment count on post
   const post = await getPost(postId);
@@ -267,7 +267,7 @@ export async function deleteComment(
 export async function createPost(data: {
   title: string;
   content: string;
-  mediaType: string;
+  mediaType: "image" | "video" | "gallery" | "text" | string;
   mediaFileIds: string[];
   category: string;
   featured?: boolean;
@@ -294,19 +294,29 @@ export async function createPost(data: {
       status: "published",
       publishedAt: now.toISOString(),
     }
-  )) as Post;
+  )) as unknown as Post;
 }
 
 export async function updatePost(
   postId: string,
   data: Partial<Post>
 ): Promise<Post> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData = data as any;
+  // Exclude appwrite meta fields
+  delete updateData.$id;
+  delete updateData.$createdAt;
+  delete updateData.$updatedAt;
+  delete updateData.$permissions;
+  delete updateData.$collectionId;
+  delete updateData.$databaseId;
+  
   return (await databases.updateDocument(
     databaseId,
     collections.posts,
     postId,
-    data
-  )) as Post;
+    updateData
+  )) as unknown as Post;
 }
 
 export async function deletePost(postId: string): Promise<void> {
@@ -370,7 +380,7 @@ export async function getAdminPosts(
     queries
   );
 
-  const posts = res.documents as Post[];
+  const posts = res.documents as unknown as Post[];
   const hasMore = posts.length > limit;
   if (hasMore) posts.pop();
 

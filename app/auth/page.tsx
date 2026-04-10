@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { account } from '@/lib/appwrite';
-import { ID } from 'appwrite';
+import { useState, useEffect } from "react";
+import { account } from "@/lib/appwrite";
+import { ID } from "appwrite";
 
 export default function AuthPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [loggedInUser, setLoggedInUser] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,7 +32,7 @@ export default function AuthPage() {
       const user = await account.get();
       setLoggedInUser(user);
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      setError(err.message || "Login failed");
     }
   };
 
@@ -43,28 +43,30 @@ export default function AuthPage() {
       await account.create(ID.unique(), email, password, name);
       await login();
     } catch (err: any) {
-      setError(err.message || 'Registration failed');
+      setError(err.message || "Registration failed");
     }
   };
 
   const logout = async () => {
     setError(null);
     try {
-      await account.deleteSession('current');
+      await account.deleteSession("current");
       setLoggedInUser(null);
-      setEmail('');
-      setPassword('');
-      setName('');
+      setEmail("");
+      setPassword("");
+      setName("");
     } catch (err: any) {
-      setError(err.message || 'Logout failed');
+      setError(err.message || "Logout failed");
     }
   };
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md bg-[#12121a] border border-[#2a2a35] rounded-2xl p-6 shadow-2xl">
-        <h1 className="text-2xl font-bold text-center text-[#ff3366] mb-6 font-mono">Appwrite Auth</h1>
-        
+        <h1 className="text-2xl font-bold text-center text-[#ff3366] mb-6 font-mono">
+          Appwrite Auth
+        </h1>
+
         {error && (
           <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded text-red-200 text-sm">
             {error}
@@ -74,7 +76,10 @@ export default function AuthPage() {
         {loggedInUser ? (
           <div className="flex flex-col items-center space-y-4">
             <p className="text-lg">
-              Logged in as <span className="font-bold text-[#ff3366]">{loggedInUser.name || loggedInUser.email}</span>
+              Logged in as{" "}
+              <span className="font-bold text-[#ff3366]">
+                {loggedInUser.name || loggedInUser.email}
+              </span>
             </p>
             <button
               onClick={logout}
@@ -86,7 +91,9 @@ export default function AuthPage() {
         ) : (
           <form className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-400">Name (for tracking registration)</label>
+              <label className="block text-sm font-medium mb-1 text-gray-400">
+                Name (for tracking registration)
+              </label>
               <input
                 type="text"
                 placeholder="John Doe"
@@ -95,9 +102,11 @@ export default function AuthPage() {
                 className="w-full bg-[#1a1a24] border border-[#2a2a35] rounded-xl px-4 py-3 focus:outline-none focus:border-[#ff3366] transition-colors"
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-400">Email</label>
+              <label className="block text-sm font-medium mb-1 text-gray-400">
+                Email
+              </label>
               <input
                 type="email"
                 placeholder="john@example.com"
@@ -109,7 +118,9 @@ export default function AuthPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-400">Password</label>
+              <label className="block text-sm font-medium mb-1 text-gray-400">
+                Password
+              </label>
               <input
                 type="password"
                 placeholder="********"

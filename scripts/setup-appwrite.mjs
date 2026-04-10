@@ -8,7 +8,7 @@
  *   node scripts/setup-appwrite.mjs YOUR_API_KEY_HERE
  */
 
-import { Client, Databases, Storage, ID, Permission, Role } from "node-appwrite";
+import { Client, Databases, Storage, Teams, ID, Permission, Role } from "node-appwrite";
 
 const ENDPOINT = "https://nyc.cloud.appwrite.io/v1";
 const PROJECT_ID = "69d8b2ac002de5834ff7";
@@ -27,6 +27,7 @@ const client = new Client()
 
 const databases = new Databases(client);
 const storage = new Storage(client);
+const teams = new Teams(client);
 
 const DB_ID = "social-db";
 
@@ -79,8 +80,8 @@ async function createPostsCollection() {
     () => databases.createEnumAttribute(DB_ID, COL, "category", ["promo", "speaker", "info", "archive", "behind-scenes"], false, "promo"),
     () => databases.createBooleanAttribute(DB_ID, COL, "featured", false, false),
     () => databases.createBooleanAttribute(DB_ID, COL, "pinned", false, false),
-    () => databases.createIntegerAttribute(DB_ID, COL, "likesCount", false, 0, 0, 1000000),
-    () => databases.createIntegerAttribute(DB_ID, COL, "commentsCount", false, 0, 0, 1000000),
+    () => databases.createIntegerAttribute(DB_ID, COL, "likesCount", false, 0),
+    () => databases.createIntegerAttribute(DB_ID, COL, "commentsCount", false, 0),
     () => databases.createStringAttribute(DB_ID, COL, "authorName", 128, false, "Radical Camp"),
     () => databases.createStringAttribute(DB_ID, COL, "authorAvatar", 512, false, ""),
     () => databases.createEnumAttribute(DB_ID, COL, "status", ["draft", "published", "archived"], false, "published"),
@@ -248,6 +249,16 @@ async function createBucket() {
   );
 }
 
+/* ─── 7. Teams ─────────────────────────────────────────────── */
+async function createTeams() {
+  console.log("\n👥 Creando team: admin...");
+  await safeCreate("Team: admin", () =>
+    teams.create("admin", "Admin Team")
+  );
+
+  console.log("⚠️  IMPORTANTE: No olvides agregar a tu cuenta principal de Appwrite a este equipo ('admin') a través de la consola para poder acceder a /admin/social en la aplicación.");
+}
+
 /* ─── Main ─────────────────────────────────────────────────── */
 async function main() {
   console.log("🚀 Configuración de Appwrite para Muro Radical");
@@ -262,6 +273,7 @@ async function main() {
     await createCommentsCollection();
     await createNotificationsCollection();
     await createBucket();
+    await createTeams();
 
     console.log("\n" + "=".repeat(50));
     console.log("🎉 ¡Setup completado con éxito!");
@@ -270,6 +282,7 @@ async function main() {
     console.log("  • Database: social-db");
     console.log("  • Collections: posts, likes, comments, notifications");
     console.log("  • Bucket: social-media");
+    console.log("  • Team: admin");
     console.log("\nPuedes empezar a usar el Muro Radical. 🔥");
   } catch (err) {
     console.error("\n💥 Error fatal durante el setup:", err.message);
