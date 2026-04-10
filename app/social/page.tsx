@@ -19,11 +19,7 @@ import StoriesBar from "./components/StoriesBar";
 import PostCard from "./components/PostCard";
 import CommentsSheet from "./components/CommentsSheet";
 import FullscreenViewer from "./components/FullscreenViewer";
-import {
-  getPosts,
-  getUserLikedPostIds,
-  type Post,
-} from "@/lib/social";
+import { getPosts, getUserLikedPostIds, type Post } from "@/lib/social";
 import { useAuth } from "@/lib/useAuth";
 
 export default function SocialPage() {
@@ -102,7 +98,7 @@ export default function SocialPage() {
         setRefreshing(false);
       }
     },
-    [lastCursor, posts, user]
+    [lastCursor, posts, user],
   );
 
   // Initial load
@@ -118,7 +114,7 @@ export default function SocialPage() {
       (entries) => {
         if (entries[0].isIntersecting) loadPosts(false);
       },
-      { rootMargin: "200px" }
+      { rootMargin: "200px" },
     );
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
@@ -170,9 +166,7 @@ export default function SocialPage() {
 
   const handleLikeChange = (postId: string, liked: boolean, count: number) => {
     setPosts((prev) =>
-      prev.map((p) =>
-        p.$id === postId ? { ...p, likesCount: count } : p
-      )
+      prev.map((p) => (p.$id === postId ? { ...p, likesCount: count } : p)),
     );
     setLikedPostIds((prev) => {
       const next = new Set(prev);
@@ -222,10 +216,7 @@ export default function SocialPage() {
 
       {/* ── Stories Row ──────────────────────────────────── */}
       <div className="border-b border-white/5 sticky top-14 z-30 bg-dark-bg/95 backdrop-blur-xl">
-        <StoriesBar
-          onStoryClick={handleStoryClick}
-          isLoggedIn={!!user}
-        />
+        <StoriesBar onStoryClick={handleStoryClick} isLoggedIn={!!user} />
       </div>
 
       {/* ── Feed ────────────────────────────────────────── */}
@@ -249,7 +240,8 @@ export default function SocialPage() {
               Aún no hay publicaciones
             </h3>
             <p className="text-sm text-gray-500 max-w-xs mx-auto leading-relaxed">
-              Las publicaciones del Radical Camp aparecerán aquí. ¡Mantente atento!
+              Las publicaciones del Radical Camp aparecerán aquí. ¡Mantente
+              atento!
             </p>
             {user && (
               <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-600">
@@ -365,7 +357,9 @@ export default function SocialPage() {
                   <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all group-active:scale-90">
                     <Copy size={22} />
                   </div>
-                  <span className="text-[10px] text-gray-400 font-medium">Copiar</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    Copiar
+                  </span>
                 </button>
                 <button
                   onClick={() =>
@@ -373,9 +367,9 @@ export default function SocialPage() {
                       `https://wa.me/?text=${encodeURIComponent(
                         (sharePost?.title || "Muro Radical") +
                           " " +
-                          window.location.href
+                          window.location.href,
                       )}`,
-                      "_blank"
+                      "_blank",
                     )
                   }
                   className="flex flex-col items-center gap-2 group"
@@ -383,15 +377,17 @@ export default function SocialPage() {
                   <div className="w-14 h-14 rounded-2xl bg-[#25D366]/15 text-[#25D366] flex items-center justify-center group-active:scale-90 transition-transform">
                     <MessageCircle size={22} />
                   </div>
-                  <span className="text-[10px] text-gray-400 font-medium">WhatsApp</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    WhatsApp
+                  </span>
                 </button>
                 <button
                   onClick={() =>
                     window.open(
                       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                        window.location.href
+                        window.location.href,
                       )}`,
-                      "_blank"
+                      "_blank",
                     )
                   }
                   className="flex flex-col items-center gap-2 group"
@@ -399,15 +395,17 @@ export default function SocialPage() {
                   <div className="w-14 h-14 rounded-2xl bg-[#1877F2]/15 text-[#1877F2] flex items-center justify-center group-active:scale-90 transition-transform">
                     <Facebook size={22} />
                   </div>
-                  <span className="text-[10px] text-gray-400 font-medium">Facebook</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    Facebook
+                  </span>
                 </button>
                 <button
                   onClick={() =>
                     window.open(
                       `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                        sharePost?.title || "Muro Radical"
+                        sharePost?.title || "Muro Radical",
                       )}&url=${encodeURIComponent(window.location.href)}`,
-                      "_blank"
+                      "_blank",
                     )
                   }
                   className="flex flex-col items-center gap-2 group"
@@ -415,7 +413,9 @@ export default function SocialPage() {
                   <div className="w-14 h-14 rounded-2xl bg-[#1DA1F2]/15 text-[#1DA1F2] flex items-center justify-center group-active:scale-90 transition-transform">
                     <Twitter size={22} />
                   </div>
-                  <span className="text-[10px] text-gray-400 font-medium">Twitter</span>
+                  <span className="text-[10px] text-gray-400 font-medium">
+                    Twitter
+                  </span>
                 </button>
               </div>
 
