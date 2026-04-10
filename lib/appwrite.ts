@@ -19,6 +19,8 @@ export const APPWRITE = {
     comments: "comments",
     likes: "likes",
     notifications: "notifications",
+    wallets: "wallets",
+    transactions: "transactions",
   },
   buckets: {
     socialMedia: "social-media",
