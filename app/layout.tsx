@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
-import CustomCursor from "@/components/ui/CustomCursor";
-import Preloader from "@/components/ui/Preloader";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
+import BottomNavigation from "@/components/layout/BottomNavigation";
+import AppTopBar from "@/components/layout/AppTopBar";
 import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const montserrat = Montserrat({
   variable: "--font-title",
@@ -20,6 +19,15 @@ const poppins = Poppins({
   subsets: ["latin"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#050505",
+};
 
 export const metadata: Metadata = {
   title: "Radical Camp 2025",
@@ -74,10 +82,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${montserrat.variable} ${poppins.variable}`}>
-        <Preloader />
-        <CustomCursor />
-        <WhatsAppButton />
-        {children}
+        <AppTopBar />
+        <main className="app-container">{children}</main>
+        <BottomNavigation />
         <Analytics />
         <SpeedInsights />
       </body>

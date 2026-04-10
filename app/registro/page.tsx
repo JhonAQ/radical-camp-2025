@@ -22,8 +22,8 @@ import {
   FaShower,
 } from "react-icons/fa";
 import { supabase } from "@/lib/supabase";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 const recommendations = [
   { icon: FaBook, text: "Biblia y cuaderno", sub: "Tus armas espirituales" },
@@ -136,10 +136,13 @@ export default function RegistroPage() {
   };
 
   return (
-    <main className="min-h-screen bg-dark-bg text-white font-sans selection:bg-secondary selection:text-black overflow-x-hidden">
-      <Navbar />
+    <main className="min-h-[100dvh] bg-dark-bg text-white font-sans selection:bg-secondary selection:text-black overflow-x-hidden" style={{ paddingTop: 0, paddingBottom: 0 }}>
+      {/* Back button */}
+      <Link href="/" className="fixed top-5 left-5 z-50 p-2.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 active:scale-90 transition-transform">
+        <ArrowLeft className="w-5 h-5 text-white" />
+      </Link>
 
-      <div className="flex flex-col lg:flex-row min-h-screen pt-24 lg:pt-20">
+      <div className="flex flex-col lg:flex-row min-h-[100dvh]">
         {/* LEFT PANEL: Visuals & Info */}
         <div className="lg:w-1/2 relative p-8 lg:p-16 flex flex-col justify-center overflow-hidden bg-[#050505]">
           {/* Background Image with Blend Mode */}
@@ -580,7 +583,6 @@ export default function RegistroPage() {
         </div>
       </div>
 
-      <Footer />
     </main>
   );
 }

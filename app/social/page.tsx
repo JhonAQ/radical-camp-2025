@@ -8,17 +8,15 @@ import {
   X,
   Download,
   Share2,
-  Pause,
   Check,
   Copy,
-  Link as LinkIcon,
   MessageCircle,
   Facebook,
   Twitter,
+  Link as LinkIcon,
 } from "lucide-react";
-import Navbar from "@/components/layout/Navbar";
 
-// Mock Data
+/* ── Data ──────────────────────────────────────────────────── */
 const items = [
   {
     id: 1,
@@ -27,8 +25,7 @@ const items = [
     category: "Video",
     url: "/promos/promo-2.mp4",
     thumbnail: "/promos/flyer-radicalcamp.jpg",
-    description:
-      "¡Es tiempo de volver! Prepárate para lo que Dios hará en este campamento.",
+    description: "¡Es tiempo de volver! Prepárate para lo que Dios hará en este campamento.",
     date: "Hace 2 días",
     featured: true,
   },
@@ -39,8 +36,7 @@ const items = [
     category: "Video",
     url: "/promos/promo-pastor-sergio.mp4",
     thumbnail: "/pastor-sergio-bustamante.jpg",
-    description:
-      "Nuestro plenarista Sergio Bustamante te invita a ser parte de esta experiencia.",
+    description: "Nuestro plenarista Sergio Bustamante te invita a ser parte de esta experiencia.",
     date: "Hace 5 días",
     aspect: "aspect-[9/16]",
   },
@@ -71,7 +67,7 @@ const items = [
     title: "¡Ya tenemos lugar!",
     category: "Info",
     url: "/promos/promo-ya-tenemos.web.jpg",
-    description: "Campel - Arequipa nos espera para 4 días inolvidables.",
+    description: "Campel - Arequipa nos espera para 5 días inolvidables.",
     date: "Hace 2 semanas",
     aspect: "aspect-square",
   },
@@ -81,8 +77,7 @@ const items = [
     title: "Pastor Sergio Bustamante",
     category: "Speaker",
     url: "/pastor-sergio-bustamante.jpg",
-    description:
-      "Plenarista confirmado. Viene con una palabra poderosa para esta generación.",
+    description: "Plenarista confirmado. Viene con una palabra poderosa para esta generación.",
     date: "Hace 3 semanas",
     aspect: "aspect-square",
   },
@@ -126,7 +121,6 @@ const items = [
     date: "Hace 3 semanas",
     aspect: "aspect-square",
   },
-
   {
     id: 11,
     type: "video",
@@ -134,8 +128,7 @@ const items = [
     category: "Promo",
     thumbnail: "/promos/promo-ya-tenemos.web.jpg",
     url: "/promos/promo-3.mp4",
-    description:
-      "Puedes conseguir el libro 'Santas Decisiones' en Radical Camp 2025.",
+    description: "Puedes conseguir el libro 'Santas Decisiones' en Radical Camp 2025.",
     date: "Hace 1 día",
     aspect: "aspect-square",
   },
@@ -143,6 +136,7 @@ const items = [
 
 const categories = ["Todos", "Video", "Speaker", "Info"];
 
+/* ── Page ──────────────────────────────────────────────────── */
 export default function SocialPage() {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [viewerOpen, setViewerOpen] = useState(false);
@@ -170,12 +164,10 @@ export default function SocialPage() {
 
   const handleScroll = () => {
     if (containerRef.current) {
-      const index = Math.round(
-        containerRef.current.scrollTop / window.innerHeight
-      );
+      const index = Math.round(containerRef.current.scrollTop / window.innerHeight);
       if (index !== activeIndex) {
         setActiveIndex(index);
-        setIsPlaying(true); // Auto-play next video
+        setIsPlaying(true);
       }
     }
   };
@@ -232,41 +224,10 @@ export default function SocialPage() {
     }
   };
 
-  const captureVideoFrame = async (
-    video: HTMLVideoElement
-  ): Promise<File | null> => {
-    try {
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return null;
-      ctx.drawImage(video, 0, 0);
-      return new Promise((resolve) => {
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(new File([blob], "preview.jpg", { type: "image/jpeg" }));
-            } else {
-              resolve(null);
-            }
-          },
-          "image/jpeg",
-          0.8
-        );
-      });
-    } catch (e) {
-      console.error("Error capturing frame", e);
-      return null;
-    }
-  };
-
   const handleShare = async (
     e: React.MouseEvent,
     title: string,
     text: string,
-    type: string,
-    url: string
   ) => {
     e.stopPropagation();
     const shareData: ShareData = {
@@ -276,40 +237,12 @@ export default function SocialPage() {
     };
 
     try {
-      let fileToShare: File | null = null;
-
-      if (type === "image") {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        fileToShare = new File([blob], "image.jpg", { type: blob.type });
-      } else if (type === "video") {
-        // Try to capture frame
-        const videoEl = videoRefs.current[activeIndex];
-        if (videoEl) {
-          fileToShare = await captureVideoFrame(videoEl);
-        }
-      }
-
-      if (
-        fileToShare &&
-        navigator.canShare &&
-        navigator.canShare({ files: [fileToShare] })
-      ) {
-        await navigator.share({
-          files: [fileToShare],
-          title,
-          text: `${text}\n\n${window.location.href}`,
-        });
+      if (navigator.share) {
+        await navigator.share(shareData);
       } else {
-        // Fallback to text share
-        if (navigator.share) {
-          await navigator.share(shareData);
-        } else {
-          throw new Error("Web Share API not supported");
-        }
+        throw new Error("Web Share API not supported");
       }
-    } catch (error) {
-      console.log("Share failed or not supported, opening modal", error);
+    } catch {
       setShowShareModal(true);
     }
   };
@@ -321,7 +254,6 @@ export default function SocialPage() {
         showToast("Enlace copiado");
         setShowShareModal(false);
       } else {
-        // Fallback for insecure contexts
         const textArea = document.createElement("textarea");
         textArea.value = window.location.href;
         document.body.appendChild(textArea);
@@ -337,10 +269,8 @@ export default function SocialPage() {
     }
   };
 
-  // Scroll to initial index when viewer opens
   useEffect(() => {
     if (viewerOpen && containerRef.current) {
-      // Instant jump to the correct position
       containerRef.current.scrollTo({
         top: window.innerHeight * initialIndex,
         behavior: "instant",
@@ -348,33 +278,17 @@ export default function SocialPage() {
     }
   }, [viewerOpen, initialIndex]);
 
-  // Handle Back Button
   useEffect(() => {
     if (viewerOpen) {
-      // Push state when opening
       window.history.pushState({ viewerOpen: true }, "");
-
-      const handlePopState = () => {
-        setViewerOpen(false);
-      };
-
+      const handlePopState = () => setViewerOpen(false);
       window.addEventListener("popstate", handlePopState);
-
-      return () => {
-        window.removeEventListener("popstate", handlePopState);
-      };
+      return () => window.removeEventListener("popstate", handlePopState);
     }
   }, [viewerOpen]);
 
-  const closeViewer = () => {
-    // If we pushed state, we should go back to pop it and close
-    // But checking if we pushed is hard.
-    // Simple approach: just setViewerOpen(false) and maybe history.back() if we know we pushed?
-    // If we use history.back(), it triggers popstate which calls setViewerOpen(false).
-    window.history.back();
-  };
+  const closeViewer = () => window.history.back();
 
-  // Effect to manage video playback based on activeIndex
   useEffect(() => {
     if (viewerOpen) {
       videoRefs.current.forEach((video, index) => {
@@ -389,121 +303,80 @@ export default function SocialPage() {
         }
       });
     } else {
-      // Pause all when viewer is closed
       videoRefs.current.forEach((video) => video?.pause());
     }
   }, [activeIndex, viewerOpen]);
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white pb-20 selection:bg-secondary selection:text-black">
-      <Navbar />
-
-      {/* Header Section */}
-      <div className="pt-32 pb-8 px-6 md:px-12 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-2 uppercase">
-            Muro{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary">
-              Radical
-            </span>
-          </h1>
-          <p className="text-gray-400 max-w-md text-sm md:text-base">
-            Entérate de las últimas novedades, lanzamientos y recursos
-            exclusivos del campamento.
-          </p>
-        </motion.div>
-
-        {/* Filters */}
-        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide mb-8">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all border ${
-                selectedCategory === cat
-                  ? "bg-white text-black border-white"
-                  : "bg-transparent text-gray-400 border-gray-800 hover:border-gray-600 hover:text-white"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Masonry Grid */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-          {filteredItems.map((item, index) => (
-            <motion.div
-              layoutId={`card-${item.id}`}
-              key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              onClick={() => openViewer(item)}
-              className="break-inside-avoid group relative bg-[#111] rounded-2xl overflow-hidden border border-white/5 hover:border-secondary/50 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_30px_rgba(0,212,255,0.15)]"
-            >
-              {/* Image/Thumbnail */}
-              <div
-                className={`relative w-full ${item.aspect || "aspect-video"}`}
-              >
-                {item.type === "video" ? (
-                  <>
-                    <Image
-                      src={item.thumbnail || item.url}
-                      alt={item.title}
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-60 transition-opacity"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
-                        <Play
-                          fill="white"
-                          className="w-5 h-5 text-white ml-1"
-                        />
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <Image
-                    src={item.url}
-                    alt={item.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                )}
-
-                {/* Category Badge */}
-                <div className="absolute top-3 left-3">
-                  <span className="px-3 py-1 bg-black/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider rounded-full border border-white/10 text-white">
-                    {item.category}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content Info */}
-              <div className="p-5">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-bold text-lg leading-tight group-hover:text-secondary transition-colors">
-                    {item.title}
-                  </h3>
-                  <span className="text-[10px] text-gray-500 font-mono whitespace-nowrap ml-2 mt-1">
-                    {item.date}
-                  </span>
-                </div>
-                <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+    <div className="px-5 pb-6">
+      {/* Filters */}
+      <div className="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide -mx-5 px-5 sticky top-14 z-30 pt-3 bg-gradient-to-b from-dark-bg via-dark-bg to-transparent">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
+              selectedCategory === cat
+                ? "bg-white text-black border-white"
+                : "bg-transparent text-gray-400 border-gray-800 active:border-gray-600 active:text-white"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
-      {/* Full Screen Feed Viewer (TikTok Style) */}
+      {/* Grid */}
+      <div className="columns-2 gap-3 space-y-3">
+        {filteredItems.map((item, index) => (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
+            onClick={() => openViewer(item)}
+            className="break-inside-avoid group relative bg-card-bg rounded-2xl overflow-hidden border border-white/5 active:scale-[0.97] transition-transform"
+          >
+            <div className={`relative w-full ${item.aspect || "aspect-video"}`}>
+              {item.type === "video" ? (
+                <>
+                  <Image
+                    src={item.thumbnail || item.url}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+                      <Play fill="white" className="w-4 h-4 text-white ml-0.5" />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <Image
+                  src={item.url}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                />
+              )}
+              <div className="absolute top-2 left-2">
+                <span className="px-2 py-0.5 bg-black/60 backdrop-blur-md text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/10 text-white">
+                  {item.category}
+                </span>
+              </div>
+            </div>
+            <div className="p-3">
+              <h3 className="font-bold text-sm leading-tight text-white mb-0.5">
+                {item.title}
+              </h3>
+              <p className="text-[10px] text-gray-500">{item.date}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Full Screen Viewer */}
       <AnimatePresence>
         {viewerOpen && (
           <motion.div
@@ -530,7 +403,6 @@ export default function SocialPage() {
                   className="h-[100dvh] w-full snap-center relative flex items-center justify-center bg-black"
                   onClick={item.type === "video" ? togglePlay : undefined}
                 >
-                  {/* Media */}
                   <div className="w-full h-full relative flex items-center justify-center">
                     {item.type === "video" ? (
                       <>
@@ -542,16 +414,11 @@ export default function SocialPage() {
                           className="w-full h-full object-contain"
                           playsInline
                           loop
-                          // No controls, custom handling
                         />
-                        {/* Play/Pause Overlay Animation */}
                         {!isPlaying && activeIndex === index && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
                             <div className="w-20 h-20 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-sm">
-                              <Play
-                                fill="white"
-                                className="w-10 h-10 text-white ml-1"
-                              />
+                              <Play fill="white" className="w-10 h-10 text-white ml-1" />
                             </div>
                           </div>
                         )}
@@ -559,12 +426,7 @@ export default function SocialPage() {
                     ) : (
                       <div className="relative w-full h-full">
                         <div className="absolute inset-0 overflow-hidden opacity-30 blur-3xl">
-                          <Image
-                            src={item.url}
-                            alt={item.title}
-                            fill
-                            className="object-cover"
-                          />
+                          <Image src={item.url} alt={item.title} fill className="object-cover" />
                         </div>
                         <Image
                           src={item.url}
@@ -576,7 +438,7 @@ export default function SocialPage() {
                     )}
                   </div>
 
-                  {/* Overlay Info - Reduced size and intrusion */}
+                  {/* Overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-20 pb-10 pointer-events-none z-20">
                     <div className="max-w-2xl mx-auto w-full pointer-events-auto">
                       <div className="flex items-end justify-between gap-4">
@@ -584,14 +446,13 @@ export default function SocialPage() {
                           <span className="inline-block px-2 py-0.5 bg-secondary text-black text-[10px] font-bold uppercase tracking-wider rounded-full mb-2">
                             {item.category}
                           </span>
-                          <h2 className="text-xl md:text-2xl font-bold mb-1 text-white drop-shadow-lg leading-tight">
+                          <h2 className="text-xl font-bold mb-1 text-white drop-shadow-lg leading-tight">
                             {item.title}
                           </h2>
-                          <p className="text-gray-200 text-xs md:text-sm max-w-lg drop-shadow-md line-clamp-2">
+                          <p className="text-gray-200 text-xs max-w-lg drop-shadow-md line-clamp-2">
                             {item.description}
                           </p>
                         </div>
-
                         <div className="flex flex-col gap-3 shrink-0">
                           <button
                             onClick={(e) =>
@@ -599,9 +460,7 @@ export default function SocialPage() {
                             }
                             disabled={isDownloading}
                             className={`p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10 ${
-                              isDownloading
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
+                              isDownloading ? "opacity-50" : ""
                             }`}
                           >
                             {isDownloading ? (
@@ -612,13 +471,7 @@ export default function SocialPage() {
                           </button>
                           <button
                             onClick={(e) =>
-                              handleShare(
-                                e,
-                                item.title,
-                                item.description,
-                                item.type,
-                                item.url
-                              )
+                              handleShare(e, item.title, item.description)
                             }
                             className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10"
                           >
@@ -634,14 +487,15 @@ export default function SocialPage() {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Toast Notification */}
+
+      {/* Toast */}
       <AnimatePresence>
         {toast.show && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[70] bg-white text-black px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold"
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] bg-white text-black px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold"
           >
             <div className="bg-green-500 rounded-full p-1">
               <Check size={14} className="text-white" strokeWidth={3} />
@@ -651,14 +505,14 @@ export default function SocialPage() {
         )}
       </AnimatePresence>
 
-      {/* Share Modal Fallback */}
+      {/* Share Modal */}
       <AnimatePresence>
         {showShareModal && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-4"
+            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4"
             onClick={() => setShowShareModal(false)}
           >
             <motion.div
@@ -677,18 +531,13 @@ export default function SocialPage() {
                   <X size={20} />
                 </button>
               </div>
-
               <div className="grid grid-cols-4 gap-4 mb-6">
-                <button
-                  onClick={copyToClipboard}
-                  className="flex flex-col items-center gap-2 group"
-                >
+                <button onClick={copyToClipboard} className="flex flex-col items-center gap-2 group">
                   <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                     <Copy size={24} />
                   </div>
                   <span className="text-xs text-gray-400">Copiar</span>
                 </button>
-
                 <button
                   onClick={() =>
                     window.open(
@@ -700,12 +549,11 @@ export default function SocialPage() {
                   }
                   className="flex flex-col items-center gap-2 group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-[#25D366]/20 text-[#25D366] flex items-center justify-center group-hover:bg-[#25D366]/30 transition-colors">
+                  <div className="w-14 h-14 rounded-full bg-[#25D366]/20 text-[#25D366] flex items-center justify-center">
                     <MessageCircle size={24} />
                   </div>
                   <span className="text-xs text-gray-400">WhatsApp</span>
                 </button>
-
                 <button
                   onClick={() =>
                     window.open(
@@ -717,12 +565,11 @@ export default function SocialPage() {
                   }
                   className="flex flex-col items-center gap-2 group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-[#1877F2]/20 text-[#1877F2] flex items-center justify-center group-hover:bg-[#1877F2]/30 transition-colors">
+                  <div className="w-14 h-14 rounded-full bg-[#1877F2]/20 text-[#1877F2] flex items-center justify-center">
                     <Facebook size={24} />
                   </div>
                   <span className="text-xs text-gray-400">Facebook</span>
                 </button>
-
                 <button
                   onClick={() =>
                     window.open(
@@ -734,13 +581,12 @@ export default function SocialPage() {
                   }
                   className="flex flex-col items-center gap-2 group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-[#1DA1F2]/20 text-[#1DA1F2] flex items-center justify-center group-hover:bg-[#1DA1F2]/30 transition-colors">
+                  <div className="w-14 h-14 rounded-full bg-[#1DA1F2]/20 text-[#1DA1F2] flex items-center justify-center">
                     <Twitter size={24} />
                   </div>
                   <span className="text-xs text-gray-400">Twitter</span>
                 </button>
               </div>
-
               <div className="bg-black/30 p-4 rounded-xl flex items-center gap-3 border border-white/5">
                 <LinkIcon size={16} className="text-gray-500 shrink-0" />
                 <p className="text-sm text-gray-400 truncate flex-1">
@@ -757,6 +603,6 @@ export default function SocialPage() {
           </motion.div>
         )}
       </AnimatePresence>
-    </main>
+    </div>
   );
 }
