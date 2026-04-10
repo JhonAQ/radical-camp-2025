@@ -2,9 +2,9 @@
 
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import NotificationsPanel from "@/components/ui/NotificationsPanel";
 
 const pageTitles: Record<string, string> = {
   "/": "Radical Camp",
@@ -12,6 +12,7 @@ const pageTitles: Record<string, string> = {
   "/chanchito": "Mi Chanchito",
   "/social": "Muro Radical",
   "/perfil": "Mi Perfil",
+  "/admin/social": "Admin Panel",
 };
 
 export default function AppTopBar() {
@@ -50,12 +51,8 @@ export default function AppTopBar() {
           {title}
         </motion.h1>
 
-        {/* Actions */}
-        <button className="relative p-2 rounded-full hover:bg-white/5 transition-colors">
-          <Bell className="w-5 h-5 text-gray-500" strokeWidth={1.8} />
-          {/* Notification dot */}
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-accent rounded-full" />
-        </button>
+        {/* Actions — Notifications */}
+        <NotificationsPanel />
       </div>
     </header>
   );

@@ -1,519 +1,363 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import {
-  Play,
-  X,
-  Download,
-  Share2,
-  Check,
   Copy,
   MessageCircle,
   Facebook,
   Twitter,
   Link as LinkIcon,
+  X,
+  Check,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
+import StoriesBar from "./components/StoriesBar";
+import PostCard from "./components/PostCard";
+import CommentsSheet from "./components/CommentsSheet";
+import FullscreenViewer from "./components/FullscreenViewer";
+import {
+  getPosts,
+  getUserLikedPostIds,
+  type Post,
+} from "@/lib/social";
+import { useAuth } from "@/lib/useAuth";
 
-/* ── Data ──────────────────────────────────────────────────── */
-const items = [
-  {
-    id: 1,
-    type: "video",
-    title: "Promo Oficial 2025",
-    category: "Video",
-    url: "/promos/promo-2.mp4",
-    thumbnail: "/promos/flyer-radicalcamp.jpg",
-    description: "¡Es tiempo de volver! Prepárate para lo que Dios hará en este campamento.",
-    date: "Hace 2 días",
-    featured: true,
-  },
-  {
-    id: 2,
-    type: "video",
-    title: "Invitación Pastor Sergio",
-    category: "Video",
-    url: "/promos/promo-pastor-sergio.mp4",
-    thumbnail: "/pastor-sergio-bustamante.jpg",
-    description: "Nuestro plenarista Sergio Bustamante te invita a ser parte de esta experiencia.",
-    date: "Hace 5 días",
-    aspect: "aspect-[9/16]",
-  },
-  {
-    id: 3,
-    type: "image",
-    title: "Flyer Oficial",
-    category: "Info",
-    url: "/promos/flyer-radicalcamp.jpg",
-    description: "Comparte el flyer oficial con tus amigos y grupo de jóvenes.",
-    date: "Hace 1 semana",
-    aspect: "aspect-[4/5]",
-  },
-  {
-    id: 4,
-    type: "video",
-    title: "Teaser Oficial",
-    category: "Video",
-    url: "/promos/promo-1.mp4",
-    thumbnail: "/promos/promo-ya-tenemos.web.jpg",
-    description: "Un adelanto de lo que viviremos en Campel.",
-    date: "Hace 2 semanas",
-    aspect: "aspect-video",
-  },
-  {
-    id: 5,
-    type: "image",
-    title: "¡Ya tenemos lugar!",
-    category: "Info",
-    url: "/promos/promo-ya-tenemos.web.jpg",
-    description: "Campel - Arequipa nos espera para 5 días inolvidables.",
-    date: "Hace 2 semanas",
-    aspect: "aspect-square",
-  },
-  {
-    id: 6,
-    type: "image",
-    title: "Pastor Sergio Bustamante",
-    category: "Speaker",
-    url: "/pastor-sergio-bustamante.jpg",
-    description: "Plenarista confirmado. Viene con una palabra poderosa para esta generación.",
-    date: "Hace 3 semanas",
-    aspect: "aspect-square",
-  },
-  {
-    id: 7,
-    type: "image",
-    title: "Diego Valero",
-    category: "Speaker",
-    url: "/diego-valero.jpg",
-    description: "Listo para compartir con nosotros en los talleres.",
-    date: "Hace 3 semanas",
-    aspect: "aspect-square",
-  },
-  {
-    id: 8,
-    type: "image",
-    title: "Lilian Nuñez",
-    category: "Speaker",
-    url: "/lilian-nunez-lipa.jpg",
-    description: "Nuestra invitada especial para tiempos de impartición.",
-    date: "Hace 3 semanas",
-    aspect: "aspect-square",
-  },
-  {
-    id: 9,
-    type: "image",
-    title: "Brayan Inga",
-    category: "Speaker",
-    url: "/brayan-inga.jpg",
-    description: "Parte del equipo de expositores que nos acompañará.",
-    date: "Hace 3 semanas",
-    aspect: "aspect-square",
-  },
-  {
-    id: 10,
-    type: "image",
-    title: "Daniel Cruz",
-    category: "Speaker",
-    url: "/daniel-cruz.jpg",
-    description: "Preparado para desafiarnos en este campamento.",
-    date: "Hace 3 semanas",
-    aspect: "aspect-square",
-  },
-  {
-    id: 11,
-    type: "video",
-    title: "Santas Decisiones",
-    category: "Promo",
-    thumbnail: "/promos/promo-ya-tenemos.web.jpg",
-    url: "/promos/promo-3.mp4",
-    description: "Puedes conseguir el libro 'Santas Decisiones' en Radical Camp 2025.",
-    date: "Hace 1 día",
-    aspect: "aspect-square",
-  },
-];
+const categories = ["Todos", "promo", "speaker", "info", "archive", "behind-scenes"];
+const categoryLabels: Record<string, string> = {
+  Todos: "Todos",
+  promo: "Promos",
+  speaker: "Speakers",
+  info: "Info",
+  archive: "Archivo",
+  "behind-scenes": "Detrás de cámaras",
+};
 
-const categories = ["Todos", "Video", "Speaker", "Info"];
-
-/* ── Page ──────────────────────────────────────────────────── */
 export default function SocialPage() {
+  const { user } = useAuth();
+
+  // Feed state
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [likedPostIds, setLikedPostIds] = useState<Set<string>>(new Set());
   const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [lastCursor, setLastCursor] = useState<string | undefined>();
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Viewer state
   const [viewerOpen, setViewerOpen] = useState(false);
-  const [initialIndex, setInitialIndex] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [viewerItems, setViewerItems] = useState<Post[]>([]);
+  const [viewerInitialIndex, setViewerInitialIndex] = useState(0);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  // Comments state
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [commentsPost, setCommentsPost] = useState<Post | null>(null);
 
-  const filteredItems =
-    selectedCategory === "Todos"
-      ? items
-      : items.filter((item) => item.category === selectedCategory);
+  // Share modal
+  const [shareOpen, setShareOpen] = useState(false);
+  const [sharePost, setSharePost] = useState<Post | null>(null);
 
-  const openViewer = (item: (typeof items)[0]) => {
-    const index = filteredItems.findIndex((i) => i.id === item.id);
-    if (index !== -1) {
-      setInitialIndex(index);
-      setActiveIndex(index);
-      setViewerOpen(true);
-      setIsPlaying(true);
-    }
-  };
-
-  const handleScroll = () => {
-    if (containerRef.current) {
-      const index = Math.round(containerRef.current.scrollTop / window.innerHeight);
-      if (index !== activeIndex) {
-        setActiveIndex(index);
-        setIsPlaying(true);
-      }
-    }
-  };
-
-  const togglePlay = () => {
-    const video = videoRefs.current[activeIndex];
-    if (video) {
-      if (video.paused) {
-        video.play();
-        setIsPlaying(true);
-      } else {
-        video.pause();
-        setIsPlaying(false);
-      }
-    }
-  };
-
-  const [isDownloading, setIsDownloading] = useState(false);
+  // Toast
   const [toast, setToast] = useState<{ show: boolean; message: string }>({
     show: false,
     message: "",
   });
-  const [showShareModal, setShowShareModal] = useState(false);
+
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const showToast = (message: string) => {
     setToast({ show: true, message });
     setTimeout(() => setToast({ show: false, message: "" }), 3000);
   };
 
-  const handleDownload = async (
-    e: React.MouseEvent,
-    url: string,
-    filename: string
-  ) => {
-    e.stopPropagation();
-    setIsDownloading(true);
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = filename || "download";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-      showToast("¡Guardado en tu dispositivo!");
-    } catch (error) {
-      console.error("Download failed", error);
-      window.open(url, "_blank");
-    } finally {
-      setIsDownloading(false);
-    }
+  /* ── Load Posts ──────────────────────────────────────────── */
+  const loadPosts = useCallback(
+    async (reset = false) => {
+      if (reset) {
+        setLoading(true);
+        setLastCursor(undefined);
+        setHasMore(true);
+      } else {
+        setLoadingMore(true);
+      }
+
+      try {
+        const cursor = reset ? undefined : lastCursor;
+        const data = await getPosts(
+          selectedCategory === "Todos" ? undefined : selectedCategory,
+          cursor
+        );
+
+        const newPosts = reset ? data.posts : [...posts, ...data.posts];
+        setPosts(newPosts);
+        setHasMore(data.hasMore);
+        setLastCursor(data.lastId);
+
+        // Load like states
+        if (user) {
+          const postIds = data.posts.map((p) => p.$id);
+          const liked = await getUserLikedPostIds(user.$id, postIds);
+          setLikedPostIds((prev) => {
+            const next = reset ? liked : new Set([...prev, ...liked]);
+            return next;
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load posts:", err);
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
+        setRefreshing(false);
+      }
+    },
+    [selectedCategory, lastCursor, posts, user]
+  );
+
+  // Initial load + category change
+  useEffect(() => {
+    loadPosts(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory, user?.$id]);
+
+  // Infinite scroll observer
+  useEffect(() => {
+    if (!sentinelRef.current || !hasMore || loading || loadingMore) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) loadPosts(false);
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, loadPosts]);
+
+  /* ── Handlers ───────────────────────────────────────────── */
+  const handleRefresh = () => {
+    setRefreshing(true);
+    loadPosts(true);
   };
 
-  const handleShare = async (
-    e: React.MouseEvent,
-    title: string,
-    text: string,
-  ) => {
-    e.stopPropagation();
+  const handleCommentClick = (post: Post) => {
+    setCommentsPost(post);
+    setCommentsOpen(true);
+  };
+
+  const handleShareClick = async (post: Post) => {
     const shareData: ShareData = {
-      title,
-      text: `${text}\n\nMira esto en: ${window.location.href}`,
+      title: post.title || "Radical Camp",
+      text: `${post.content || post.title}\n\nMira esto en: ${window.location.href}`,
       url: window.location.href,
     };
-
     try {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        throw new Error("Web Share API not supported");
+        throw new Error("no share api");
       }
     } catch {
-      setShowShareModal(true);
+      setSharePost(post);
+      setShareOpen(true);
     }
+  };
+
+  const handleMediaClick = (post: Post) => {
+    if (post.mediaType === "text") return;
+    const idx = posts.findIndex((p) => p.$id === post.$id);
+    const viewable = posts.filter((p) => p.mediaType !== "text");
+    const viewIdx = viewable.findIndex((p) => p.$id === post.$id);
+    setViewerItems(viewable);
+    setViewerInitialIndex(Math.max(0, viewIdx));
+    setViewerOpen(true);
+  };
+
+  const handleStoryClick = (story: Post, index: number) => {
+    setViewerItems([story]);
+    setViewerInitialIndex(0);
+    setViewerOpen(true);
+  };
+
+  const handleLikeChange = (postId: string, liked: boolean, count: number) => {
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.$id === postId ? { ...p, likesCount: count } : p
+      )
+    );
+    setLikedPostIds((prev) => {
+      const next = new Set(prev);
+      if (liked) next.add(postId);
+      else next.delete(postId);
+      return next;
+    });
   };
 
   const copyToClipboard = async () => {
     try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(window.location.href);
-        showToast("Enlace copiado");
-        setShowShareModal(false);
-      } else {
-        const textArea = document.createElement("textarea");
-        textArea.value = window.location.href;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textArea);
-        showToast("Enlace copiado");
-        setShowShareModal(false);
-      }
-    } catch (err) {
-      console.error("Failed to copy", err);
+      await navigator.clipboard.writeText(window.location.href);
+      showToast("Enlace copiado");
+      setShareOpen(false);
+    } catch {
       showToast("Error al copiar");
     }
   };
 
-  useEffect(() => {
-    if (viewerOpen && containerRef.current) {
-      containerRef.current.scrollTo({
-        top: window.innerHeight * initialIndex,
-        behavior: "instant",
-      });
-    }
-  }, [viewerOpen, initialIndex]);
-
-  useEffect(() => {
-    if (viewerOpen) {
-      window.history.pushState({ viewerOpen: true }, "");
-      const handlePopState = () => setViewerOpen(false);
-      window.addEventListener("popstate", handlePopState);
-      return () => window.removeEventListener("popstate", handlePopState);
-    }
-  }, [viewerOpen]);
-
-  const closeViewer = () => window.history.back();
-
-  useEffect(() => {
-    if (viewerOpen) {
-      videoRefs.current.forEach((video, index) => {
-        if (video) {
-          if (index === activeIndex) {
-            video.currentTime = 0;
-            video.play().catch(() => {});
-            setIsPlaying(true);
-          } else {
-            video.pause();
-          }
-        }
-      });
-    } else {
-      videoRefs.current.forEach((video) => video?.pause());
-    }
-  }, [activeIndex, viewerOpen]);
+  /* ── Skeleton ───────────────────────────────────────────── */
+  const PostSkeleton = () => (
+    <div className="bg-card-bg rounded-2xl border border-white/5 overflow-hidden animate-pulse">
+      <div className="flex items-center gap-3 px-4 py-3">
+        <div className="w-9 h-9 rounded-full bg-white/5" />
+        <div className="flex-1">
+          <div className="w-24 h-3 rounded bg-white/5 mb-1.5" />
+          <div className="w-16 h-2 rounded bg-white/5" />
+        </div>
+      </div>
+      <div className="w-full aspect-square bg-white/5" />
+      <div className="px-4 py-3 space-y-2">
+        <div className="w-32 h-3 rounded bg-white/5" />
+        <div className="w-full h-2 rounded bg-white/5" />
+      </div>
+    </div>
+  );
 
   return (
-    <div className="px-5 pb-6">
-      {/* Filters */}
-      <div className="flex gap-2 overflow-x-auto pb-4 mb-4 scrollbar-hide -mx-5 px-5 sticky top-14 z-30 pt-3 bg-gradient-to-b from-dark-bg via-dark-bg to-transparent">
+    <div className="pb-4">
+      {/* ── Stories ──────────────────────────────────────── */}
+      <StoriesBar
+        onStoryClick={handleStoryClick}
+        isLoggedIn={!!user}
+      />
+
+      {/* ── Category Tabs ───────────────────────────────── */}
+      <div className="flex gap-2 overflow-x-auto pb-3 mb-1 scrollbar-hide px-5 sticky top-14 z-30 pt-2 bg-gradient-to-b from-dark-bg via-dark-bg/95 to-transparent backdrop-blur-sm">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
             className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
               selectedCategory === cat
-                ? "bg-white text-black border-white"
-                : "bg-transparent text-gray-400 border-gray-800 active:border-gray-600 active:text-white"
+                ? "bg-white text-black border-white shadow-lg shadow-white/10"
+                : "bg-transparent text-gray-400 border-white/10 active:border-white/30 active:text-white hover:border-white/20"
             }`}
           >
-            {cat}
+            {categoryLabels[cat] || cat}
           </button>
         ))}
       </div>
 
-      {/* Grid */}
-      <div className="columns-2 gap-3 space-y-3">
-        {filteredItems.map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            onClick={() => openViewer(item)}
-            className="break-inside-avoid group relative bg-card-bg rounded-2xl overflow-hidden border border-white/5 active:scale-[0.97] transition-transform"
-          >
-            <div className={`relative w-full ${item.aspect || "aspect-video"}`}>
-              {item.type === "video" ? (
-                <>
-                  <Image
-                    src={item.thumbnail || item.url}
-                    alt={item.title}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                      <Play fill="white" className="w-4 h-4 text-white ml-0.5" />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <Image
-                  src={item.url}
-                  alt={item.title}
-                  fill
-                  className="object-cover"
-                />
-              )}
-              <div className="absolute top-2 left-2">
-                <span className="px-2 py-0.5 bg-black/60 backdrop-blur-md text-[9px] font-bold uppercase tracking-wider rounded-full border border-white/10 text-white">
-                  {item.category}
-                </span>
-              </div>
-            </div>
-            <div className="p-3">
-              <h3 className="font-bold text-sm leading-tight text-white mb-0.5">
-                {item.title}
-              </h3>
-              <p className="text-[10px] text-gray-500">{item.date}</p>
-            </div>
-          </motion.div>
-        ))}
+      {/* ── Refresh Button ──────────────────────────────── */}
+      <div className="flex justify-center py-2">
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 transition-all border border-transparent hover:border-white/10"
+        >
+          <RefreshCw
+            className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`}
+          />
+          Actualizar
+        </button>
       </div>
 
-      {/* Full Screen Viewer */}
-      <AnimatePresence>
-        {viewerOpen && (
+      {/* ── Feed ────────────────────────────────────────── */}
+      <div className="px-4 space-y-4">
+        {loading ? (
+          <>
+            <PostSkeleton />
+            <PostSkeleton />
+            <PostSkeleton />
+          </>
+        ) : posts.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-black"
+            className="text-center py-16"
           >
-            <button
-              className="absolute top-6 right-6 z-50 p-3 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full text-white transition-colors border border-white/10"
-              onClick={closeViewer}
-            >
-              <X size={24} />
-            </button>
-
-            <div
-              className="h-full w-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide overscroll-contain"
-              ref={containerRef}
-              onScroll={handleScroll}
-            >
-              {filteredItems.map((item, index) => (
-                <div
-                  key={item.id}
-                  className="h-[100dvh] w-full snap-center relative flex items-center justify-center bg-black"
-                  onClick={item.type === "video" ? togglePlay : undefined}
-                >
-                  <div className="w-full h-full relative flex items-center justify-center">
-                    {item.type === "video" ? (
-                      <>
-                        <video
-                          ref={(el) => {
-                            videoRefs.current[index] = el;
-                          }}
-                          src={item.url}
-                          className="w-full h-full object-contain"
-                          playsInline
-                          loop
-                        />
-                        {!isPlaying && activeIndex === index && (
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/20 pointer-events-none">
-                            <div className="w-20 h-20 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-sm">
-                              <Play fill="white" className="w-10 h-10 text-white ml-1" />
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <div className="relative w-full h-full">
-                        <div className="absolute inset-0 overflow-hidden opacity-30 blur-3xl">
-                          <Image src={item.url} alt={item.title} fill className="object-cover" />
-                        </div>
-                        <Image
-                          src={item.url}
-                          alt={item.title}
-                          fill
-                          className="object-contain relative z-10"
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/40 to-transparent pt-20 pb-10 pointer-events-none z-20">
-                    <div className="max-w-2xl mx-auto w-full pointer-events-auto">
-                      <div className="flex items-end justify-between gap-4">
-                        <div className="flex-1">
-                          <span className="inline-block px-2 py-0.5 bg-secondary text-black text-[10px] font-bold uppercase tracking-wider rounded-full mb-2">
-                            {item.category}
-                          </span>
-                          <h2 className="text-xl font-bold mb-1 text-white drop-shadow-lg leading-tight">
-                            {item.title}
-                          </h2>
-                          <p className="text-gray-200 text-xs max-w-lg drop-shadow-md line-clamp-2">
-                            {item.description}
-                          </p>
-                        </div>
-                        <div className="flex flex-col gap-3 shrink-0">
-                          <button
-                            onClick={(e) =>
-                              handleDownload(e, item.url, `${item.title}.mp4`)
-                            }
-                            disabled={isDownloading}
-                            className={`p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10 ${
-                              isDownloading ? "opacity-50" : ""
-                            }`}
-                          >
-                            {isDownloading ? (
-                              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : (
-                              <Download size={20} />
-                            )}
-                          </button>
-                          <button
-                            onClick={(e) =>
-                              handleShare(e, item.title, item.description)
-                            }
-                            className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white transition-colors border border-white/10"
-                          >
-                            <Share2 size={20} />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl">📷</span>
             </div>
+            <h3 className="text-lg font-bold text-white mb-1">
+              Aún no hay publicaciones
+            </h3>
+            <p className="text-sm text-gray-500 max-w-xs mx-auto">
+              Las publicaciones del Radical Camp aparecerán aquí
+            </p>
           </motion.div>
-        )}
-      </AnimatePresence>
+        ) : (
+          <>
+            {posts.map((post) => (
+              <PostCard
+                key={post.$id}
+                post={post}
+                isLiked={likedPostIds.has(post.$id)}
+                userId={user?.$id}
+                userName={user?.name}
+                onCommentClick={handleCommentClick}
+                onShareClick={handleShareClick}
+                onMediaClick={handleMediaClick}
+              />
+            ))}
 
-      {/* Toast */}
-      <AnimatePresence>
-        {toast.show && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] bg-white text-black px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold"
-          >
-            <div className="bg-green-500 rounded-full p-1">
-              <Check size={14} className="text-white" strokeWidth={3} />
-            </div>
-            {toast.message}
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {/* Infinite scroll sentinel */}
+            {hasMore && (
+              <div ref={sentinelRef} className="py-4">
+                {loadingMore && (
+                  <div className="flex justify-center">
+                    <Loader2 className="w-6 h-6 text-gray-500 animate-spin" />
+                  </div>
+                )}
+              </div>
+            )}
 
-      {/* Share Modal */}
+            {!hasMore && posts.length > 0 && (
+              <div className="text-center py-8 border-t border-white/5">
+                <p className="text-xs text-gray-600 font-bold uppercase tracking-wider">
+                  ··· fin del muro ···
+                </p>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* ── Comments Sheet ──────────────────────────────── */}
+      <CommentsSheet
+        isOpen={commentsOpen}
+        onClose={() => setCommentsOpen(false)}
+        postId={commentsPost?.$id || ""}
+        postTitle={commentsPost?.title || ""}
+        commentsCount={commentsPost?.commentsCount || 0}
+        userId={user?.$id}
+        userName={user?.name}
+      />
+
+      {/* ── Fullscreen Viewer ───────────────────────────── */}
+      <FullscreenViewer
+        isOpen={viewerOpen}
+        items={viewerItems}
+        initialIndex={viewerInitialIndex}
+        likedPostIds={likedPostIds}
+        userId={user?.$id}
+        onClose={() => setViewerOpen(false)}
+        onCommentClick={(post) => {
+          setCommentsPost(post);
+          setCommentsOpen(true);
+        }}
+        onShareClick={handleShareClick}
+        onLikeChange={handleLikeChange}
+      />
+
+      {/* ── Share Modal ─────────────────────────────────── */}
       <AnimatePresence>
-        {showShareModal && (
+        {shareOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4"
-            onClick={() => setShowShareModal(false)}
+            onClick={() => setShareOpen(false)}
           >
             <motion.div
               initial={{ y: "100%" }}
@@ -525,14 +369,17 @@ export default function SocialPage() {
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold">Compartir</h3>
                 <button
-                  onClick={() => setShowShareModal(false)}
+                  onClick={() => setShareOpen(false)}
                   className="p-2 bg-white/5 rounded-full hover:bg-white/10"
                 >
                   <X size={20} />
                 </button>
               </div>
               <div className="grid grid-cols-4 gap-4 mb-6">
-                <button onClick={copyToClipboard} className="flex flex-col items-center gap-2 group">
+                <button
+                  onClick={copyToClipboard}
+                  className="flex flex-col items-center gap-2 group"
+                >
                   <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
                     <Copy size={24} />
                   </div>
@@ -542,7 +389,9 @@ export default function SocialPage() {
                   onClick={() =>
                     window.open(
                       `https://wa.me/?text=${encodeURIComponent(
-                        document.title + " " + window.location.href
+                        (sharePost?.title || "Muro Radical") +
+                          " " +
+                          window.location.href
                       )}`,
                       "_blank"
                     )
@@ -574,7 +423,7 @@ export default function SocialPage() {
                   onClick={() =>
                     window.open(
                       `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                        document.title
+                        sharePost?.title || "Muro Radical"
                       )}&url=${encodeURIComponent(window.location.href)}`,
                       "_blank"
                     )
@@ -600,6 +449,23 @@ export default function SocialPage() {
                 </button>
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Toast ───────────────────────────────────────── */}
+      <AnimatePresence>
+        {toast.show && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[90] bg-white text-black px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold"
+          >
+            <div className="bg-green-500 rounded-full p-1">
+              <Check size={14} className="text-white" strokeWidth={3} />
+            </div>
+            {toast.message}
           </motion.div>
         )}
       </AnimatePresence>
