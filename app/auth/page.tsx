@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import { account } from "@/lib/appwrite";
 import { ID } from "appwrite";
+import { useAuth } from "@/lib/useAuth";
 
 export default function AuthPage() {
+  const { refresh, logout: globalLogout } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -29,8 +31,8 @@ export default function AuthPage() {
     setError(null);
     try {
       await account.createEmailPasswordSession(email, password);
-      const user = await account.get();
-      setLoggedInUser(user);
+      await refresh();
+      window.location.href = "/";
     } catch (err: any) {
       setError(err.message || "Login failed");
     }
@@ -50,7 +52,7 @@ export default function AuthPage() {
   const logout = async () => {
     setError(null);
     try {
-      await account.deleteSession("current");
+      await globalLogout();
       setLoggedInUser(null);
       setEmail("");
       setPassword("");

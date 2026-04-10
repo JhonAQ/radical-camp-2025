@@ -64,5 +64,18 @@ export function useAuth() {
     return checkSession();
   }, [checkSession]);
 
-  return { ...state, refresh };
+  const logout = useCallback(async () => {
+    try {
+      cachedUser = null;
+      cachedIsAdmin = false;
+      cacheTimestamp = 0;
+      await account.deleteSession("current");
+      setState({ user: null, isAdmin: false, loading: false });
+      window.location.href = "/auth";
+    } catch (err) {
+      console.error("Logout error", err);
+    }
+  }, []);
+
+  return { ...state, refresh, logout };
 }

@@ -21,26 +21,35 @@ import {
   Check,
 } from "lucide-react";
 import { FaWhatsapp, FaInstagram, FaTiktok } from "react-icons/fa";
-
-/* ── Mock User Data ─────────────────────────────────────────── */
-const mockUser = {
-  name: "Camper Radical",
-  fullName: "Camper Radical Camp",
-  email: "camper@radicalcamp.pe",
-  phone: "+51 999 999 999",
-  iglesia: "IEL-P Arequipa",
-  ciudad: "Arequipa",
-  registrationId: "RC-2025-0042",
-  status: "pendiente" as "pendiente" | "confirmado" | "pagado",
-  paymentType: "reservation" as "full" | "reservation",
-  amountPaid: 50,
-  totalAmount: 190,
-};
+import { useAuth } from "@/lib/useAuth";
+import { useRouter } from "next/navigation";
 
 /* ── Page ──────────────────────────────────────────────────── */
 export default function PerfilPage() {
+  const { user, logout, loading } = useAuth();
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [chanchitoTotal, setChanchitoTotal] = useState(0);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/auth");
+    }
+  }, [user, loading, router]);
+
+  const mockUser = {
+    name: user?.name || "Camper",
+    fullName: user?.name || "Camper Radical Camp",
+    email: user?.email || "camper@radicalcamp.pe",
+    phone: "+51 999 999 999",
+    iglesia: "IEL-P Arequipa",
+    ciudad: "Arequipa",
+    registrationId: user ? `RC-2025-${user.$id.slice(-4).toUpperCase()}` : "RC-2025-0042",
+    status: "pendiente" as "pendiente" | "confirmado" | "pagado",
+    paymentType: "reservation" as "full" | "reservation",
+    amountPaid: 50,
+    totalAmount: 190,
+  };
 
   // Load chanchito data
   useEffect(() => {
@@ -348,6 +357,26 @@ export default function PerfilPage() {
             </a>
           ))}
         </div>
+      </motion.section>
+
+      {/* ── Acciones de Cuenta ────────────────── */}
+      <motion.section
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="app-card overflow-hidden"
+      >
+        <button
+          onClick={logout}
+          className="w-full flex items-center justify-between p-4 text-red-400 hover:bg-white/5 transition-colors"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-red-400/10 flex items-center justify-center">
+              <LogOut className="w-4 h-4" />
+            </div>
+            <span className="font-semibold text-sm">Cerrar Sesión</span>
+          </div>
+          <ChevronRight className="w-4 h-4 opacity-50" />
+        </button>
       </motion.section>
 
       {/* ── Org Info ────────────────── */}
