@@ -12,6 +12,8 @@ import {
   Check,
   Loader2,
   RefreshCw,
+  Camera,
+  Sparkles,
 } from "lucide-react";
 import StoriesBar from "./components/StoriesBar";
 import PostCard from "./components/PostCard";
@@ -26,12 +28,12 @@ import { useAuth } from "@/lib/useAuth";
 
 const categories = ["Todos", "promo", "speaker", "info", "archive", "behind-scenes"];
 const categoryLabels: Record<string, string> = {
-  Todos: "Todos",
-  promo: "Promos",
-  speaker: "Speakers",
-  info: "Info",
-  archive: "Archivo",
-  "behind-scenes": "Detrás de cámaras",
+  Todos: "🔥 Todo",
+  promo: "🎫 Promos",
+  speaker: "🎤 Speakers",
+  info: "ℹ️ Info",
+  archive: "📂 Archivo",
+  "behind-scenes": "🎬 BTS",
 };
 
 export default function SocialPage() {
@@ -67,6 +69,7 @@ export default function SocialPage() {
   });
 
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const categoriesRef = useRef<HTMLDivElement>(null);
 
   const showToast = (message: string) => {
     setToast({ show: true, message });
@@ -166,7 +169,6 @@ export default function SocialPage() {
 
   const handleMediaClick = (post: Post) => {
     if (post.mediaType === "text") return;
-    const idx = posts.findIndex((p) => p.$id === post.$id);
     const viewable = posts.filter((p) => p.mediaType !== "text");
     const viewIdx = viewable.findIndex((p) => p.$id === post.$id);
     setViewerItems(viewable);
@@ -206,63 +208,73 @@ export default function SocialPage() {
 
   /* ── Skeleton ───────────────────────────────────────────── */
   const PostSkeleton = () => (
-    <div className="bg-card-bg rounded-2xl border border-white/5 overflow-hidden animate-pulse">
+    <div className="bg-card-bg rounded-none border-b border-white/5 overflow-hidden animate-pulse">
       <div className="flex items-center gap-3 px-4 py-3">
-        <div className="w-9 h-9 rounded-full bg-white/5" />
+        <div className="w-10 h-10 rounded-full bg-white/5" />
         <div className="flex-1">
-          <div className="w-24 h-3 rounded bg-white/5 mb-1.5" />
+          <div className="w-28 h-3 rounded bg-white/5 mb-1.5" />
           <div className="w-16 h-2 rounded bg-white/5" />
         </div>
       </div>
-      <div className="w-full aspect-square bg-white/5" />
+      <div className="w-full aspect-[4/5] bg-white/[0.03]" />
       <div className="px-4 py-3 space-y-2">
-        <div className="w-32 h-3 rounded bg-white/5" />
+        <div className="flex gap-4">
+          <div className="w-7 h-7 rounded-full bg-white/5" />
+          <div className="w-7 h-7 rounded-full bg-white/5" />
+          <div className="w-7 h-7 rounded-full bg-white/5" />
+        </div>
+        <div className="w-20 h-3 rounded bg-white/5" />
         <div className="w-full h-2 rounded bg-white/5" />
+        <div className="w-3/4 h-2 rounded bg-white/5" />
       </div>
     </div>
   );
 
   return (
-    <div className="pb-4">
-      {/* ── Stories ──────────────────────────────────────── */}
-      <StoriesBar
-        onStoryClick={handleStoryClick}
-        isLoggedIn={!!user}
-      />
-
-      {/* ── Category Tabs ───────────────────────────────── */}
-      <div className="flex gap-2 overflow-x-auto pb-3 mb-1 scrollbar-hide px-5 sticky top-14 z-30 pt-2 bg-gradient-to-b from-dark-bg via-dark-bg/95 to-transparent backdrop-blur-sm">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
-              selectedCategory === cat
-                ? "bg-white text-black border-white shadow-lg shadow-white/10"
-                : "bg-transparent text-gray-400 border-white/10 active:border-white/30 active:text-white hover:border-white/20"
-            }`}
-          >
-            {categoryLabels[cat] || cat}
-          </button>
-        ))}
+    <div className="min-h-screen -mx-0">
+      {/* ── Stories Row ──────────────────────────────────── */}
+      <div className="border-b border-white/5">
+        <StoriesBar
+          onStoryClick={handleStoryClick}
+          isLoggedIn={!!user}
+        />
       </div>
 
-      {/* ── Refresh Button ──────────────────────────────── */}
-      <div className="flex justify-center py-2">
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold text-gray-500 hover:text-white hover:bg-white/5 transition-all border border-transparent hover:border-white/10"
+      {/* ── Category pills (horizontal scroll) ──────────── */}
+      <div className="sticky top-14 z-30 bg-dark-bg/95 backdrop-blur-xl border-b border-white/5">
+        <div
+          ref={categoriesRef}
+          className="flex items-center gap-2 px-4 py-2.5 overflow-x-auto scrollbar-hide"
         >
-          <RefreshCw
-            className={`w-3.5 h-3.5 ${refreshing ? "animate-spin" : ""}`}
-          />
-          Actualizar
-        </button>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 ${
+                selectedCategory === cat
+                  ? "bg-white text-black shadow-lg shadow-white/5"
+                  : "bg-white/[0.06] text-gray-400 hover:bg-white/10 hover:text-gray-200 active:scale-95"
+              }`}
+            >
+              {categoryLabels[cat] || cat}
+            </button>
+          ))}
+
+          {/* Refresh pill */}
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="ml-auto px-3 py-1.5 rounded-full text-xs font-semibold text-gray-500 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] transition-all flex items-center gap-1.5 shrink-0"
+          >
+            <RefreshCw
+              className={`w-3 h-3 ${refreshing ? "animate-spin" : ""}`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* ── Feed ────────────────────────────────────────── */}
-      <div className="px-4 space-y-4">
+      <div className="divide-y divide-white/[0.04]">
         {loading ? (
           <>
             <PostSkeleton />
@@ -273,48 +285,64 @@ export default function SocialPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-16"
+            className="text-center py-20 px-6"
           >
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">📷</span>
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center mx-auto mb-6 border border-white/5">
+              <Camera className="w-10 h-10 text-gray-600" strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-bold text-white mb-1">
+            <h3 className="text-lg font-bold text-white mb-2">
               Aún no hay publicaciones
             </h3>
-            <p className="text-sm text-gray-500 max-w-xs mx-auto">
-              Las publicaciones del Radical Camp aparecerán aquí
+            <p className="text-sm text-gray-500 max-w-xs mx-auto leading-relaxed">
+              Las publicaciones del Radical Camp aparecerán aquí. ¡Mantente atento!
             </p>
+            {user && (
+              <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-600">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Sé el primero en interactuar</span>
+              </div>
+            )}
           </motion.div>
         ) : (
           <>
-            {posts.map((post) => (
-              <PostCard
+            {posts.map((post, index) => (
+              <motion.div
                 key={post.$id}
-                post={post}
-                isLiked={likedPostIds.has(post.$id)}
-                userId={user?.$id}
-                userName={user?.name}
-                onCommentClick={handleCommentClick}
-                onShareClick={handleShareClick}
-                onMediaClick={handleMediaClick}
-              />
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: Math.min(index * 0.05, 0.3) }}
+              >
+                <PostCard
+                  post={post}
+                  isLiked={likedPostIds.has(post.$id)}
+                  userId={user?.$id}
+                  userName={user?.name}
+                  onCommentClick={handleCommentClick}
+                  onShareClick={handleShareClick}
+                  onMediaClick={handleMediaClick}
+                  onLikeChange={handleLikeChange}
+                />
+              </motion.div>
             ))}
 
             {/* Infinite scroll sentinel */}
             {hasMore && (
-              <div ref={sentinelRef} className="py-4">
+              <div ref={sentinelRef} className="py-6">
                 {loadingMore && (
                   <div className="flex justify-center">
-                    <Loader2 className="w-6 h-6 text-gray-500 animate-spin" />
+                    <Loader2 className="w-5 h-5 text-gray-600 animate-spin" />
                   </div>
                 )}
               </div>
             )}
 
             {!hasMore && posts.length > 0 && (
-              <div className="text-center py-8 border-t border-white/5">
-                <p className="text-xs text-gray-600 font-bold uppercase tracking-wider">
-                  ··· fin del muro ···
+              <div className="text-center py-10">
+                <div className="w-12 h-12 rounded-full bg-white/[0.03] flex items-center justify-center mx-auto mb-3">
+                  <Check className="w-5 h-5 text-gray-700" />
+                </div>
+                <p className="text-[11px] text-gray-600 font-semibold uppercase tracking-widest">
+                  Estás al día
                 </p>
               </div>
             )}
@@ -356,34 +384,33 @@ export default function SocialPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4"
+            className="fixed inset-0 z-[80] bg-black/70 backdrop-blur-sm flex items-end justify-center"
             onClick={() => setShareOpen(false)}
           >
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              className="bg-[#1a1a1a] w-full max-w-md rounded-3xl p-6 border border-white/10"
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-[#161616] w-full max-w-md rounded-t-3xl p-6 border-t border-white/10"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold">Compartir</h3>
-                <button
-                  onClick={() => setShareOpen(false)}
-                  className="p-2 bg-white/5 rounded-full hover:bg-white/10"
-                >
-                  <X size={20} />
-                </button>
+              {/* Handle */}
+              <div className="flex justify-center mb-5">
+                <div className="w-10 h-1 rounded-full bg-white/20" />
               </div>
+
+              <h3 className="text-lg font-bold text-center mb-6">Compartir</h3>
+
               <div className="grid grid-cols-4 gap-4 mb-6">
                 <button
                   onClick={copyToClipboard}
                   className="flex flex-col items-center gap-2 group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                    <Copy size={24} />
+                  <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all group-active:scale-90">
+                    <Copy size={22} />
                   </div>
-                  <span className="text-xs text-gray-400">Copiar</span>
+                  <span className="text-[10px] text-gray-400 font-medium">Copiar</span>
                 </button>
                 <button
                   onClick={() =>
@@ -398,10 +425,10 @@ export default function SocialPage() {
                   }
                   className="flex flex-col items-center gap-2 group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-[#25D366]/20 text-[#25D366] flex items-center justify-center">
-                    <MessageCircle size={24} />
+                  <div className="w-14 h-14 rounded-2xl bg-[#25D366]/15 text-[#25D366] flex items-center justify-center group-active:scale-90 transition-transform">
+                    <MessageCircle size={22} />
                   </div>
-                  <span className="text-xs text-gray-400">WhatsApp</span>
+                  <span className="text-[10px] text-gray-400 font-medium">WhatsApp</span>
                 </button>
                 <button
                   onClick={() =>
@@ -414,10 +441,10 @@ export default function SocialPage() {
                   }
                   className="flex flex-col items-center gap-2 group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-[#1877F2]/20 text-[#1877F2] flex items-center justify-center">
-                    <Facebook size={24} />
+                  <div className="w-14 h-14 rounded-2xl bg-[#1877F2]/15 text-[#1877F2] flex items-center justify-center group-active:scale-90 transition-transform">
+                    <Facebook size={22} />
                   </div>
-                  <span className="text-xs text-gray-400">Facebook</span>
+                  <span className="text-[10px] text-gray-400 font-medium">Facebook</span>
                 </button>
                 <button
                   onClick={() =>
@@ -430,20 +457,21 @@ export default function SocialPage() {
                   }
                   className="flex flex-col items-center gap-2 group"
                 >
-                  <div className="w-14 h-14 rounded-full bg-[#1DA1F2]/20 text-[#1DA1F2] flex items-center justify-center">
-                    <Twitter size={24} />
+                  <div className="w-14 h-14 rounded-2xl bg-[#1DA1F2]/15 text-[#1DA1F2] flex items-center justify-center group-active:scale-90 transition-transform">
+                    <Twitter size={22} />
                   </div>
-                  <span className="text-xs text-gray-400">Twitter</span>
+                  <span className="text-[10px] text-gray-400 font-medium">Twitter</span>
                 </button>
               </div>
-              <div className="bg-black/30 p-4 rounded-xl flex items-center gap-3 border border-white/5">
-                <LinkIcon size={16} className="text-gray-500 shrink-0" />
-                <p className="text-sm text-gray-400 truncate flex-1">
+
+              <div className="bg-black/40 p-3.5 rounded-xl flex items-center gap-3 border border-white/5">
+                <LinkIcon size={14} className="text-gray-600 shrink-0" />
+                <p className="text-xs text-gray-400 truncate flex-1 font-mono">
                   {typeof window !== "undefined" ? window.location.href : ""}
                 </p>
                 <button
                   onClick={copyToClipboard}
-                  className="text-xs font-bold text-secondary hover:text-white transition-colors"
+                  className="text-xs font-bold text-secondary hover:text-white transition-colors shrink-0"
                 >
                   Copiar
                 </button>
@@ -460,10 +488,10 @@ export default function SocialPage() {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[90] bg-white text-black px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 font-bold"
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[90] bg-white text-black px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-2.5 font-semibold text-sm"
           >
-            <div className="bg-green-500 rounded-full p-1">
-              <Check size={14} className="text-white" strokeWidth={3} />
+            <div className="bg-emerald-500 rounded-full p-0.5">
+              <Check size={12} className="text-white" strokeWidth={3} />
             </div>
             {toast.message}
           </motion.div>

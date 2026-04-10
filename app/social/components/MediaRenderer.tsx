@@ -16,6 +16,17 @@ interface MediaRendererProps {
   onVideoStateChange?: (playing: boolean) => void;
 }
 
+// Curated gradient backgrounds for text posts
+const textGradients = [
+  "from-[#6200ea] via-[#3b0090] to-[#1a0044]",
+  "from-[#00d4ff] via-[#0066bb] to-[#003366]",
+  "from-[#ff0055] via-[#cc0044] to-[#660022]",
+  "from-[#833ab4] via-[#5b1e8e] to-[#2a0d42]",
+  "from-[#f09433] via-[#cc5500] to-[#662a00]",
+  "from-[#00c6ff] via-[#0072ff] to-[#001e5c]",
+  "from-[#6200ea] via-[#ff0055] to-[#001e5c]",
+];
+
 export default function MediaRenderer({
   mediaType,
   mediaFileIds,
@@ -69,9 +80,19 @@ export default function MediaRenderer({
 
   /* ── Text Post ──────────────────────────────────────────── */
   if (mediaType === "text") {
+    // Pick gradient based on title hash
+    const hash = (title || content || "").split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    const gradient = textGradients[hash % textGradients.length];
+
     return (
-      <div className="w-full min-h-[200px] bg-gradient-to-br from-primary/30 via-card-bg to-secondary/20 flex items-center justify-center p-8">
-        <p className="text-xl md:text-2xl font-bold text-white text-center leading-relaxed max-w-lg">
+      <div className={`w-full aspect-[4/5] bg-gradient-to-br ${gradient} flex items-center justify-center p-8 relative overflow-hidden`}>
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-[0.04]" style={{
+          backgroundImage: `radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 50%)`
+        }} />
+        {/* Content */}
+        <p className="text-xl md:text-2xl font-bold text-white text-center leading-relaxed max-w-sm relative z-10 drop-shadow-lg">
           {content || title}
         </p>
       </div>
@@ -109,7 +130,7 @@ export default function MediaRenderer({
         {/* Play/Pause overlay */}
         {!isPlaying && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+            <div className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
               <Play fill="white" className="w-7 h-7 text-white ml-1" />
             </div>
           </div>
@@ -165,17 +186,17 @@ export default function MediaRenderer({
             {mediaFileIds.map((_, i) => (
               <div
                 key={i}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                className={`h-1.5 rounded-full transition-all duration-200 ${
                   i === galleryIndex
-                    ? "bg-white w-4"
-                    : "bg-white/40"
+                    ? "bg-secondary w-4"
+                    : "bg-white/40 w-1.5"
                 }`}
               />
             ))}
           </div>
         )}
         {/* Counter */}
-        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-xs font-bold text-white border border-white/10">
+        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-xs font-semibold text-white border border-white/10">
           {galleryIndex + 1}/{mediaFileIds.length}
         </div>
       </div>

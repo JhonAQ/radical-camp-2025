@@ -1,22 +1,22 @@
-// ============================================================
-// Appwrite Backend Setup Script for Radical Camp Social Feed
-// 
-// Run: npx tsx scripts/setup-appwrite.mjs
-// 
-// Required: Set APPWRITE_API_KEY environment variable first:
-//   $env:APPWRITE_API_KEY = "your-api-key-here"
-//   npx tsx scripts/setup-appwrite.mjs
-// ============================================================
+/**
+ * Script de configuración de Appwrite para Muro Radical
+ * Crea la base de datos, colecciones, atributos, índices y bucket de storage.
+ *
+ * Uso: node scripts/setup-appwrite.mjs
+ *
+ * Requiere: APPWRITE_API_KEY en variable de entorno o pásala como argumento
+ *   node scripts/setup-appwrite.mjs YOUR_API_KEY_HERE
+ */
 
-import { Client, Databases, Storage, Teams } from "node-appwrite";
+import { Client, Databases, Storage, ID, Permission, Role } from "node-appwrite";
 
 const ENDPOINT = "https://nyc.cloud.appwrite.io/v1";
 const PROJECT_ID = "69d8b2ac002de5834ff7";
-const API_KEY = process.env.APPWRITE_API_KEY;
+const API_KEY = process.argv[2] || process.env.APPWRITE_API_KEY;
 
 if (!API_KEY) {
-  console.error("❌ Set APPWRITE_API_KEY environment variable first!");
-  console.error('   $env:APPWRITE_API_KEY = "your-key"');
+  console.error("❌ Necesitas pasar tu Appwrite API Key:");
+  console.error("   node scripts/setup-appwrite.mjs YOUR_API_KEY");
   process.exit(1);
 }
 
@@ -27,219 +27,254 @@ const client = new Client()
 
 const databases = new Databases(client);
 const storage = new Storage(client);
-const teams = new Teams(client);
 
 const DB_ID = "social-db";
 
-async function main() {
-  console.log("🚀 Setting up Appwrite backend for Radical Camp Social...\n");
-
-  // ── 1. Create Database ──────────────────────────────────
+/* ─── Helpers ──────────────────────────────────────────────── */
+async function safeCreate(label, fn) {
   try {
-    await databases.create(DB_ID, "Radical Social");
-    console.log("✅ Database 'social-db' created");
-  } catch (e) {
-    if (e.code === 409) console.log("⏭️  Database 'social-db' already exists");
-    else throw e;
+    const result = await fn();
+    console.log(`  ✅ ${label} -> creado (${result?.$id || "ok"})`);
+    return result;
+  } catch (err) {
+    if (err.code === 409) {
+      console.log(`  ⏭️  ${label} -> ya existe, saltando`);
+      return null;
+    }
+    console.error(`  ❌ ${label} -> error:`, err.message);
+    throw err;
   }
+}
 
-  // ── 2. Create Posts Collection ──────────────────────────
-  try {
-    await databases.createCollection(DB_ID, "posts", "Posts", [
-      'read("any")',
-      'create("team:admin")',
-      'update("team:admin")',
-      'delete("team:admin")',
-    ]);
-    console.log("✅ Collection 'posts' created");
-  } catch (e) {
-    if (e.code === 409) console.log("⏭️  Collection 'posts' already exists");
-    else throw e;
-  }
+// Wait a bit between attribute creations to avoid rate limits
+const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  // Posts attributes
-  const postsAttrs = [
-    () => databases.createStringAttribute(DB_ID, "posts", "title", 256, false, ""),
-    () => databases.createStringAttribute(DB_ID, "posts", "content", 2000, false, ""),
-    () => databases.createEnumAttribute(DB_ID, "posts", "mediaType", ["image", "video", "gallery", "text"], false, "image"),
-    () => databases.createStringAttribute(DB_ID, "posts", "mediaFileIds", 256, false, undefined, true),
-    () => databases.createEnumAttribute(DB_ID, "posts", "category", ["promo", "speaker", "info", "archive", "behind-scenes"], false, "info"),
-    () => databases.createBooleanAttribute(DB_ID, "posts", "featured", false, false),
-    () => databases.createBooleanAttribute(DB_ID, "posts", "pinned", false, false),
-    () => databases.createIntegerAttribute(DB_ID, "posts", "likesCount", false, 0, 0, 999999),
-    () => databases.createIntegerAttribute(DB_ID, "posts", "commentsCount", false, 0, 0, 999999),
-    () => databases.createStringAttribute(DB_ID, "posts", "authorName", 128, false, "Radical Camp"),
-    () => databases.createStringAttribute(DB_ID, "posts", "authorAvatar", 512, false, ""),
-    () => databases.createEnumAttribute(DB_ID, "posts", "status", ["draft", "published", "archived"], false, "published"),
-    () => databases.createDatetimeAttribute(DB_ID, "posts", "publishedAt", false),
-    () => databases.createBooleanAttribute(DB_ID, "posts", "isStory", false, false),
-    () => databases.createStringAttribute(DB_ID, "posts", "storyExpiresAt", 64, false, ""),
+/* ─── 1. Database ──────────────────────────────────────────── */
+async function createDatabase() {
+  console.log("\n📦 Creando base de datos...");
+  await safeCreate("Database: social-db", () =>
+    databases.create(DB_ID, "Social DB")
+  );
+}
+
+/* ─── 2. Collection: posts ─────────────────────────────────── */
+async function createPostsCollection() {
+  console.log("\n📄 Creando collection: posts...");
+  const COL = "posts";
+
+  await safeCreate("Collection: posts", () =>
+    databases.createCollection(DB_ID, COL, "Posts", [
+      Permission.read(Role.any()),
+      Permission.create(Role.users()),
+      Permission.update(Role.users()),
+      Permission.delete(Role.users()),
+    ])
+  );
+
+  const attrs = [
+    () => databases.createStringAttribute(DB_ID, COL, "title", 256, false, ""),
+    () => databases.createStringAttribute(DB_ID, COL, "content", 2000, false, ""),
+    () => databases.createEnumAttribute(DB_ID, COL, "mediaType", ["image", "video", "gallery", "text"], false, "image"),
+    () => databases.createStringAttribute(DB_ID, COL, "mediaFileIds", 512, false, undefined, true),
+    () => databases.createEnumAttribute(DB_ID, COL, "category", ["promo", "speaker", "info", "archive", "behind-scenes"], false, "promo"),
+    () => databases.createBooleanAttribute(DB_ID, COL, "featured", false, false),
+    () => databases.createBooleanAttribute(DB_ID, COL, "pinned", false, false),
+    () => databases.createIntegerAttribute(DB_ID, COL, "likesCount", false, 0, 0, 1000000),
+    () => databases.createIntegerAttribute(DB_ID, COL, "commentsCount", false, 0, 0, 1000000),
+    () => databases.createStringAttribute(DB_ID, COL, "authorName", 128, false, "Radical Camp"),
+    () => databases.createStringAttribute(DB_ID, COL, "authorAvatar", 512, false, ""),
+    () => databases.createEnumAttribute(DB_ID, COL, "status", ["draft", "published", "archived"], false, "published"),
+    () => databases.createDatetimeAttribute(DB_ID, COL, "publishedAt", false),
+    () => databases.createBooleanAttribute(DB_ID, COL, "isStory", false, false),
+    () => databases.createStringAttribute(DB_ID, COL, "storyExpiresAt", 64, false, ""),
   ];
 
-  for (const createAttr of postsAttrs) {
-    try {
-      await createAttr();
-    } catch (e) {
-      if (e.code !== 409) console.warn("  ⚠️ Attr error:", e.message);
-    }
-  }
-  console.log("  📝 Posts attributes configured");
-
-  // Posts indexes
-  try {
-    await databases.createIndex(DB_ID, "posts", "idx_status_published", "key", ["status", "publishedAt"], ["asc", "desc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  try {
-    await databases.createIndex(DB_ID, "posts", "idx_story", "key", ["isStory", "pinned", "publishedAt"], ["asc", "desc", "desc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  try {
-    await databases.createIndex(DB_ID, "posts", "idx_category", "key", ["category", "status"], ["asc", "asc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  console.log("  📊 Posts indexes configured");
-
-  // ── 3. Create Likes Collection ─────────────────────────
-  try {
-    await databases.createCollection(DB_ID, "likes", "Likes", [
-      'read("any")',
-      'create("users")',
-      'delete("users")',
-    ]);
-    console.log("✅ Collection 'likes' created");
-  } catch (e) {
-    if (e.code === 409) console.log("⏭️  Collection 'likes' already exists");
-    else throw e;
+  for (const attr of attrs) {
+    await safeCreate(`Attr: posts.${attr.toString().match(/COL, "(\w+)"/)?.[1] || "?"}`, attr);
+    await delay(1500);
   }
 
-  try {
-    await databases.createStringAttribute(DB_ID, "likes", "postId", 36, true);
-    await databases.createStringAttribute(DB_ID, "likes", "userId", 36, true);
-  } catch (e) {
-    if (e.code !== 409) console.warn("  ⚠️ Attr error:", e.message);
-  }
+  // Indexes
+  console.log("  📊 Creando índices para posts...");
+  await delay(5000); // Wait for attributes to be ready
+  
+  await safeCreate("Index: posts.status_published", () =>
+    databases.createIndex(DB_ID, COL, "idx_status_published", "key", ["status", "publishedAt"], ["ASC", "DESC"])
+  );
+  await delay(2000);
+  
+  await safeCreate("Index: posts.pinned", () =>
+    databases.createIndex(DB_ID, COL, "idx_pinned", "key", ["pinned"], ["DESC"])
+  );
+  await delay(2000);
+  
+  await safeCreate("Index: posts.isStory", () =>
+    databases.createIndex(DB_ID, COL, "idx_isStory", "key", ["isStory", "status"], ["ASC", "ASC"])
+  );
+  await delay(2000);
+  
+  await safeCreate("Index: posts.category", () =>
+    databases.createIndex(DB_ID, COL, "idx_category", "key", ["category"], ["ASC"])
+  );
+}
 
-  try {
-    await databases.createIndex(DB_ID, "likes", "idx_post_user", "unique", ["postId", "userId"], ["asc", "asc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  try {
-    await databases.createIndex(DB_ID, "likes", "idx_user", "key", ["userId"], ["asc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  console.log("  📊 Likes indexes configured");
+/* ─── 3. Collection: likes ─────────────────────────────────── */
+async function createLikesCollection() {
+  console.log("\n❤️ Creando collection: likes...");
+  const COL = "likes";
 
-  // ── 4. Create Comments Collection ──────────────────────
-  try {
-    await databases.createCollection(DB_ID, "comments", "Comments", [
-      'read("any")',
-      'create("users")',
-      'update("users")',
-      'delete("users")',
-    ]);
-    console.log("✅ Collection 'comments' created");
-  } catch (e) {
-    if (e.code === 409) console.log("⏭️  Collection 'comments' already exists");
-    else throw e;
-  }
+  await safeCreate("Collection: likes", () =>
+    databases.createCollection(DB_ID, COL, "Likes", [
+      Permission.read(Role.any()),
+      Permission.create(Role.users()),
+      Permission.update(Role.users()),
+      Permission.delete(Role.users()),
+    ])
+  );
 
-  const commentsAttrs = [
-    () => databases.createStringAttribute(DB_ID, "comments", "postId", 36, true),
-    () => databases.createStringAttribute(DB_ID, "comments", "userId", 36, true),
-    () => databases.createStringAttribute(DB_ID, "comments", "userName", 128, true),
-    () => databases.createStringAttribute(DB_ID, "comments", "userAvatar", 512, false, ""),
-    () => databases.createStringAttribute(DB_ID, "comments", "content", 1000, true),
+  await safeCreate("Attr: likes.postId", () =>
+    databases.createStringAttribute(DB_ID, COL, "postId", 36, true)
+  );
+  await delay(1500);
+
+  await safeCreate("Attr: likes.userId", () =>
+    databases.createStringAttribute(DB_ID, COL, "userId", 36, true)
+  );
+  await delay(5000);
+
+  // Unique index
+  await safeCreate("Index: likes.unique_post_user", () =>
+    databases.createIndex(DB_ID, COL, "idx_unique_like", "unique", ["postId", "userId"], ["ASC", "ASC"])
+  );
+  await delay(2000);
+
+  await safeCreate("Index: likes.by_user", () =>
+    databases.createIndex(DB_ID, COL, "idx_user_likes", "key", ["userId", "postId"], ["ASC", "ASC"])
+  );
+}
+
+/* ─── 4. Collection: comments ──────────────────────────────── */
+async function createCommentsCollection() {
+  console.log("\n💬 Creando collection: comments...");
+  const COL = "comments";
+
+  await safeCreate("Collection: comments", () =>
+    databases.createCollection(DB_ID, COL, "Comments", [
+      Permission.read(Role.any()),
+      Permission.create(Role.users()),
+      Permission.update(Role.users()),
+      Permission.delete(Role.users()),
+    ])
+  );
+
+  const attrs = [
+    () => databases.createStringAttribute(DB_ID, COL, "postId", 36, true),
+    () => databases.createStringAttribute(DB_ID, COL, "userId", 36, true),
+    () => databases.createStringAttribute(DB_ID, COL, "userName", 128, false, ""),
+    () => databases.createStringAttribute(DB_ID, COL, "userAvatar", 512, false, ""),
+    () => databases.createStringAttribute(DB_ID, COL, "content", 1000, true),
   ];
 
-  for (const createAttr of commentsAttrs) {
-    try {
-      await createAttr();
-    } catch (e) {
-      if (e.code !== 409) console.warn("  ⚠️ Attr error:", e.message);
-    }
+  for (const attr of attrs) {
+    await safeCreate(`Attr: comments.${attr.toString().match(/COL, "(\w+)"/)?.[1] || "?"}`, attr);
+    await delay(1500);
   }
 
-  try {
-    await databases.createIndex(DB_ID, "comments", "idx_post", "key", ["postId"], ["asc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  console.log("  📊 Comments indexes configured");
+  await delay(5000);
 
-  // ── 5. Create Notifications Collection ─────────────────
-  try {
-    await databases.createCollection(DB_ID, "notifications", "Notifications", [
-      'read("users")',
-      'create("users")',
-      'update("users")',
-      'delete("users")',
-    ]);
-    console.log("✅ Collection 'notifications' created");
-  } catch (e) {
-    if (e.code === 409) console.log("⏭️  Collection 'notifications' already exists");
-    else throw e;
-  }
+  await safeCreate("Index: comments.by_post", () =>
+    databases.createIndex(DB_ID, COL, "idx_by_post", "key", ["postId"], ["ASC"])
+  );
+}
 
-  const notifAttrs = [
-    () => databases.createStringAttribute(DB_ID, "notifications", "userId", 36, true),
-    () => databases.createEnumAttribute(DB_ID, "notifications", "type", ["like", "comment", "new_post"], true),
-    () => databases.createStringAttribute(DB_ID, "notifications", "fromUserName", 128, true),
-    () => databases.createStringAttribute(DB_ID, "notifications", "fromUserAvatar", 512, false, ""),
-    () => databases.createStringAttribute(DB_ID, "notifications", "postId", 36, false, ""),
-    () => databases.createStringAttribute(DB_ID, "notifications", "postTitle", 256, false, ""),
-    () => databases.createStringAttribute(DB_ID, "notifications", "message", 512, true),
-    () => databases.createBooleanAttribute(DB_ID, "notifications", "read", false, false),
+/* ─── 5. Collection: notifications ────────────────────────── */
+async function createNotificationsCollection() {
+  console.log("\n🔔 Creando collection: notifications...");
+  const COL = "notifications";
+
+  await safeCreate("Collection: notifications", () =>
+    databases.createCollection(DB_ID, COL, "Notifications", [
+      Permission.read(Role.users()),
+      Permission.create(Role.users()),
+      Permission.update(Role.users()),
+      Permission.delete(Role.users()),
+    ])
+  );
+
+  const attrs = [
+    () => databases.createStringAttribute(DB_ID, COL, "userId", 36, true),
+    () => databases.createEnumAttribute(DB_ID, COL, "type", ["like", "comment", "new_post"], true),
+    () => databases.createStringAttribute(DB_ID, COL, "fromUserName", 128, false, ""),
+    () => databases.createStringAttribute(DB_ID, COL, "fromUserAvatar", 512, false, ""),
+    () => databases.createStringAttribute(DB_ID, COL, "postId", 36, false, ""),
+    () => databases.createStringAttribute(DB_ID, COL, "postTitle", 256, false, ""),
+    () => databases.createStringAttribute(DB_ID, COL, "message", 500, false, ""),
+    () => databases.createBooleanAttribute(DB_ID, COL, "read", false, false),
   ];
 
-  for (const createAttr of notifAttrs) {
-    try {
-      await createAttr();
-    } catch (e) {
-      if (e.code !== 409) console.warn("  ⚠️ Attr error:", e.message);
-    }
+  for (const attr of attrs) {
+    await safeCreate(`Attr: notifications.${attr.toString().match(/COL, "(\w+)"/)?.[1] || "?"}`, attr);
+    await delay(1500);
   }
 
-  try {
-    await databases.createIndex(DB_ID, "notifications", "idx_user_read", "key", ["userId", "read"], ["asc", "asc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  try {
-    await databases.createIndex(DB_ID, "notifications", "idx_user_created", "key", ["userId", "$createdAt"], ["asc", "desc"]);
-  } catch (e) { if (e.code !== 409) console.warn("  ⚠️ Index error:", e.message); }
-  console.log("  📊 Notifications indexes configured");
+  await delay(5000);
 
-  // ── 6. Create Storage Bucket ───────────────────────────
-  try {
-    await storage.createBucket(
+  await safeCreate("Index: notifications.by_user", () =>
+    databases.createIndex(DB_ID, COL, "idx_by_user", "key", ["userId", "read"], ["ASC", "ASC"])
+  );
+}
+
+/* ─── 6. Storage Bucket ────────────────────────────────────── */
+async function createBucket() {
+  console.log("\n📁 Creando bucket: social-media...");
+  await safeCreate("Bucket: social-media", () =>
+    storage.createBucket(
       "social-media",
       "Social Media",
       [
-        'read("any")',
-        'create("team:admin")',
-        'update("team:admin")',
-        'delete("team:admin")',
+        Permission.read(Role.any()),
+        Permission.create(Role.users()),
+        Permission.update(Role.users()),
+        Permission.delete(Role.users()),
       ],
-      false, // fileSecurity
-      true,  // enabled
-      104857600, // 100MB max
+      false,  // fileSecurity
+      true,   // enabled
+      104857600, // 100MB max file size
       ["jpg", "jpeg", "png", "webp", "gif", "mp4", "mov", "webm"],
-      "gzip",
-      false, // encryption
-      false  // antivirus
-    );
-    console.log("✅ Storage bucket 'social-media' created");
-  } catch (e) {
-    if (e.code === 409) console.log("⏭️  Bucket 'social-media' already exists");
-    else throw e;
-  }
-
-  // ── 7. Create Admin Team ───────────────────────────────
-  try {
-    await teams.create("admin", "Admin");
-    console.log("✅ Team 'admin' created");
-  } catch (e) {
-    if (e.code === 409) console.log("⏭️  Team 'admin' already exists");
-    else throw e;
-  }
-
-  console.log("\n🎉 Setup complete! Now add yourself to the 'admin' team via Appwrite console.");
-  console.log("   Go to: https://cloud.appwrite.io > Your Project > Auth > Teams > admin > Add Member");
+      "none",  // compression
+      false,   // encryption
+      false    // antivirus
+    )
+  );
 }
 
-main().catch((err) => {
-  console.error("\n❌ Setup failed:", err);
-  process.exit(1);
-});
+/* ─── Main ─────────────────────────────────────────────────── */
+async function main() {
+  console.log("🚀 Configuración de Appwrite para Muro Radical");
+  console.log(`   Endpoint: ${ENDPOINT}`);
+  console.log(`   Project:  ${PROJECT_ID}`);
+  console.log(`   DB ID:    ${DB_ID}\n`);
+
+  try {
+    await createDatabase();
+    await createPostsCollection();
+    await createLikesCollection();
+    await createCommentsCollection();
+    await createNotificationsCollection();
+    await createBucket();
+
+    console.log("\n" + "=".repeat(50));
+    console.log("🎉 ¡Setup completado con éxito!");
+    console.log("=".repeat(50));
+    console.log("\nRecursos creados:");
+    console.log("  • Database: social-db");
+    console.log("  • Collections: posts, likes, comments, notifications");
+    console.log("  • Bucket: social-media");
+    console.log("\nPuedes empezar a usar el Muro Radical. 🔥");
+  } catch (err) {
+    console.error("\n💥 Error fatal durante el setup:", err.message);
+    process.exit(1);
+  }
+}
+
+main();
