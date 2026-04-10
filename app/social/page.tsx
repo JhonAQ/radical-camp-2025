@@ -21,6 +21,8 @@ import CommentsSheet from "./components/CommentsSheet";
 import FullscreenViewer from "./components/FullscreenViewer";
 import { getPosts, getUserLikedPostIds, type Post } from "@/lib/social";
 import { useAuth } from "@/lib/useAuth";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function SocialPage() {
   const { user } = useAuth();
@@ -212,10 +214,44 @@ export default function SocialPage() {
 
   return (
     <div className="min-h-screen -mx-0 pb-20">
-      {/* Feed pull-to-refresh style header or stories... */}
+      
+      {/* ── Social Header (User & Link to Profile) ────────────────────── */}
+      <div className="px-5 py-4 flex items-center justify-between bg-dark-bg border-b border-white/5">
+        <Link
+          href="/perfil"
+          className="flex items-center gap-3 active:scale-95 transition-all"
+        >
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary p-[2px] shadow-[0_0_10px_rgba(0,212,255,0.3)]">
+            <div className="w-full h-full rounded-full bg-[#121212] flex items-center justify-center overflow-hidden">
+              <Image
+                src="/RADICAL-logotipo.png"
+                alt="Avatar Profile"
+                width={24}
+                height={24}
+                className="object-contain"
+              />
+            </div>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-white leading-tight">
+              {user?.name || "Camper Invitado"}
+            </p>
+            <p className="text-xs text-gray-500 font-medium">
+              Ver mi perfil
+            </p>
+          </div>
+        </Link>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10"
+        >
+          <RefreshCw className={`w-5 h-5 text-gray-400 ${refreshing ? "animate-spin text-secondary" : ""}`} />
+        </button>
+      </div>
 
       {/* ── Stories Row ──────────────────────────────────── */}
-      <div className="border-b border-white/5 sticky top-14 z-30 bg-dark-bg/95 backdrop-blur-xl">
+      <div className="border-b border-white/5 bg-dark-bg/95">
         <StoriesBar onStoryClick={handleStoryClick} isLoggedIn={!!user} />
       </div>
 
