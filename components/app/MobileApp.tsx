@@ -20,7 +20,12 @@ import {
 
 /* ── Countdown Hook ──────────────────────────────────────────── */
 function useCountdown(target: string) {
-  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [time, setTime] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
   useEffect(() => {
     const t = new Date(target).getTime();
     const tick = () => {
@@ -73,15 +78,33 @@ const quickActions = [
 ];
 
 const eventInfo = [
-  { icon: Calendar, label: "Fechas", value: "30 Dic — 03 Ene", sub: "5 días de verano" },
+  {
+    icon: Calendar,
+    label: "Fechas",
+    value: "30 Dic — 03 Ene",
+    sub: "5 días de verano",
+  },
   { icon: MapPin, label: "Lugar", value: "Campel", sub: "Arequipa, Perú" },
   { icon: Users, label: "Edades", value: "17+", sub: "Cupos limitados" },
-  { icon: Ticket, label: "Precio", value: "S/ 190", sub: "Promo hasta 15 Dic: S/170" },
+  {
+    icon: Ticket,
+    label: "Precio",
+    value: "S/ 190",
+    sub: "Promo hasta 15 Dic: S/170",
+  },
 ];
 
 const speakers = [
-  { name: "Ps. Sergio Bustamante", role: "Plenarista", image: "/pastor-sergio-bustamante.jpg" },
-  { name: "Lilian Nuñez Lipa", role: "Taller", image: "/lilian-nunez-lipa.jpg" },
+  {
+    name: "Ps. Sergio Bustamante",
+    role: "Plenarista",
+    image: "/pastor-sergio-bustamante.jpg",
+  },
+  {
+    name: "Lilian Nuñez Lipa",
+    role: "Taller",
+    image: "/lilian-nunez-lipa.jpg",
+  },
   { name: "Diego Valero C.", role: "Taller", image: "/diego-valero.jpg" },
   { name: "Brian Gonzales Inga", role: "Ponencia", image: "/brayan-inga.jpg" },
   { name: "Ps. Daniel Cruz", role: "Ponencia", image: "/daniel-cruz.jpg" },
@@ -150,7 +173,8 @@ export default function MobileApp() {
           </h1>
 
           <p className="text-white/70 text-sm max-w-[260px] mb-5 leading-relaxed">
-            Campamento juvenil cristiano en Campel, Arequipa. ¡Vive la experiencia!
+            Campamento juvenil cristiano en Campel, Arequipa. ¡Vive la
+            experiencia!
           </p>
 
           {/* Countdown */}
@@ -198,7 +222,10 @@ export default function MobileApp() {
                   className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${action.gradient} p-[1px] shadow-lg ${action.glow} group-active:scale-90 transition-transform`}
                 >
                   <div className="w-full h-full bg-dark-bg rounded-[15px] flex items-center justify-center">
-                    <action.icon className="w-5 h-5 text-white" strokeWidth={2} />
+                    <action.icon
+                      className="w-5 h-5 text-white"
+                      strokeWidth={2}
+                    />
                   </div>
                 </div>
                 <span className="text-[10px] font-bold text-gray-400 group-hover:text-white transition-colors text-center leading-tight">
@@ -213,7 +240,10 @@ export default function MobileApp() {
       {/* ── Event Info ─────────────────────────── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-title)" }}>
+          <h2
+            className="text-lg font-bold text-white"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
             Información
           </h2>
           <Link
@@ -234,7 +264,10 @@ export default function MobileApp() {
               className="flex-shrink-0 w-[140px] app-card p-4"
             >
               <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3">
-                <info.icon className="w-5 h-5 text-secondary" strokeWidth={1.8} />
+                <info.icon
+                  className="w-5 h-5 text-secondary"
+                  strokeWidth={1.8}
+                />
               </div>
               <p
                 className="text-lg font-bold text-white mb-0.5 leading-tight"
@@ -268,9 +301,13 @@ export default function MobileApp() {
             <div className="relative p-5 flex items-center gap-5">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-gray-500 text-xs line-through">S/ 190</span>
+                  <span className="text-gray-500 text-xs line-through">
+                    S/ 190
+                  </span>
                   <Clock className="w-3 h-3 text-accent" />
-                  <span className="text-accent text-[10px] font-bold">Hasta 15 Dic</span>
+                  <span className="text-accent text-[10px] font-bold">
+                    Hasta 15 Dic
+                  </span>
                 </div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-lg font-bold text-white">S/</span>
@@ -298,7 +335,10 @@ export default function MobileApp() {
       {/* ── Speakers ──────────────────────────── */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-title)" }}>
+          <h2
+            className="text-lg font-bold text-white"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
             Ponentes
           </h2>
         </div>
@@ -345,8 +385,8 @@ export default function MobileApp() {
       >
         <div className="glass-card p-5">
           <p className="text-sm text-gray-300 italic leading-relaxed">
-            &ldquo;Deje el impío su camino, y el hombre inicuo sus pensamientos, y
-            vuélvase a Jehová, el cual tendrá de él misericordia, y al Dios
+            &ldquo;Deje el impío su camino, y el hombre inicuo sus pensamientos,
+            y vuélvase a Jehová, el cual tendrá de él misericordia, y al Dios
             nuestro, el cual será amplio en perdonar.&rdquo;
           </p>
           <p className="text-xs text-secondary font-bold mt-3">— Isaías 55:7</p>

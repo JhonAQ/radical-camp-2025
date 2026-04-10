@@ -31,7 +31,7 @@ export default function PWAInstallModal() {
     return () => {
       window.removeEventListener(
         "beforeinstallprompt",
-        handleBeforeInstallPrompt
+        handleBeforeInstallPrompt,
       );
     };
   }, []);
@@ -42,11 +42,11 @@ export default function PWAInstallModal() {
     deferredPrompt.prompt();
 
     const { outcome } = await deferredPrompt.userChoice;
-    
+
     if (outcome === "accepted") {
       setDeferredPrompt(null);
     }
-    
+
     setShowModal(false);
   };
 
@@ -73,11 +73,12 @@ export default function PWAInstallModal() {
             <div className="flex-1">
               <h3 className="font-bold text-white text-sm">Instalar App</h3>
               <p className="text-[10px] text-gray-400 mt-1 leading-tight">
-                Agrega Radical Camp a tu pantalla de inicio para acceso rápido, modo desconectado y notificaciones.
+                Agrega Radical Camp a tu pantalla de inicio para acceso rápido,
+                modo desconectado y notificaciones.
               </p>
             </div>
           </div>
-          
+
           <button
             onClick={handleInstallClick}
             className="w-full mt-3 bg-primary text-white font-bold py-2 rounded-xl text-sm transition-transform active:scale-95"
