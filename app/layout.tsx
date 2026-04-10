@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat, Poppins } from "next/font/google";
+import { headers } from "next/headers";
 import "./globals.css";
 import BottomNavigation from "@/components/layout/BottomNavigation";
 import AppTopBar from "@/components/layout/AppTopBar";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -56,11 +59,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const isDesktop = headersList.get("x-device-type") === "desktop";
+
   return (
     <html lang="es">
       <head>
@@ -82,9 +88,11 @@ export default function RootLayout({
         />
       </head>
       <body className={`${montserrat.variable} ${poppins.variable}`}>
-        <AppTopBar />
-        <main className="app-container">{children}</main>
-        <BottomNavigation />
+        {isDesktop ? <Navbar /> : <AppTopBar />}
+        <main className={isDesktop ? "min-h-screen" : "app-container"}>
+          {children}
+        </main>
+        {isDesktop ? <Footer /> : <BottomNavigation />}
         <Analytics />
         <SpeedInsights />
       </body>

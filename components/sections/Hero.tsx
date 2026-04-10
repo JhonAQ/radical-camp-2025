@@ -3,14 +3,14 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { Play } from "lucide-react";
+import { Play, QrCode, Smartphone } from "lucide-react";
 import Countdown from "@/components/ui/Countdown";
 
 export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] flex flex-col justify-start md:justify-center items-center text-center px-5 pt-28 pb-24 md:pt-36 md:pb-48 overflow-hidden"
+      className="relative w-full min-h-[100dvh] flex flex-col justify-start md:justify-center items-center text-center px-5 pt-28 pb-24 md:pt-36 md:pb-48 overflow-hidden"
     >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
@@ -88,6 +88,30 @@ export default function Hero() {
               Ver Multimedia
             </button>
           </Link>
+        </motion.div>
+
+        {/* --- NUEVA SECCIÓN: APP INTERACTIVA --- */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+          className="mt-16 bg-black/40 backdrop-blur-md border border-white/20 p-6 md:p-8 rounded-3xl flex flex-col items-center gap-6 max-w-3xl mx-auto shadow-2xl relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-secondary/10 to-transparent pointer-events-none" />
+          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 z-10 w-full text-center md:text-left">
+            <div className="bg-white p-4 rounded-2xl flex-shrink-0 animate-pulse shadow-[0_0_20px_rgba(0,212,255,0.3)]">
+              <QrCode className="w-28 h-28 text-primary" strokeWidth={1.5} />
+            </div>
+            <div className="text-white">
+              <h3 className="text-2xl font-bold mb-3 flex flex-col md:flex-row items-center md:justify-start gap-2">
+                <Smartphone className="w-6 h-6 text-secondary hidden md:block" />
+                <span>Desbloquea la App Exclusiva</span>
+              </h3>
+              <p className="text-white/80 leading-relaxed text-sm md:text-base font-light">
+                Escanea el código QR desde tu celular para acceder al <strong className="text-secondary font-bold">Chanchito Digital</strong>, interactuar en la <strong className="text-secondary font-bold">Red Social del evento</strong> y vivir grandes sorpresas durante tu visita.
+              </p>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

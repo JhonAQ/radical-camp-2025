@@ -33,7 +33,7 @@ const speakers = [
 
 export default function Speakers() {
   return (
-    <section id="speakers" className="py-10 md:py-20 px-5 bg-black/50">
+    <section id="speakers" className="relative w-full py-10 md:py-20 px-5 bg-black/50">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

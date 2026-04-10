@@ -56,6 +56,8 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  if (pathname === "/registro") return null;
+
   return (
     <>
       {/* Top Bar */}

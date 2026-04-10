@@ -121,7 +121,7 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative py-8 bg-dark-bg"
+      className="relative w-full py-8 bg-dark-bg"
       style={{ overflowX: "clip", overflowY: "visible" }}
     >
       {/* Background Elements */}
