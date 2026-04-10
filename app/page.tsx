@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { client } from "@/lib/appwrite";
 import Link from "next/link";
 import {
   Calendar,
@@ -88,6 +89,16 @@ const speakers = [
 /* ── Page ─────────────────────────────────────────────────────── */
 export default function HomePage() {
   const time = useCountdown("2025-12-30T00:00:00");
+
+  useEffect(() => {
+    try {
+      // @ts-ignore
+      client.ping();
+      console.log("Pinged Appwrite backend server");
+    } catch (error) {
+      console.error("Error pinging Appwrite:", error);
+    }
+  }, []);
 
   return (
     <div className="px-5 pb-6 space-y-7">
