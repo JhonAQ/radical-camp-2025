@@ -13,7 +13,7 @@ import {
   Loader2,
   RefreshCw,
   Camera,
-  Sparkles,
+  Plus,
 } from "lucide-react";
 import StoriesBar from "./components/StoriesBar";
 import PostCard from "./components/PostCard";
@@ -25,7 +25,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function SocialPage() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   // Feed state
   const [posts, setPosts] = useState<Post[]>([]);
@@ -214,7 +214,6 @@ export default function SocialPage() {
 
   return (
     <div className="min-h-screen -mx-0 pb-20">
-      
       {/* ── Social Header (User & Link to Profile) ────────────────────── */}
       <div className="px-5 py-4 flex items-center justify-between bg-dark-bg border-b border-white/5">
         <Link
@@ -236,18 +235,31 @@ export default function SocialPage() {
             <p className="text-sm font-bold text-white leading-tight">
               {user?.name || "Camper Invitado"}
             </p>
-            <p className="text-xs text-gray-500 font-medium">
-              Ver mi perfil
-            </p>
+            <p className="text-xs text-gray-500 font-medium">Ver mi perfil</p>
           </div>
         </Link>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10"
-        >
-          <RefreshCw className={`w-5 h-5 text-gray-400 ${refreshing ? "animate-spin text-secondary" : ""}`} />
-        </button>
+          
+          <div className="flex flex-row items-center gap-3">
+            {isAdmin && (
+              <Link
+                href="/admin/social"
+                className="flex items-center justify-center p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all text-white"
+                title="Nueva publicación"
+              >
+                <Plus className="w-5 h-5" strokeWidth={2.5} />
+              </Link>
+            )}
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 active:scale-95 transition-all"
+              title="Refrescar feed"
+            >
+              <RefreshCw
+                className={`w-5 h-5 text-gray-400 ${refreshing ? "animate-spin text-secondary" : ""}`}
+              />
+            </button>
+          </div>
       </div>
 
       {/* ── Stories Row ──────────────────────────────────── */}
@@ -281,7 +293,7 @@ export default function SocialPage() {
             </p>
             {user && (
               <div className="mt-6 flex items-center justify-center gap-2 text-xs text-gray-600">
-                <Sparkles className="w-3.5 h-3.5" />
+                <Camera className="w-3.5 h-3.5" />
                 <span>Sé el primero en interactuar</span>
               </div>
             )}
